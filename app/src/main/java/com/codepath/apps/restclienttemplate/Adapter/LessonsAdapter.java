@@ -96,9 +96,8 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemViewType(int position) {
         Lesson lesson = mLessons.get(position);
-        int currentNumber = sharedPreferences.getInt(currentLessonNumber, 2);
         int lessonNumber = lesson.getWeekNumber();
-        if (currentNumber == lessonNumber) {
+        if (currentLesson == lessonNumber) {
             return CURRENT_LESSON;
         } else {
             return LESSON;
@@ -112,6 +111,7 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         LayoutInflater inflater = LayoutInflater.from(context);
         RecyclerView.ViewHolder viewHolder;
         sharedPreferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
+        currentLesson = sharedPreferences.getInt(currentLessonNumber, 2);
 
         switch (viewType) {
             case CURRENT_LESSON:
