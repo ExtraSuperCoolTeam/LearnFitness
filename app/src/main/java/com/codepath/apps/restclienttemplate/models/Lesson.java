@@ -1,7 +1,6 @@
 package com.codepath.apps.restclienttemplate.models;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Lesson {
     String title;
@@ -9,6 +8,7 @@ public class Lesson {
     String imageUrl;
     String videoUrl;
     String textContent;
+    int weekNumber;
 
     public String getTitle() {
         return title;
@@ -29,12 +29,17 @@ public class Lesson {
     public String getTextContent() {
         return textContent;
     }
+
+    public int getWeekNumber() {
+        return weekNumber;
+    }
     
     public static Lesson getExample() {
         Lesson newLesson =  new Lesson();
         newLesson.title = "Sample Lesson";
         newLesson.videoUrl = "asdf.com";
         newLesson.imageUrl = "http://gumbofitness.com/wp-content/uploads/2014/11/header-photo1.jpg";
+//        newLesson.weekNumber = 1;
         newLesson.textContent = "Super awesome lesson content!. Step 1\n\nStep 2" +
                 "fasdfjadsklfjaldkjf  lkasdjfj lkjsdlkfj jksldfjw lksjdf fjkdls" +
                 "fasdfjadsklfjaldkjf  lkasdjfj lkjsdlkfj jksldfjw lksjdf fjkdls" +
@@ -53,7 +58,9 @@ public class Lesson {
         ArrayList<Lesson> lessons = new ArrayList<>();
 
         for (int i = 0 ; i < 8; i++) {
-            lessons.add(getExample());
+            Lesson l = getExample();
+            l.weekNumber = i + 1;
+            lessons.add(l);
         }
 
         return lessons;
