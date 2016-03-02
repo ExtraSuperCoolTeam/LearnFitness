@@ -1,9 +1,11 @@
-package com.codepath.apps.restclienttemplate;
+package com.codepath.apps.restclienttemplate.activities;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 
+import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.RestClient;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 import com.codepath.oauth.OAuthLoginActivity;
 
