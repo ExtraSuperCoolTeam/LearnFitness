@@ -1,11 +1,11 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+
+import com.codepath.apps.restclienttemplate.Fragment.LessonsListFragment;
 
 public class LessonListActivity extends AppCompatActivity {
 
@@ -15,6 +15,16 @@ public class LessonListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lesson_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (savedInstanceState == null) {
+
+            LessonsListFragment fragment = new LessonsListFragment();
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.flLessonsList, fragment);
+            ft.commit();
+
+        }
 
     }
 
