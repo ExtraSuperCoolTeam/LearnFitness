@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Rest Client Template</string>
+    <string name="app_name">Learn Fitness!</string>
     <string name="login_label">Log in</string>
-    <string name="title_activity_lesson_list">LessonListActivity</string>
-    <string name="title_activity_lesson">LessonActivity</string>
+    <string name="title_activity_lesson_list">Learn Fitness Lessons</string>
+    <string name="title_activity_lesson">Week 1: Something</string>
     <string name="error_player">Error Message</string>
 
 </resources>
