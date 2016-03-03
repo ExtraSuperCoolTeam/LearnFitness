@@ -23,7 +23,7 @@ public class LessonListActivity extends AppCompatActivity {
             LessonsListFragment fragment = new LessonsListFragment();
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.flLessonsList, fragment);
+            ft.replace(R.id.flContent, fragment);
             ft.commit();
 
         }
