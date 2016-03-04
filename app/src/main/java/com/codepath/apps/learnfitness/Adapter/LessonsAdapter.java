@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate.Adapter;
+package com.codepath.apps.learnfitness.Adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.codepath.apps.restclienttemplate.R;
-import com.codepath.apps.restclienttemplate.models.Lesson;
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.models.Lesson;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate.Fragment;
+package com.codepath.apps.learnfitness.Fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,9 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.codepath.apps.restclienttemplate.DeveloperKey;
-import com.codepath.apps.restclienttemplate.R;
-import com.codepath.apps.restclienttemplate.models.Lesson;
+import com.codepath.apps.learnfitness.DeveloperKey;
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.models.Lesson;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;

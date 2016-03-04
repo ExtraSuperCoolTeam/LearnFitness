@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate.Fragment;
+package com.codepath.apps.learnfitness.Fragment;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -10,9 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.codepath.apps.restclienttemplate.Adapter.LessonsAdapter;
-import com.codepath.apps.restclienttemplate.R;
-import com.codepath.apps.restclienttemplate.models.Lesson;
+import com.codepath.apps.learnfitness.Adapter.LessonsAdapter;
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.models.Lesson;
 
 import java.util.ArrayList;
 

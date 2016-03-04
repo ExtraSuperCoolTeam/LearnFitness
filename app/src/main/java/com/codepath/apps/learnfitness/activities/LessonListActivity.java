@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate.activities;
+package com.codepath.apps.learnfitness.activities;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -12,16 +12,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.codepath.apps.restclienttemplate.Fragment.LessonFragment;
-import com.codepath.apps.restclienttemplate.Fragment.LessonsListFragment;
-import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.learnfitness.Fragment.LessonsListFragment;
+import com.codepath.apps.learnfitness.R;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class LessonListActivity extends AppCompatActivity {
 
+    @Bind(R.id.drawer_layout)
     DrawerLayout mDrawer;
-    ActionBarDrawerToggle drawerToggle;
-    Toolbar toolbar;
+
+    @Bind(R.id.nvView)
     NavigationView mNavigation;
+
+    private ActionBarDrawerToggle drawerToggle;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,20 +35,18 @@ public class LessonListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lesson_list);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ButterKnife.bind(this);
 
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerToggle = setUpDrawerToggle();
 
         mDrawer.setDrawerListener(drawerToggle);
 
-        mNavigation = (NavigationView) findViewById(R.id.nvView);
         setUpDrawerContent(mNavigation);
 
         if (savedInstanceState == null) {
 
-//            LessonsListFragment fragment = new LessonsListFragment();
-            LessonFragment fragment = new LessonFragment();
-
+            // TODO: Is this duplicate of below?
+            LessonsListFragment fragment = new LessonsListFragment();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.flContent, fragment);
             ft.commit();
