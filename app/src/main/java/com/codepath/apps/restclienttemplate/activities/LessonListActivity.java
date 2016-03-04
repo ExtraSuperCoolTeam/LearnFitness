@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.codepath.apps.restclienttemplate.Fragment.LessonFragment;
 import com.codepath.apps.restclienttemplate.Fragment.LessonsListFragment;
 import com.codepath.apps.restclienttemplate.R;
 
@@ -39,7 +40,8 @@ public class LessonListActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
 
-            LessonsListFragment fragment = new LessonsListFragment();
+//            LessonsListFragment fragment = new LessonsListFragment();
+            LessonFragment fragment = new LessonFragment();
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.flContent, fragment);

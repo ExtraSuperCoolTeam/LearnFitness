@@ -19,9 +19,6 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by JaneChung on 3/1/16.
- */
 public class LessonsListFragment extends Fragment {
 
     @Bind(R.id.rvLessonsList)

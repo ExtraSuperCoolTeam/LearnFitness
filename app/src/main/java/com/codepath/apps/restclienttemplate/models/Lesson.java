@@ -7,6 +7,7 @@ public class Lesson {
     String description;
     String imageUrl;
     String videoUrl;
+    String videoId;
     String textContent;
     int weekNumber;
 
@@ -22,8 +23,8 @@ public class Lesson {
         return imageUrl;
     }
 
-    public String getVideoUrl() {
-        return videoUrl;
+    public String getVideoId() {
+        return videoId;
     }
 
     public String getTextContent() {
@@ -38,6 +39,7 @@ public class Lesson {
         Lesson newLesson =  new Lesson();
         newLesson.title = "Sample Lesson";
         newLesson.videoUrl = "asdf.com";
+        newLesson.videoId = "D9BC884dIDg";
         newLesson.imageUrl = "http://gumbofitness.com/wp-content/uploads/2014/11/header-photo1.jpg";
 //        newLesson.weekNumber = 1;
         newLesson.textContent = "Super awesome lesson content!. Step 1\n\nStep 2" +

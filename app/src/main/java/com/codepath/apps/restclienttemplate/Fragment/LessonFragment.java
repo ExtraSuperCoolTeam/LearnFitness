@@ -2,51 +2,72 @@ package com.codepath.apps.restclienttemplate.Fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.DeveloperKey;
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.models.Lesson;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerFragment;
-import com.google.android.youtube.player.YouTubePlayerView;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by JaneChung on 3/2/16.
- */
-public class LessonFragment extends YouTubePlayerFragment implements
-        YouTubePlayer.OnInitializedListener {
-    @Bind(R.id.pvYoutube)
-    YouTubePlayerView pvYoutube;
+public class LessonFragment extends Fragment implements YouTubePlayer.OnInitializedListener {
+    private static final String TAG = "LessonFragment";
+
+    @Bind(R.id.ivImage)
+    ImageView ivImage;
+
+    @Bind(R.id.tvTextContent)
+    TextView tvTextContent;
+
+    Lesson mLesson;
 
     private static final int RECOVERY_DIALOG_REQUEST = 1;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.lesson_list_fragment, container, false);
+        View v = inflater.inflate(R.layout.lesson_fragment, container, false);
         ButterKnife.bind(this, v);
 
-        pvYoutube.initialize(DeveloperKey.DEVELOPER_KEY, this);
+        mLesson = Lesson.getExample();
+
+        // Update the text content and image.
+        tvTextContent.setText(mLesson.getTextContent());
+        Glide.with(getActivity()).load(mLesson.getImageUrl()).into(ivImage);
+
+        // Switch in a new YouTubePlayerSupportFragment
+        YouTubePlayerSupportFragment youTubePlayerFragment = YouTubePlayerSupportFragment.newInstance();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.add(R.id.flVideo, youTubePlayerFragment).commit();
+
+        youTubePlayerFragment.initialize(DeveloperKey.DEVELOPER_KEY, this);
         return v;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
+
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider,
-                                        YouTubePlayer youTubePlayer, boolean wasRestored) {
+                                        YouTubePlayer youTubePlayer,
+                                        boolean wasRestored) {
+        Toast.makeText(getActivity(), "OMG", Toast.LENGTH_LONG).show();
         if (!wasRestored) {
-            youTubePlayer.cueVideo("D9BC884dIDg");
+            youTubePlayer.cueVideo(mLesson.getVideoId());
         }
     }
 
@@ -60,5 +81,4 @@ public class LessonFragment extends YouTubePlayerFragment implements
             Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
         }
     }
-
 }
