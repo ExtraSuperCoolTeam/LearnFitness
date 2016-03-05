@@ -1,16 +1,5 @@
 package com.codepath.apps.learnfitness.Fragment;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-
-import com.bumptech.glide.Glide;
-import com.codepath.apps.learnfitness.R;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.TextHttpResponseHandler;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,6 +10,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.models.Trainer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +45,12 @@ public class TrainerInfoFragment extends Fragment {
     @Bind(R.id.tvTrainerAddress) TextView mTextViewTrainerAddress;
     @Bind(R.id.tvTrainerCall) TextView mTextViewTrainerCall;
 
+    public Trainer mTrainer;
 
-    public static TrainerInfoFragment newInstance() {
+
+    public static TrainerInfoFragment newInstance(Trainer trainer) {
         TrainerInfoFragment trainerInfoFragment = new TrainerInfoFragment();
-
+        trainerInfoFragment.mTrainer = trainer;
         return trainerInfoFragment;
     }
 

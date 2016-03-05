@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.codepath.apps.learnfitness.Adapter.CustomWindowAdapter;
 import com.codepath.apps.learnfitness.Manifest;
 import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.activities.LessonListActivity;
 import com.codepath.apps.learnfitness.models.Trainer;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -54,15 +55,17 @@ import permissions.dispatcher.RuntimePermissions;
 public class FindTrainerFragment extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener, GoogleMap.OnInfoWindowClickListener {
 
     private static View view;
+    private static final String TAG = "FindTrainerFragment";
 
     private GoogleApiClient mGoogleApiClient;
     private SupportMapFragment mapFragment;
     private static GoogleMap mMap;
     private static Double latitude, longitude;
     private LocationRequest mLocationRequest;
+    private static HashMap<String, Trainer> mTrainers;
 
 
     /*
@@ -104,13 +107,13 @@ public class FindTrainerFragment extends Fragment implements
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
-                HashMap<String, Trainer> trainers = Trainer.fromJSONArray(response);
+                mTrainers = Trainer.fromJSONArray(response);
                 CustomWindowAdapter adapter = new CustomWindowAdapter(
-                        getActivity().getLayoutInflater(), trainers, getActivity());
+                        getActivity().getLayoutInflater(), mTrainers, getActivity());
                 if (mMap != null) {
                     mMap.setInfoWindowAdapter(adapter);
-                    for (String key : trainers.keySet()) {
-                        Trainer trainer = trainers.get(key);
+                    for (String key : mTrainers.keySet()) {
+                        Trainer trainer = mTrainers.get(key);
                         addMarkerforTrainer(trainer);
                     }
 
@@ -126,6 +129,12 @@ public class FindTrainerFragment extends Fragment implements
             }
         });
 
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Trainer trainer = mTrainers.get(marker.getTitle());
+        ((LessonListActivity)getActivity()).showTrainerInfo(trainer);
     }
 
     public void addMarkerforTrainer(Trainer trainer) {
@@ -165,6 +174,7 @@ public class FindTrainerFragment extends Fragment implements
 
         Toast.makeText(getActivity(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
         FindTrainerFragmentPermissionsDispatcher.getMyLocationWithCheck(this);
+        mMap.setOnInfoWindowClickListener(this);
         populateMapWithSearchQuery("test");
 
 //        mMap.setOnMapLongClickListener(this);

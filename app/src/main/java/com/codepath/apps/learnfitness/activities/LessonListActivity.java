@@ -15,7 +15,9 @@ import android.view.MenuItem;
 
 import com.codepath.apps.learnfitness.Fragment.FindTrainerFragment;
 import com.codepath.apps.learnfitness.Fragment.LessonsListFragment;
+import com.codepath.apps.learnfitness.Fragment.TrainerInfoFragment;
 import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.models.Trainer;
 import com.facebook.appevents.AppEventsLogger;
 
 import butterknife.Bind;
@@ -99,6 +101,11 @@ public class LessonListActivity extends AppCompatActivity
                         return true;
                     }
                 });
+    }
+
+    public void showTrainerInfo(Trainer trainer) {
+        Fragment fragment = TrainerInfoFragment.newInstance(trainer);
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
 
     public void selectDrawerItem(MenuItem currentMenuItem) {
