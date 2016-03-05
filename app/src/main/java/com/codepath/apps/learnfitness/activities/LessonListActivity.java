@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.codepath.apps.learnfitness.Fragment.FindTrainerFragment;
 import com.codepath.apps.learnfitness.Fragment.LessonsListFragment;
 import com.codepath.apps.learnfitness.R;
 import com.facebook.appevents.AppEventsLogger;
@@ -19,7 +20,8 @@ import com.facebook.appevents.AppEventsLogger;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class LessonListActivity extends AppCompatActivity {
+public class LessonListActivity extends AppCompatActivity
+{
 
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawer;
@@ -29,6 +31,7 @@ public class LessonListActivity extends AppCompatActivity {
 
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
+    public static FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +111,7 @@ public class LessonListActivity extends AppCompatActivity {
                 fragmentClass = LessonsListFragment.class;
                 break;
             case R.id.nav_second_fragment:
-                fragmentClass = LessonsListFragment.class;
+                fragmentClass = FindTrainerFragment.class;
 //                fragmentClass = .class;
                 break;
             case R.id.nav_third_fragment:
@@ -127,7 +130,7 @@ public class LessonListActivity extends AppCompatActivity {
         }
 
         // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         // Highlight the selected item, update the title, and close the drawer

@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.codepath.apps.learnfitness.DeveloperKey;
 import com.codepath.apps.learnfitness.R;
 import com.codepath.apps.learnfitness.models.Lesson;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -52,7 +51,7 @@ public class LessonFragment extends Fragment implements YouTubePlayer.OnInitiali
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.add(R.id.flVideo, youTubePlayerFragment).commit();
 
-        youTubePlayerFragment.initialize(DeveloperKey.DEVELOPER_KEY, this);
+        youTubePlayerFragment.initialize(getString(R.string.google_developer_key), this);
         return v;
     }
 
