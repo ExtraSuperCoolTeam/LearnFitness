@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.codepath.apps.learnfitness.Fragment.FindTrainerFragment;
@@ -100,23 +101,21 @@ public class LessonListActivity extends AppCompatActivity
                 });
     }
 
-    public void selectDrawerItem(MenuItem menuItem) {
+    public void selectDrawerItem(MenuItem currentMenuItem) {
         // Create a new fragment and specify the planet to show based on
         // position
         Fragment fragment = null;
 
         Class fragmentClass;
-        switch(menuItem.getItemId()) {
+        switch(currentMenuItem.getItemId()) {
             case R.id.nav_first_fragment:
                 fragmentClass = LessonsListFragment.class;
                 break;
             case R.id.nav_second_fragment:
                 fragmentClass = FindTrainerFragment.class;
-//                fragmentClass = .class;
                 break;
             case R.id.nav_third_fragment:
                 fragmentClass = LessonsListFragment.class;
-//                fragmentClass = SimpsonsFragment.class;
                 break;
             default:
                 fragmentClass = LessonsListFragment.class;
@@ -134,8 +133,13 @@ public class LessonListActivity extends AppCompatActivity
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         // Highlight the selected item, update the title, and close the drawer
-        menuItem.setChecked(true);
-        setTitle(menuItem.getTitle());
+        Menu menu = mNavigation.getMenu();
+        for (int i = 0; i < menu.size(); i++) {
+            menu.getItem(i).setChecked(false);
+        }
+        currentMenuItem.setChecked(true);
+
+        setTitle(currentMenuItem.getTitle());
         mDrawer.closeDrawers();
     }
 
