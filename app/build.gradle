@@ -24,6 +24,8 @@ repositories {
     mavenCentral()
 }
 
+apply plugin: 'android-apt'
+
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     // Picasso for remote image loading
@@ -37,6 +39,11 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.github.bumptech.glide:glide:3.5.2'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    compile 'com.google.android.gms:play-services-maps:8.4.0'
+    compile 'com.google.android.gms:play-services-location:8.4.0'
+
+    compile 'com.github.hotchemi:permissionsdispatcher:2.0.7'
+    apt 'com.github.hotchemi:permissionsdispatcher-processor:2.0.7'
 
     //Butterknife
     compile 'com.jakewharton:butterknife:7.0.1'
