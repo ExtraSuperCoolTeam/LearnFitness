@@ -16,4 +16,7 @@
 
     <string name="facebook_app_id">1115574068475551</string>
 
+    <string name="get_directions">Get Directions</string>
+    <string name="call">Call</string>
+
 </resources>
