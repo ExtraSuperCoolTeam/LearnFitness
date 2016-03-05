@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 import com.codepath.apps.learnfitness.Fragment.LessonsListFragment;
 import com.codepath.apps.learnfitness.R;
+import com.facebook.appevents.AppEventsLogger;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -133,6 +134,18 @@ public class LessonListActivity extends AppCompatActivity {
         menuItem.setChecked(true);
         setTitle(menuItem.getTitle());
         mDrawer.closeDrawers();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AppEventsLogger.deactivateApp(this);
     }
 
 }
