@@ -20,11 +20,13 @@
         android:text="220 California Street San Francisco, CA 941111"/>
 
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="300dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:id="@+id/ivTrainerThumbnail"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/the_rock"
         />
 
 

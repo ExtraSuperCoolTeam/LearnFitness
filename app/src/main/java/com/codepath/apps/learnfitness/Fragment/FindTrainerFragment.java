@@ -19,8 +19,10 @@ import android.view.animation.BounceInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.codepath.apps.learnfitness.Adapter.CustomWindowAdapter;
 import com.codepath.apps.learnfitness.Manifest;
 import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.models.Trainer;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -32,9 +34,19 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
+import cz.msebera.android.httpclient.Header;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 
@@ -58,6 +70,8 @@ public class FindTrainerFragment extends Fragment implements
 	 * returned in Activity.onActivityResult
 	 */
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    public static String REST_END_POINT = "https://learnxiny-mediastore.herokuapp.com/trainers";
+
 
     @Nullable
     @Override
@@ -78,6 +92,53 @@ public class FindTrainerFragment extends Fragment implements
         super.onCreate(savedInstanceState);
     }
 
+    public void populateMapWithSearchQuery(String query) {
+        if (query.trim().isEmpty()) {
+            return;
+        }
+
+        String url = REST_END_POINT + "/1";
+        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+
+        asyncHttpClient.get(url, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                HashMap<String, Trainer> trainers = Trainer.fromJSONArray(response);
+                CustomWindowAdapter adapter = new CustomWindowAdapter(
+                        getActivity().getLayoutInflater(), trainers, getActivity());
+                if (mMap != null) {
+                    mMap.setInfoWindowAdapter(adapter);
+                    for (String key : trainers.keySet()) {
+                        Trainer trainer = trainers.get(key);
+                        addMarkerforTrainer(trainer);
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String response,
+                                  Throwable throwable) {
+                Log.w("AsyncHttpClient", "HTTP Request failure: " + statusCode + " " +
+                        throwable.getMessage());
+            }
+        });
+
+    }
+
+    public void addMarkerforTrainer(Trainer trainer) {
+
+        //Todo: Get the actual location from trainer
+        BitmapDescriptor defaultMarker = BitmapDescriptorFactory
+                .defaultMarker(BitmapDescriptorFactory.HUE_RED);
+        LatLng trainerPosition = new LatLng(37.7739, -122.431297);
+        Marker marker = mMap.addMarker(new MarkerOptions()
+                .position(trainerPosition)
+                .title(trainer.getId()).icon(defaultMarker));
+    }
+
     public void setUpMapIfNeeded() {
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
@@ -91,31 +152,21 @@ public class FindTrainerFragment extends Fragment implements
             FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
             transaction.add(R.id.trainer_map, mapFragment).commit();
 
-
-//            if (mapFragment != null) {
-//                mapFragment.getMapAsync(new OnMapReadyCallback() {
-//                    @Override
-//                    public void onMapReady(GoogleMap map) {
-//                        loadMap(map);
-//
-//                    }
-//                });
-//            } else {
-//                Toast.makeText(getActivity(), "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
-//            }
-
         }
     }
 
     protected void loadMap(GoogleMap googleMap) {
         // Map is ready
         mMap = googleMap;
-        if (mMap != null) {
-            Toast.makeText(getActivity(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
-            FindTrainerFragmentPermissionsDispatcher.getMyLocationWithCheck(this);
-        } else {
+        if (mMap == null) {
             Toast.makeText(getActivity(), "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        Toast.makeText(getActivity(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
+        FindTrainerFragmentPermissionsDispatcher.getMyLocationWithCheck(this);
+        populateMapWithSearchQuery("test");
+
 //        mMap.setOnMapLongClickListener(this);
 //        mMap.setOnMarkerDragListener(this);
     }
@@ -293,6 +344,8 @@ public class FindTrainerFragment extends Fragment implements
         }
     }
 
+
+
     // Define a DialogFragment that displays the error dialog
     public static class ErrorDialogFragment extends DialogFragment {
 
@@ -316,5 +369,7 @@ public class FindTrainerFragment extends Fragment implements
             return mDialog;
         }
     }
+
+
 
 }
