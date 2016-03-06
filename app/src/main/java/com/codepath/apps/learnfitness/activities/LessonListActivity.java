@@ -59,7 +59,6 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
         if (savedInstanceState == null) {
             // TODO: Is this duplicate of below?
             WeeksListFragment fragment = new WeeksListFragment();
-            showSearch(false);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.flContent, fragment);
             ft.commit();
@@ -165,6 +164,7 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
         mMenu = menu;
         getMenuInflater().inflate(R.menu.menu_search, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
+        searchItem.setVisible(false);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
