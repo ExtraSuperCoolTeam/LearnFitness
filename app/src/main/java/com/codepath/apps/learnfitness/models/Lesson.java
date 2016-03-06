@@ -1,71 +1,127 @@
+
 package com.codepath.apps.learnfitness.models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
+import java.util.List;
 
-public class Lesson {
-    String title;
-    String description;
-    String imageUrl;
-    String videoUrl;
-    String videoId;
-    String textContent;
-    int weekNumber;
+public class Lesson implements Parcelable {
 
+    @SerializedName("title")
+    @Expose
+    private String title;
+
+    @SerializedName("imageUrl")
+    @Expose
+    private String imageUrl;
+
+    @SerializedName("numberOfWeeks")
+    @Expose
+    private String numberOfWeeks;
+
+    @SerializedName("weeks")
+    @Expose
+    private List<Week> weeks = new ArrayList<Week>();
+
+    /**
+     *
+     * @return
+     *     The title
+     */
     public String getTitle() {
         return title;
     }
 
-    public String getDescription() {
-        return description;
+    /**
+     *
+     * @param title
+     *     The title
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     *
+     * @return
+     *     The numberOfWeeks
+     */
+    public String getNumberOfWeeks() {
+        return numberOfWeeks;
+    }
+
+    /**
+     *
+     * @param numberOfWeeks
+     *     The numberOfWeeks
+     */
+    public void setNumberOfWeeks(String numberOfWeeks) {
+        this.numberOfWeeks = numberOfWeeks;
+    }
+
+    /**
+     *
+     * @return
+     *     The weeks
+     */
+    public List<Week> getWeeks() {
+        return weeks;
+    }
+
+    /**
+     *
+     * @param weeks
+     *     The weeks
+     */
+    public void setWeeks(List<Week> weeks) {
+        this.weeks = weeks;
     }
 
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public String getVideoId() {
-        return videoId;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public String getTextContent() {
-        return textContent;
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public int getWeekNumber() {
-        return weekNumber;
-    }
-    
-    public static Lesson getExample() {
-        Lesson newLesson =  new Lesson();
-        newLesson.title = "Sample Lesson";
-        newLesson.videoUrl = "asdf.com";
-        newLesson.videoId = "D9BC884dIDg";
-        newLesson.imageUrl = "http://gumbofitness.com/wp-content/uploads/2014/11/header-photo1.jpg";
-//        newLesson.weekNumber = 1;
-        newLesson.textContent = "Super awesome lesson content!. Step 1\n\nStep 2" +
-                "fasdfjadsklfjaldkjf  lkasdjfj lkjsdlkfj jksldfjw lksjdf fjkdls" +
-                "fasdfjadsklfjaldkjf  lkasdjfj lkjsdlkfj jksldfjw lksjdf fjkdls" +
-                "fasdfjadsklfjaldkjf  lkasdjfj lkjsdlkfj jksldfjw lksjdf fjkdls" +
-                "fasdfjadsklfjaldkjf  lkasdjfj lkjsdlkfj jksldfjw lksjdf fjkdls" +
-                "fasdfjadsklfjaldkjf  lkasdjfj lkjsdlkfj jksldfjw lksjdf fjkdls" +
-                "fasdfjadsklfjaldkjf  lkasdjfj lkjsdlkfj jksldfjw lksjdf fjkdls" +
-                "fasdfjadsklfjaldkjf  lkasdjfj lkjsdlkfj jksldfjw lksjdf fjkdls" +
-                "fasdfjadsklfjaldkjf  lkasdjfj lkjsdlkfj jksldfjw lksjdf fjkdls";
-        newLesson.description = "This is a short description of the lesson!";
-
-        return newLesson;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.title);
+        dest.writeString(this.imageUrl);
+        dest.writeString(this.numberOfWeeks);
+        dest.writeList(this.weeks);
     }
 
-    public static ArrayList<Lesson> getExampleList() {
-        ArrayList<Lesson> lessons = new ArrayList<>();
+    public Lesson() {
+    }
 
-        for (int i = 0 ; i < 8; i++) {
-            Lesson l = getExample();
-            l.weekNumber = i + 1;
-            lessons.add(l);
+    protected Lesson(Parcel in) {
+        this.title = in.readString();
+        this.imageUrl = in.readString();
+        this.numberOfWeeks = in.readString();
+        this.weeks = new ArrayList<Week>();
+        in.readList(this.weeks, List.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Lesson> CREATOR = new Parcelable.Creator<Lesson>() {
+        public Lesson createFromParcel(Parcel source) {
+            return new Lesson(source);
         }
 
-        return lessons;
-    }
-
+        public Lesson[] newArray(int size) {
+            return new Lesson[size];
+        }
+    };
 }

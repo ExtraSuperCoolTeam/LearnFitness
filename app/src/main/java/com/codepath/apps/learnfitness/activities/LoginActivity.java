@@ -1,17 +1,6 @@
 package com.codepath.apps.learnfitness.activities;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.View;
-import android.widget.Toast;
-
 import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.FacebookClient;
-import com.codepath.oauth.OAuthLoginActionBarActivity;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -20,6 +9,12 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
 
-        // If the user is already logged in, skip the Login page and go directly to the Lesson List.
+        // If the user is already logged in, skip the Login page and go directly to the LessonDepre List.
         AccessToken token = AccessToken.getCurrentAccessToken();
         if (token != null) {
             Intent i = new Intent(this, LessonListActivity.class);

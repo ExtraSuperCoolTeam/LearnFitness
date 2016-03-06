@@ -1,5 +1,10 @@
 package com.codepath.apps.learnfitness.activities;
 
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.fragments.WeekFragment;
+import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
+import com.codepath.apps.learnfitness.models.Week;
+
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -11,20 +16,20 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-
-import com.codepath.apps.learnfitness.Fragment.LessonsListFragment;
-import com.codepath.apps.learnfitness.R;
+import android.view.View;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class LessonListActivity extends AppCompatActivity {
+public class LessonListActivity extends AppCompatActivity
+            implements WeeksListFragment.OnItemSelectedListener {
 
-    @Bind(R.id.drawer_layout)
-    DrawerLayout mDrawer;
+    public static final String MY_SHARED_PREFS = "MY_SHARED_PREFS4";
+    public static final String CURRENT_WEEK_NUMBER = "CURRENT_WEEK_NUMBER";
 
-    @Bind(R.id.nvView)
-    NavigationView mNavigation;
+    @Bind(R.id.drawer_layout) DrawerLayout mDrawer;
+
+    @Bind(R.id.nvView) NavigationView mNavigation;
 
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
@@ -44,9 +49,8 @@ public class LessonListActivity extends AppCompatActivity {
         setUpDrawerContent(mNavigation);
 
         if (savedInstanceState == null) {
-
             // TODO: Is this duplicate of below?
-            LessonsListFragment fragment = new LessonsListFragment();
+            WeeksListFragment fragment = new WeeksListFragment();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.flContent, fragment);
             ft.commit();
@@ -54,8 +58,8 @@ public class LessonListActivity extends AppCompatActivity {
         }
 
         mNavigation.getMenu().getItem(0).setChecked(true);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, new LessonsListFragment()).commit();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager.beginTransaction().replace(R.id.flContent, new WeeksListFragment()).commit();
         setTitle(R.string.title_activity_lesson_list);
 
     }
@@ -104,18 +108,18 @@ public class LessonListActivity extends AppCompatActivity {
         Class fragmentClass;
         switch(menuItem.getItemId()) {
             case R.id.nav_first_fragment:
-                fragmentClass = LessonsListFragment.class;
+                fragmentClass = WeeksListFragment.class;
                 break;
             case R.id.nav_second_fragment:
-                fragmentClass = LessonsListFragment.class;
+                fragmentClass = WeeksListFragment.class;
 //                fragmentClass = .class;
                 break;
             case R.id.nav_third_fragment:
-                fragmentClass = LessonsListFragment.class;
+                fragmentClass = WeeksListFragment.class;
 //                fragmentClass = SimpsonsFragment.class;
                 break;
             default:
-                fragmentClass = LessonsListFragment.class;
+                fragmentClass = WeeksListFragment.class;
                 break;
         }
 
@@ -126,8 +130,8 @@ public class LessonListActivity extends AppCompatActivity {
         }
 
         // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         // Highlight the selected item, update the title, and close the drawer
         menuItem.setChecked(true);
@@ -135,4 +139,9 @@ public class LessonListActivity extends AppCompatActivity {
         mDrawer.closeDrawers();
     }
 
+    @Override
+    public void onWeekSelected(View itemView, Week week) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, WeekFragment.newInstance(week)).commit();
+    }
 }
