@@ -57,15 +57,15 @@ public class FindTrainerFragment extends Fragment implements
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener, GoogleMap.OnInfoWindowClickListener {
 
-    private static View view;
+    private View view;
     private static final String TAG = "FindTrainerFragment";
 
     private GoogleApiClient mGoogleApiClient;
     private SupportMapFragment mapFragment;
-    private static GoogleMap mMap;
-    private static Double latitude, longitude;
+    private GoogleMap mMap;
+    private Double latitude, longitude;
     private LocationRequest mLocationRequest;
-    private static HashMap<String, Trainer> mTrainers;
+    private HashMap<String, Trainer> mTrainers;
 
 
     /*
@@ -175,7 +175,7 @@ public class FindTrainerFragment extends Fragment implements
         Toast.makeText(getActivity(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
         FindTrainerFragmentPermissionsDispatcher.getMyLocationWithCheck(this);
         mMap.setOnInfoWindowClickListener(this);
-        populateMapWithSearchQuery("test");
+//        populateMapWithSearchQuery("test");
 
 //        mMap.setOnMapLongClickListener(this);
 //        mMap.setOnMarkerDragListener(this);

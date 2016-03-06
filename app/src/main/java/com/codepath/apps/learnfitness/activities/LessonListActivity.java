@@ -41,6 +41,7 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
     private Toolbar toolbar;
     public static FragmentManager fragmentManager;
     private Menu mMenu;
+    private FindTrainerFragment mFindTrainerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +140,9 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
+            if (fragmentClass == FindTrainerFragment.class) {
+                mFindTrainerFragment = (FindTrainerFragment) fragment;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -170,6 +174,7 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
             @Override
             public boolean onQueryTextSubmit(String query) {
                 //Todo need to refresh the trainer fragment
+                mFindTrainerFragment.populateMapWithSearchQuery(query);
                 searchView.clearFocus();
                 return true;
             }
