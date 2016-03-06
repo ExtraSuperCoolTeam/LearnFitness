@@ -1,12 +1,5 @@
 package com.codepath.apps.learnfitness.fragments;
 
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.activities.LessonListActivity;
-import com.codepath.apps.learnfitness.adapters.LessonsAdapter;
-import com.codepath.apps.learnfitness.models.Lesson;
-import com.codepath.apps.learnfitness.models.Week;
-import com.codepath.apps.learnfitness.rest.MediaStoreService;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -19,6 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.activities.LessonListActivity;
+import com.codepath.apps.learnfitness.adapters.LessonsAdapter;
+import com.codepath.apps.learnfitness.models.Lesson;
+import com.codepath.apps.learnfitness.models.Week;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -95,7 +95,7 @@ public class WeeksListFragment extends Fragment {
                 if (newlySelectedWeekNumber >= 0 && newlySelectedWeekNumber <= mWeeks.size()) {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(LessonListActivity.CURRENT_WEEK_NUMBER,
-                             Integer.toString(newlySelectedWeekNumber + 1));
+                            Integer.toString(newlySelectedWeekNumber + 1));
 
                     editor.commit();
                 }

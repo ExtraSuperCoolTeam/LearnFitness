@@ -1,20 +1,12 @@
 package com.codepath.apps.learnfitness.activities;
 
-import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
-import com.codepath.apps.learnfitness.fragments.TrainerInfoFragment;
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.fragments.WeekFragment;
-import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
-import com.codepath.apps.learnfitness.models.Trainer;
-import com.codepath.apps.learnfitness.models.Week;
-import com.facebook.appevents.AppEventsLogger;
-
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +14,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.support.v7.widget.SearchView;
+
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
+import com.codepath.apps.learnfitness.fragments.TrainerInfoFragment;
+import com.codepath.apps.learnfitness.fragments.WeekFragment;
+import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
+import com.codepath.apps.learnfitness.models.Trainer;
+import com.codepath.apps.learnfitness.models.Week;
+import com.facebook.appevents.AppEventsLogger;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -38,6 +40,7 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
     public static FragmentManager fragmentManager;
+    private Menu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
         if (savedInstanceState == null) {
             // TODO: Is this duplicate of below?
             WeeksListFragment fragment = new WeeksListFragment();
+            showSearch(false);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.flContent, fragment);
             ft.commit();
@@ -132,6 +136,8 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
                 break;
         }
 
+        showSearch(currentMenuItem.getItemId() == R.id.nav_second_fragment);
+
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
@@ -151,6 +157,34 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
 
         setTitle(currentMenuItem.getTitle());
         mDrawer.closeDrawers();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        mMenu = menu;
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //Todo need to refresh the trainer fragment
+                searchView.clearFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public void showSearch(Boolean show) {
+        MenuItem search = mMenu.findItem(R.id.action_search);
+        search.setVisible(show);
     }
 
     @Override

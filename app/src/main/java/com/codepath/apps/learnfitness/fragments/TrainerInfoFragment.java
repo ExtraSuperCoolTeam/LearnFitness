@@ -1,10 +1,5 @@
 package com.codepath.apps.learnfitness.fragments;
 
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.models.Trainer;
-import com.codepath.apps.learnfitness.rest.MediaStoreService;
-import com.loopj.android.http.AsyncHttpClient;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.models.Trainer;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
+import com.loopj.android.http.AsyncHttpClient;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -45,6 +45,7 @@ public class TrainerInfoFragment extends Fragment {
 
         return trainerInfoFragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

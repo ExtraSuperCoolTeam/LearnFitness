@@ -1,15 +1,5 @@
 package com.codepath.apps.learnfitness.fragments;
 
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerSupportFragment;
-
-//import com.codepath.apps.learnfitness.DeveloperKey;
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.adapters.WeekStepsAdapter;
-import com.codepath.apps.learnfitness.models.Step;
-import com.codepath.apps.learnfitness.models.Week;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,11 +12,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.adapters.WeekStepsAdapter;
+import com.codepath.apps.learnfitness.models.Step;
+import com.codepath.apps.learnfitness.models.Week;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+//import com.codepath.apps.learnfitness.DeveloperKey;
 
 public class WeekFragment extends Fragment implements YouTubePlayer.OnInitializedListener {
     private static final String TAG = "WeekFragment";
@@ -87,6 +87,7 @@ public class WeekFragment extends Fragment implements YouTubePlayer.OnInitialize
 
 
     }
+
 
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider,
