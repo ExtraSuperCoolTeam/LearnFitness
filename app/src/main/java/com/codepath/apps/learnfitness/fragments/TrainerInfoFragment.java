@@ -1,9 +1,9 @@
 package com.codepath.apps.learnfitness.fragments;
 
+import com.bumptech.glide.Glide;
 import com.codepath.apps.learnfitness.R;
 import com.codepath.apps.learnfitness.models.Trainer;
 import com.codepath.apps.learnfitness.rest.MediaStoreService;
-import com.loopj.android.http.AsyncHttpClient;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -41,7 +41,12 @@ public class TrainerInfoFragment extends Fragment {
 
     public static TrainerInfoFragment newInstance(Trainer trainer) {
         TrainerInfoFragment trainerInfoFragment = new TrainerInfoFragment();
-        trainerInfoFragment.mTrainer = trainer;
+        Bundle args = new Bundle();
+        args.putParcelable("trainer", trainer);
+        trainerInfoFragment.setArguments(args);
+
+        //TODO remove this?
+        //trainerInfoFragment.mTrainer = trainer;
 
         return trainerInfoFragment;
     }
@@ -58,121 +63,58 @@ public class TrainerInfoFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_trainer_info, parent, false);
         ButterKnife.bind(this, view);
+        //TODO This is is weird, do we already have all the trainer info here?
+        Trainer trainer = getArguments().getParcelable("trainer");
 
-        String url = REST_END_POINT + "/1";
+        trainer = getTrainer(trainer.getId());
 
-        Observable<Trainer> call = MediaStoreService.trainersStore.getTrainer("1");
+
+        return view;
+    }
+
+    private void setupTrainerDetailView(Trainer trainer) {
+
+        mTextViewTrainerInfo1.setText(trainer.getTrainerParams().getSpeciality());
+        mTextViewTrainerInfo2.setText(trainer.getTrainerParams().getYrsOfTraining());
+        mTextViewTrainerInfo3.setText(trainer.getTrainerParams().getWeight());
+        mTextViewTrainerInfo4.setText(trainer.getTrainerParams().getHeight());
+
+        Glide.with(getActivity())
+        .load(trainer.getProfileUrl())
+                .into(mImageViewTrainerPhoto);
+
+        mTextViewTrainerAddress.setText(trainer.getAddress());
+        mTextViewTrainerCall.setText(trainer.getPhone());
+
+    }
+
+    public Trainer getTrainer(String trainerId) {
+        Observable<Trainer> call = MediaStoreService.trainersStore.getTrainer(trainerId);
         subscription = call
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Trainer>() {
-                @Override
-                public void onCompleted() {
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                    // cast to retrofit.HttpException to get the response code
-                    if (e instanceof HttpException) {
-                        HttpException response = (HttpException) e;
-                        int code = response.code();
+                    @Override
+                    public void onCompleted() {
                     }
-                }
 
-                @Override
-                public void onNext(Trainer trainer) {
-                    Log.i("TrainerInfoFragment", trainer.getName());
-                }
-            });
+                    @Override
+                    public void onError(Throwable e) {
+                        // cast to retrofit.HttpException to get the response code
+                        if (e instanceof HttpException) {
+                            HttpException response = (HttpException) e;
+                            int code = response.code();
+                        }
+                    }
 
-//        Observable<List<Trainer>> call2 = MediaStoreService.trainersStore.fetchTrainers();
-//        subscription = call2
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<Trainer>>() {
-//                    @Override
-//                    public void onCompleted() {
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        // cast to retrofit.HttpException to get the response code
-//                        if (e instanceof HttpException) {
-//                            HttpException response = (HttpException) e;
-//                            int code = response.code();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onNext(List<Trainer> trainers) {
-//                        Log.i("TrainerInfoFragment",  "" + trainers.size());
-//                    }
-//                });
+                    @Override
+                    public void onNext(Trainer t) {
+                        Log.i("TrainerInfoFragment", t.getName());
+                        mTrainer = t;
+                    }
+                });
 
 
-        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-
-//        asyncHttpClient.get(url, new TextHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, String response) {
-//
-//                try {
-//                    if (response != null) {
-//                        Gson gson = new GsonBuilder().serializeNulls().create();
-//                        JsonObject jsonObject = gson.fromJson(response, JsonObject.class);
-//                        if (jsonObject != null) {
-//                            if(jsonObject.has("trainerParams")) {
-//                                JsonObject jsonTrainerParamsObject =
-//                                        jsonObject.getAsJsonObject("trainerParams");
-//
-//                                List<String> trainerInfoList = new ArrayList<String>();
-//                                if (jsonTrainerParamsObject != null) {
-//                                    for (Map.Entry<String, JsonElement> entry :
-//                                            jsonTrainerParamsObject.entrySet()) {
-//
-//                                        trainerInfoList.add(entry.getKey() +
-//                                                " : " + entry.getValue());
-//                                        Log.i("SearchActivity", "key: " + entry.getKey() + " value: " +
-//                                                entry.getValue());
-//                                    }
-//
-//                                    mTextViewTrainerInfo1.setText(trainerInfoList.get(0));
-//                                    mTextViewTrainerInfo2.setText(trainerInfoList.get(1));
-//                                    mTextViewTrainerInfo3.setText(trainerInfoList.get(2));
-//                                    mTextViewTrainerInfo4.setText(trainerInfoList.get(3));
-//                                }
-//                            }
-//
-//                            if (jsonObject.has("profileUrl")) {
-//                                Glide.with(getActivity())
-//                                        .load(jsonObject.get("profileUrl").getAsString())
-//                                        .into(mImageViewTrainerPhoto);
-//                            }
-//
-//                            if (jsonObject.has("address")) {
-//                                mTextViewTrainerAddress.setText(jsonObject.get("address").getAsString());
-//                            }
-//
-//                            if (jsonObject.has("phone")) {
-//                                mTextViewTrainerCall.setText(jsonObject.get("phone").getAsString());
-//                            }
-//                        }
-//                    }
-//                } catch (JsonSyntaxException e) {
-//                    Log.w("AsyncHttpClient", "Exception while parsing json " + e.getMessage());
-//                    Toast.makeText(getContext(), "Opps looks like " +
-//                                    "some problem, try again",
-//                            Toast.LENGTH_SHORT).show();
-//
-//                }
-//            }
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, String response,
-//                                  Throwable throwable) {
-//                Log.w("AsyncHttpClient", "HTTP Request failure: " + statusCode + " " +
-//                        throwable.getMessage());
-//            }
-//        });
-
-        return view;
+        return  mTrainer;
     }
 
     @Override

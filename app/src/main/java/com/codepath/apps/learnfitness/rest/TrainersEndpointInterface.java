@@ -12,5 +12,7 @@ public interface TrainersEndpointInterface {
 
     @GET("trainers/{trainerId}")
     Observable<Trainer> getTrainer(@Path("trainerId") String trainerId);
+
+    @GET("trainers")
     Observable<List<Trainer>> fetchTrainers();
 }
