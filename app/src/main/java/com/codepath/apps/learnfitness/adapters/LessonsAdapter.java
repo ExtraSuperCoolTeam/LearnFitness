@@ -28,65 +28,9 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mWeeks = weeks;
     }
 
-//    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-//
-//        @Bind(R.id.ivImage) ImageView image;
-//        @Bind(R.id.tvTitle) TextView title;
-//        @Bind(R.id.tvDescription) TextView description;
-//
-//        public ViewHolder(View itemView) {
-//            super(itemView);
-//
-//            ButterKnife.bind(this, itemView);
-//            itemView.setOnClickListener(this);
-//        }
-//
-//        public void onClick(View v) {
-//            int position = getAdapterPosition();
-//           // Intent i = new Intent(itemView.getContext(), LessonDetailActivity.class);
-//
-//            Week week = mWeeks.get(position);
-////            i.putExtra("lesson", Parcels.wrap(article));
-//
-////            itemView.getContext().startActivity(i);
-//
-//            WeekFragment fragment = WeekFragment.newInstance(week);
-//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//            ft.replace(R.id.flContent, fragment);
-//            ft.commit();
-//
-//        }
-//    }
-
-//    public class ViewHolder2 extends RecyclerView.ViewHolder implements View.OnClickListener {
-//
-//        @Bind(R.id.tvWeek) TextView week;
-//        @Bind(R.id.tvLessonTitle) TextView lessonTitle;
-//        @Bind(R.id.ivThumbnail) ImageView thumbnail;
-//
-//        public ViewHolder2(View itemView) {
-//            super(itemView);
-//
-//            ButterKnife.bind(this, itemView);
-//            itemView.setOnClickListener(this);
-//        }
-//
-//        public void onClick(View v) {
-//            int position = getAdapterPosition();
-////            Intent i = new Intent(itemView.getContext(), LessonDetailActivity.class);
-//
-//            Week week = mWeeks.get(position);
-////            i.putExtra("lesson", Parcels.wrap(article));
-////
-////            itemView.getContext().startActivity(i);
-//        }
-//    }
-
     @Override
     public int getItemViewType(int position) {
         Week week = mWeeks.get(position);
-        //String weekNumber = week.getWeekNumber();
-        //if (currentLesson == Integer.parseInt(weekNumber)) {
         if (week.isCurrent()) {
             return CURRENT_LESSON;
         } else {
@@ -99,9 +43,6 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         RecyclerView.ViewHolder viewHolder;
-//        sharedPreferences = context.getSharedPreferences(LessonListActivity.MY_SHARED_PREFS,
-//                Context.MODE_PRIVATE);
-//        currentLesson = sharedPreferences.getInt(LessonListActivity.CURRENT_WEEK_NUMBER, 1);
 
         switch (viewType) {
             case CURRENT_LESSON:
@@ -183,7 +124,6 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return mWeeks.size();
     }
 
-    /***** Creating OnItemClickListener *****/
 
     // Define listener member variable
     private static OnItemClickListener listener;

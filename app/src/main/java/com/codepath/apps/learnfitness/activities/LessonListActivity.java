@@ -1,9 +1,13 @@
 package com.codepath.apps.learnfitness.activities;
 
+import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
+import com.codepath.apps.learnfitness.fragments.TrainerInfoFragment;
 import com.codepath.apps.learnfitness.R;
 import com.codepath.apps.learnfitness.fragments.WeekFragment;
 import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
+import com.codepath.apps.learnfitness.models.Trainer;
 import com.codepath.apps.learnfitness.models.Week;
+import com.facebook.appevents.AppEventsLogger;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -15,14 +19,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class LessonListActivity extends AppCompatActivity
-            implements WeeksListFragment.OnItemSelectedListener {
+public class LessonListActivity extends AppCompatActivity implements WeeksListFragment.OnItemSelectedListener {
 
     public static final String MY_SHARED_PREFS = "MY_SHARED_PREFS4";
     public static final String CURRENT_WEEK_NUMBER = "CURRENT_WEEK_NUMBER";
@@ -33,6 +37,7 @@ public class LessonListActivity extends AppCompatActivity
 
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
+    public static FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,24 +105,28 @@ public class LessonListActivity extends AppCompatActivity
                 });
     }
 
-    public void selectDrawerItem(MenuItem menuItem) {
+    public void showTrainerInfo(Trainer trainer) {
+        Fragment fragment = TrainerInfoFragment.newInstance(trainer);
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+    }
+
+    public void selectDrawerItem(MenuItem currentMenuItem) {
         // Create a new fragment and specify the planet to show based on
         // position
         Fragment fragment = null;
 
         Class fragmentClass;
-        switch(menuItem.getItemId()) {
+        switch(currentMenuItem.getItemId()) {
             case R.id.nav_first_fragment:
                 fragmentClass = WeeksListFragment.class;
                 break;
             case R.id.nav_second_fragment:
-                fragmentClass = WeeksListFragment.class;
-//                fragmentClass = .class;
+                fragmentClass = FindTrainerFragment.class;
                 break;
             case R.id.nav_third_fragment:
                 fragmentClass = WeeksListFragment.class;
-//                fragmentClass = SimpsonsFragment.class;
                 break;
+
             default:
                 fragmentClass = WeeksListFragment.class;
                 break;
@@ -130,12 +139,17 @@ public class LessonListActivity extends AppCompatActivity
         }
 
         // Insert the fragment by replacing any existing fragment
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         // Highlight the selected item, update the title, and close the drawer
-        menuItem.setChecked(true);
-        setTitle(menuItem.getTitle());
+        Menu menu = mNavigation.getMenu();
+        for (int i = 0; i < menu.size(); i++) {
+            menu.getItem(i).setChecked(false);
+        }
+        currentMenuItem.setChecked(true);
+
+        setTitle(currentMenuItem.getTitle());
         mDrawer.closeDrawers();
     }
 
@@ -143,5 +157,16 @@ public class LessonListActivity extends AppCompatActivity
     public void onWeekSelected(View itemView, Week week) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, WeekFragment.newInstance(week)).commit();
+    }
+
+    protected void onResume() {
+        super.onResume();
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AppEventsLogger.deactivateApp(this);
     }
 }

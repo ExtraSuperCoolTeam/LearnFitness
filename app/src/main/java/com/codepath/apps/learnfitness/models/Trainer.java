@@ -1,11 +1,14 @@
-
 package com.codepath.apps.learnfitness.models;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.util.HashMap;
 
 public class Trainer implements Parcelable {
 
@@ -51,6 +54,10 @@ public class Trainer implements Parcelable {
      * @return
      *     The name
      */
+
+    //Todo add trainderParams from Retrofit
+    //Todo add longitude and Latitude for trainers
+
     public String getName() {
         return name;
     }
@@ -173,4 +180,33 @@ public class Trainer implements Parcelable {
             return new Trainer[size];
         }
     };
+
+    public static Trainer fromJSONObject(JSONObject object) {
+        Trainer trainer = new Trainer();
+        try {
+            trainer.id = object.getString("id");
+            trainer.name = object.getString("name");
+            trainer.address = object.getString("address");
+            trainer.profileUrl = object.getString("profileUrl");
+            trainer.phone = object.getString("phone");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return trainer;
+    }
+
+    //TODO Fix the object to array
+
+    public static HashMap<String, Trainer> fromJSONArray(JSONObject object) {
+        HashMap<String, Trainer> trainers = new HashMap<>();
+
+        //todo for loop
+        Trainer trainer = fromJSONObject(object);
+        trainers.put(trainer.getId(), trainer);
+
+        return trainers;
+    }
+
 }

@@ -37,10 +37,11 @@ public class TrainerInfoFragment extends Fragment {
     @Bind(R.id.tvTrainerInfo4) TextView mTextViewTrainerInfo4;
     @Bind(R.id.tvTrainerAddress) TextView mTextViewTrainerAddress;
     @Bind(R.id.tvTrainerCall) TextView mTextViewTrainerCall;
+    public Trainer mTrainer;
 
-
-    public static TrainerInfoFragment newInstance() {
+    public static TrainerInfoFragment newInstance(Trainer trainer) {
         TrainerInfoFragment trainerInfoFragment = new TrainerInfoFragment();
+        trainerInfoFragment.mTrainer = trainer;
 
         return trainerInfoFragment;
     }
@@ -64,24 +65,24 @@ public class TrainerInfoFragment extends Fragment {
         subscription = call
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Trainer>() {
-                    @Override
-                    public void onCompleted() {
-                    }
+                @Override
+                public void onCompleted() {
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        // cast to retrofit.HttpException to get the response code
-                        if (e instanceof HttpException) {
-                            HttpException response = (HttpException) e;
-                            int code = response.code();
-                        }
+                @Override
+                public void onError(Throwable e) {
+                    // cast to retrofit.HttpException to get the response code
+                    if (e instanceof HttpException) {
+                        HttpException response = (HttpException) e;
+                        int code = response.code();
                     }
+                }
 
-                    @Override
-                    public void onNext(Trainer trainer) {
-                        Log.i("TrainerInfoFragment", trainer.getName());
-                    }
-                });
+                @Override
+                public void onNext(Trainer trainer) {
+                    Log.i("TrainerInfoFragment", trainer.getName());
+                }
+            });
 
 //        Observable<List<Trainer>> call2 = MediaStoreService.trainersStore.fetchTrainers();
 //        subscription = call2

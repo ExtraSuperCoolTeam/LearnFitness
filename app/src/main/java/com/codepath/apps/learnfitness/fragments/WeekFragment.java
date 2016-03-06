@@ -4,7 +4,7 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
-import com.codepath.apps.learnfitness.DeveloperKey;
+//import com.codepath.apps.learnfitness.DeveloperKey;
 import com.codepath.apps.learnfitness.R;
 import com.codepath.apps.learnfitness.adapters.WeekStepsAdapter;
 import com.codepath.apps.learnfitness.models.Step;
@@ -77,7 +77,7 @@ public class WeekFragment extends Fragment implements YouTubePlayer.OnInitialize
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.add(R.id.flVideo, youTubePlayerFragment).commit();
 
-        youTubePlayerFragment.initialize(DeveloperKey.DEVELOPER_KEY, this);
+        youTubePlayerFragment.initialize(getString(R.string.google_developer_key), this);
         return v;
     }
 
