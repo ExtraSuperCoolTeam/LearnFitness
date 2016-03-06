@@ -1,32 +1,5 @@
 package com.codepath.apps.learnfitness.fragments;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import com.codepath.apps.learnfitness.Manifest;
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.activities.LessonListActivity;
-import com.codepath.apps.learnfitness.adapters.CustomWindowAdapter;
-import com.codepath.apps.learnfitness.models.Trainer;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.json.JSONObject;
-
 import android.app.Dialog;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -46,6 +19,32 @@ import android.view.animation.BounceInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.codepath.apps.learnfitness.Manifest;
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.activities.LessonListActivity;
+import com.codepath.apps.learnfitness.adapters.CustomWindowAdapter;
+import com.codepath.apps.learnfitness.models.Trainer;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
 import cz.msebera.android.httpclient.Header;
@@ -58,15 +57,15 @@ public class FindTrainerFragment extends Fragment implements
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener, GoogleMap.OnInfoWindowClickListener {
 
-    private static View view;
+    private View view;
     private static final String TAG = "FindTrainerFragment";
 
     private GoogleApiClient mGoogleApiClient;
     private SupportMapFragment mapFragment;
-    private static GoogleMap mMap;
-    private static Double latitude, longitude;
+    private GoogleMap mMap;
+    private Double latitude, longitude;
     private LocationRequest mLocationRequest;
-    private static HashMap<String, Trainer> mTrainers;
+    private HashMap<String, Trainer> mTrainers;
 
 
     /*
@@ -176,7 +175,7 @@ public class FindTrainerFragment extends Fragment implements
         Toast.makeText(getActivity(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
         FindTrainerFragmentPermissionsDispatcher.getMyLocationWithCheck(this);
         mMap.setOnInfoWindowClickListener(this);
-        populateMapWithSearchQuery("test");
+//        populateMapWithSearchQuery("test");
 
 //        mMap.setOnMapLongClickListener(this);
 //        mMap.setOnMarkerDragListener(this);

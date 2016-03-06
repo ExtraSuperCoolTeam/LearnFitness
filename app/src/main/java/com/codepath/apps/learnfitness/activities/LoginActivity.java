@@ -38,12 +38,7 @@ public class LoginActivity extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
 
-        // If the user is already logged in, skip the Login page and go directly to the LessonDepre List.
-        AccessToken token = AccessToken.getCurrentAccessToken();
-        if (token != null) {
-            Intent i = new Intent(this, LessonListActivity.class);
-            startActivity(i);
-        }
+        checkIfAuthenticated();
 
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
@@ -85,11 +80,21 @@ public class LoginActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         AppEventsLogger.activateApp(this);
+        checkIfAuthenticated();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         AppEventsLogger.deactivateApp(this);
+    }
+
+    private void checkIfAuthenticated() {
+        // If the user is already logged in, skip the Login page and go directly to the LessonDepre List.
+        AccessToken token = AccessToken.getCurrentAccessToken();
+        if (token != null) {
+            Intent i = new Intent(this, LessonListActivity.class);
+            startActivity(i);
+        }
     }
 }

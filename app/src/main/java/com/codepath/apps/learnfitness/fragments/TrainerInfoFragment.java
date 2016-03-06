@@ -51,6 +51,7 @@ public class TrainerInfoFragment extends Fragment {
         return trainerInfoFragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

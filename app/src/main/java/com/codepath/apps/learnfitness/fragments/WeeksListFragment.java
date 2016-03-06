@@ -95,7 +95,7 @@ public class WeeksListFragment extends Fragment {
                 if (newlySelectedWeekNumber >= 0 && newlySelectedWeekNumber <= mWeeks.size()) {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(LessonListActivity.CURRENT_WEEK_NUMBER,
-                             Integer.toString(newlySelectedWeekNumber + 1));
+                            Integer.toString(newlySelectedWeekNumber + 1));
 
                     editor.commit();
                 }
