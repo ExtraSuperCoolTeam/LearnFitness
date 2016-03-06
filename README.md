@@ -22,8 +22,8 @@ MVP
   * [X] User can identify the week they are on by UI/UX difference on the current week.
 * [X] User can tap on a week to see a detailed view of that material.
   * [X] User can watch the week's video, follow through instructions, read description on this page.
-* [ ] User can navigate to a 1-on-1 chat with his/her trainer 
-  * [ ] User can post pictures and texts to an offline chat with the trainer
+* [ ] User can navigate to "check my form" screen
+  * [ ] User can post videos of their form offline to the trainer
   * [ ] user can view the latest response from the trainer 
 * [X] User can search for a trainer close to their location.
   * [X] User can see a map view with pins of the results.
@@ -33,7 +33,6 @@ MVP
 Optional
 
 * [ ] User can see a map or a list view for the trainer search results.
-* [ ] User can post videos to the 1-on-1 chat
 * [ ] User can call the trainer directly from the find a trainer map fragment 
 
 Bonus
