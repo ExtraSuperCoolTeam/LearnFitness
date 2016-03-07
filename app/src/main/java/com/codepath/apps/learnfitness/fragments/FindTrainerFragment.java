@@ -1,29 +1,5 @@
 package com.codepath.apps.learnfitness.fragments;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import com.codepath.apps.learnfitness.Manifest;
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.activities.LessonListActivity;
-import com.codepath.apps.learnfitness.adapters.CustomWindowAdapter;
-import com.codepath.apps.learnfitness.models.Trainer;
-import com.codepath.apps.learnfitness.rest.MediaStoreService;
-
 import android.app.Dialog;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -41,6 +17,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
 import android.widget.Toast;
+
+import com.codepath.apps.learnfitness.Manifest;
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.activities.LessonListActivity;
+import com.codepath.apps.learnfitness.adapters.CustomWindowAdapter;
+import com.codepath.apps.learnfitness.models.Trainer;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.HashMap;
 import java.util.List;
