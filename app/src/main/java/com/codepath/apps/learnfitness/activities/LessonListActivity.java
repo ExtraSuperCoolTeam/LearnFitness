@@ -1,14 +1,5 @@
 package com.codepath.apps.learnfitness.activities;
 
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
-import com.codepath.apps.learnfitness.fragments.TrainerInfoFragment;
-import com.codepath.apps.learnfitness.fragments.WeekFragment;
-import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
-import com.codepath.apps.learnfitness.models.Trainer;
-import com.codepath.apps.learnfitness.models.Week;
-import com.facebook.appevents.AppEventsLogger;
-
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -24,6 +15,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
+import com.codepath.apps.learnfitness.fragments.TrainerInfoFragment;
+import com.codepath.apps.learnfitness.fragments.WeekFragment;
+import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
+import com.codepath.apps.learnfitness.models.Trainer;
+import com.codepath.apps.learnfitness.models.Week;
+import com.facebook.appevents.AppEventsLogger;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
