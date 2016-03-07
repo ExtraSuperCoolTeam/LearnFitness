@@ -41,7 +41,6 @@ public class CustomWindowAdapter implements GoogleMap.InfoWindowAdapter {
         String key = marker.getTitle();
         Trainer trainer = mTrainers.get(key);
         // Populate fields
-
         TextView title = (TextView) v.findViewById(R.id.tvTrainerName);
         title.setText(trainer.getName());
 

@@ -68,7 +68,7 @@ public class TrainerInfoFragment extends Fragment {
         Trainer trainer = getArguments().getParcelable("trainer");
 
         trainer = getTrainer(trainer.getId());
-
+        setupTrainerDetailView(trainer);
 
         return view;
     }
@@ -94,25 +94,25 @@ public class TrainerInfoFragment extends Fragment {
         subscription = call
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Trainer>() {
-                    @Override
-                    public void onCompleted() {
-                    }
+                @Override
+                public void onCompleted() {
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        // cast to retrofit.HttpException to get the response code
-                        if (e instanceof HttpException) {
-                            HttpException response = (HttpException) e;
-                            int code = response.code();
-                        }
+                @Override
+                public void onError(Throwable e) {
+                    // cast to retrofit.HttpException to get the response code
+                    if (e instanceof HttpException) {
+                        HttpException response = (HttpException) e;
+                        int code = response.code();
                     }
+                }
 
-                    @Override
-                    public void onNext(Trainer t) {
-                        Log.i("TrainerInfoFragment", t.getName());
-                        mTrainer = t;
-                    }
-                });
+                @Override
+                public void onNext(Trainer t) {
+                    Log.i("TrainerInfoFragment", t.getName());
+                    mTrainer = t;
+                }
+            });
 
 
         return  mTrainer;

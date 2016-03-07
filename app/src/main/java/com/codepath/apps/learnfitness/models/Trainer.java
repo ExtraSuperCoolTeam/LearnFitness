@@ -1,4 +1,5 @@
 package com.codepath.apps.learnfitness.models;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,6 +10,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class Trainer implements Parcelable {
 
@@ -30,6 +32,10 @@ public class Trainer implements Parcelable {
     @SerializedName("trainerParams")
     @Expose
     private TrainerParams trainerParams;
+    @SerializedName("location")
+    @Expose
+    private Location location;
+
 
     /**
      * 
@@ -143,6 +149,13 @@ public class Trainer implements Parcelable {
         this.trainerParams = trainerParams;
     }
 
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 
     @Override
     public int describeContents() {
@@ -157,6 +170,7 @@ public class Trainer implements Parcelable {
         dest.writeString(this.phone);
         dest.writeString(this.profileUrl);
         dest.writeParcelable(this.trainerParams, flags);
+        dest.writeParcelable(this.location, flags);
     }
 
     public Trainer() {
@@ -169,6 +183,7 @@ public class Trainer implements Parcelable {
         this.phone = in.readString();
         this.profileUrl = in.readString();
         this.trainerParams = in.readParcelable(TrainerParams.class.getClassLoader());
+        this.location = in.readParcelable(Location.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Trainer> CREATOR = new Parcelable.Creator<Trainer>() {
@@ -209,4 +224,15 @@ public class Trainer implements Parcelable {
         return trainers;
     }
 
+    public static HashMap<String, Trainer> mapTrainerIdToTrainer(List<Trainer> trainers) {
+        HashMap<String, Trainer> trainerMap = new HashMap<>();
+
+        int i = 0;
+        for (Trainer trainer:trainers) {
+            trainerMap.put(trainer.getId(), trainer);
+
+            break;
+        }
+        return trainerMap;
+    }
 }

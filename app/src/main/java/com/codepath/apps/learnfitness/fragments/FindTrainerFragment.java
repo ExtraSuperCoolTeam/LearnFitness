@@ -1,5 +1,29 @@
 package com.codepath.apps.learnfitness.fragments;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import com.codepath.apps.learnfitness.Manifest;
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.activities.LessonListActivity;
+import com.codepath.apps.learnfitness.adapters.CustomWindowAdapter;
+import com.codepath.apps.learnfitness.models.Trainer;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
+
 import android.app.Dialog;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -19,37 +43,17 @@ import android.view.animation.BounceInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.codepath.apps.learnfitness.Manifest;
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.activities.LessonListActivity;
-import com.codepath.apps.learnfitness.adapters.CustomWindowAdapter;
-import com.codepath.apps.learnfitness.models.Trainer;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.json.JSONObject;
-
 import java.util.HashMap;
+import java.util.List;
 
-import cz.msebera.android.httpclient.Header;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
+import retrofit2.adapter.rxjava.HttpException;
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 @RuntimePermissions
 public class FindTrainerFragment extends Fragment implements
@@ -66,7 +70,7 @@ public class FindTrainerFragment extends Fragment implements
     private Double latitude, longitude;
     private LocationRequest mLocationRequest;
     private HashMap<String, Trainer> mTrainers;
-
+    Subscription subscription;
 
     /*
 	 * Define a request code to send to Google Play services This code is
@@ -99,36 +103,43 @@ public class FindTrainerFragment extends Fragment implements
         if (query.trim().isEmpty()) {
             return;
         }
-
-        String url = REST_END_POINT + "/1";
-        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-
-        asyncHttpClient.get(url, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-
-                mTrainers = Trainer.fromJSONArray(response);
-                CustomWindowAdapter adapter = new CustomWindowAdapter(
-                        getActivity().getLayoutInflater(), mTrainers, getActivity());
-                if (mMap != null) {
-                    mMap.setInfoWindowAdapter(adapter);
-                    for (String key : mTrainers.keySet()) {
-                        Trainer trainer = mTrainers.get(key);
-                        addMarkerforTrainer(trainer);
+        Observable<List<Trainer>> call = MediaStoreService.trainersStore.fetchTrainers();
+        subscription = call
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Trainer>>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.i("FindTrainerFragment", "Api call success");
                     }
 
-                }
+                    @Override
+                    public void onError(Throwable e) {
+                        // cast to retrofit.HttpException to get the response code
+                        Log.i("FindTrainerFragment", "in error");
+                        Log.i("FindTrainerFragment", e.toString());
 
-            }
+                        if (e instanceof HttpException) {
+                            HttpException response = (HttpException) e;
+                            int code = response.code();
+                        }
+                    }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String response,
-                                  Throwable throwable) {
-                Log.w("AsyncHttpClient", "HTTP Request failure: " + statusCode + " " +
-                        throwable.getMessage());
-            }
-        });
+                    @Override
+                    public void onNext(List<Trainer> trainers) {
+                        Log.i("FindTrainerFragment", "Found " + trainers.size() + " trainers");
+                        mTrainers = Trainer.mapTrainerIdToTrainer(trainers);
+                        CustomWindowAdapter adapter = new CustomWindowAdapter(
+                                getActivity().getLayoutInflater(), mTrainers, getActivity());
 
+                        if (mMap != null) {
+                            mMap.setInfoWindowAdapter(adapter);
+                            for (String key : mTrainers.keySet()) {
+                                Trainer trainer = mTrainers.get(key);
+                                addMarkerforTrainer(trainer);
+                            }
+                        }
+                    }
+                });
     }
 
     @Override
@@ -142,7 +153,10 @@ public class FindTrainerFragment extends Fragment implements
         //Todo: Get the actual location from trainer
         BitmapDescriptor defaultMarker = BitmapDescriptorFactory
                 .defaultMarker(BitmapDescriptorFactory.HUE_RED);
-        LatLng trainerPosition = new LatLng(37.7739, -122.431297);
+        //LatLng trainerPosition = new LatLng(37.7739, -122.431297);
+        LatLng trainerPosition = new LatLng(Double.parseDouble(trainer.getLocation().getLatitude()),
+                Double.parseDouble(trainer.getLocation().getLongitude()));
+
         Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(trainerPosition)
                 .title(trainer.getId()).icon(defaultMarker));
