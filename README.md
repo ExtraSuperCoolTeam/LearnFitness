@@ -42,3 +42,10 @@ Bonus
 
 **Backend, server-side** 
 https://github.com/ExtraSuperCoolTeam/LearnFitness-Mediastore
+
+## Video Walkthrough
+
+Here's a walkthrough of implemented user stories:
+
+<img src='http://i.imgur.com/Qy9REGl.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
