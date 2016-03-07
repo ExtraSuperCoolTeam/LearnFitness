@@ -47,5 +47,5 @@ https://github.com/ExtraSuperCoolTeam/LearnFitness-Mediastore
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/46AjRVO.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/Qy9REGl.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
