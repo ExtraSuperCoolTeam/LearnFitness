@@ -227,11 +227,8 @@ public class Trainer implements Parcelable {
     public static HashMap<String, Trainer> mapTrainerIdToTrainer(List<Trainer> trainers) {
         HashMap<String, Trainer> trainerMap = new HashMap<>();
 
-        int i = 0;
         for (Trainer trainer:trainers) {
             trainerMap.put(trainer.getId(), trainer);
-
-            break;
         }
         return trainerMap;
     }

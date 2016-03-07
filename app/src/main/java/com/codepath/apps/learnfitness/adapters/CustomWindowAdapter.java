@@ -7,7 +7,6 @@ import com.bumptech.glide.Glide;
 import com.codepath.apps.learnfitness.R;
 import com.codepath.apps.learnfitness.models.Trainer;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +16,9 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by JaneChung on 3/5/16.
  */
@@ -25,6 +27,11 @@ public class CustomWindowAdapter implements GoogleMap.InfoWindowAdapter {
     LayoutInflater mInflater;
     HashMap<String, Trainer> mTrainers;
     Context mContext;
+
+    @Bind(R.id.tvTrainerName) TextView mTextViewTrainerName;
+    @Bind(R.id.tvAddress) TextView mTextViewTrainerAddress;
+    @Bind(R.id.ivTrainerThumbnail) ImageView mImageViewTrainerThumnnail;
+
 
     public CustomWindowAdapter(LayoutInflater i, HashMap<String, Trainer> trainers, Context context){
         mInflater = i;
@@ -36,24 +43,22 @@ public class CustomWindowAdapter implements GoogleMap.InfoWindowAdapter {
     @Override
     public View getInfoContents(Marker marker) {
         // Getting view from the layout file
-        View v = mInflater.inflate(R.layout.custom_info_window, null);
+        View view = mInflater.inflate(R.layout.custom_info_window, null);
+        ButterKnife.bind(this,view);
 
         String key = marker.getTitle();
         Trainer trainer = mTrainers.get(key);
-        // Populate fields
-        TextView title = (TextView) v.findViewById(R.id.tvTrainerName);
-        title.setText(trainer.getName());
 
+        mTextViewTrainerName.setText(trainer.getName());
+        mTextViewTrainerAddress.setText(trainer.getAddress());
 
-        TextView description = (TextView) v.findViewById(R.id.tvAddress);
-        description.setText(trainer.getAddress());
-
-        ImageView thumbnail = (ImageView) v.findViewById(R.id.ivTrainerThumbnail);
         Log.d(TAG, "PHOTO URL: " + trainer.getProfileUrl());
-        Glide.with((Activity)mContext).load(trainer.getProfileUrl()).into(thumbnail);
-        // Return info window contents
+        mImageViewTrainerThumnnail.setImageResource(0);
+        Glide.with(mContext).load(trainer.getProfileUrl()).placeholder(R.mipmap.ic_wifi)
+                .into(mImageViewTrainerThumnnail);
 
-        return v;
+        // Return info window contents
+        return view;
     }
 
     // This changes the frame of the info window; returning null uses the default frame.
@@ -62,7 +67,4 @@ public class CustomWindowAdapter implements GoogleMap.InfoWindowAdapter {
     public View getInfoWindow(Marker marker) {
         return null;
     }
-
-
-
 }

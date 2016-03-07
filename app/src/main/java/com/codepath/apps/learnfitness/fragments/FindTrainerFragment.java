@@ -40,7 +40,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -87,10 +86,9 @@ public class FindTrainerFragment extends Fragment implements
             return null;
         }
 
-        view = (RelativeLayout) inflater.inflate(R.layout.fragment_find_trainers, container, false);
+        view = inflater.inflate(R.layout.fragment_find_trainers, container, false);
 
         setUpMapIfNeeded();
-
         return view;
     }
 
@@ -114,13 +112,13 @@ public class FindTrainerFragment extends Fragment implements
 
                     @Override
                     public void onError(Throwable e) {
-                        // cast to retrofit.HttpException to get the response code
-                        Log.i("FindTrainerFragment", "in error");
                         Log.i("FindTrainerFragment", e.toString());
 
+                        // cast to retrofit.HttpException to get the response code
                         if (e instanceof HttpException) {
                             HttpException response = (HttpException) e;
                             int code = response.code();
+                            Log.i("FindTrainerFragment", "Http error code: " + code);
                         }
                     }
 
@@ -368,8 +366,6 @@ public class FindTrainerFragment extends Fragment implements
         }
     }
 
-
-
     // Define a DialogFragment that displays the error dialog
     public static class ErrorDialogFragment extends DialogFragment {
 
@@ -393,7 +389,4 @@ public class FindTrainerFragment extends Fragment implements
             return mDialog;
         }
     }
-
-
-
 }

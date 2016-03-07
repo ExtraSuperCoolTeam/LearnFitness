@@ -15,7 +15,7 @@ public class TrainerParams implements Parcelable {
     @SerializedName("height")
     @Expose
     private String height;
-    @SerializedName("Yrs of Training")
+    @SerializedName("yrsOfTraining")
     @Expose
     private String yrsOfTraining;
     @SerializedName("weight")

@@ -44,8 +44,6 @@ public class CollapsedWeekViewHolder extends RecyclerView.ViewHolder
         int position = getAdapterPosition();
         Week week = mWeeks.get(position);
 
-
-
         if (mOnItemClickListener != null)
             mOnItemClickListener.onItemExpand(v, week);
     }
