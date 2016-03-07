@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="300dp"
+    android:layout_gravity="center"
+    android:background="#00000000">
 
     <RelativeLayout
         android:layout_gravity="center"
@@ -22,32 +24,36 @@
                     android:layout_width="150dp"
                     android:layout_height="150dp" />
                 <TextView
-                    android:id="@+id/tvTrainerInfo1"
+                    android:id="@+id/tvTrainerSpeciality"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/ivTrainerPhoto"
-                    android:layout_marginLeft="20dp"/>
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/speciality"/>
                 <TextView
-                    android:id="@+id/tvTrainerInfo2"
+                    android:id="@+id/tvTrainerExperience"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/ivTrainerPhoto"
-                    android:layout_below="@id/tvTrainerInfo1"
-                    android:layout_marginLeft="20dp"/>
+                    android:layout_below="@id/tvTrainerSpeciality"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/experience"/>
                 <TextView
-                    android:id="@+id/tvTrainerInfo3"
+                    android:id="@+id/tvTrainerWeight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/ivTrainerPhoto"
-                    android:layout_below="@id/tvTrainerInfo2"
-                    android:layout_marginLeft="20dp"/>
+                    android:layout_below="@id/tvTrainerExperience"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/weight"/>
                 <TextView
-                    android:id="@+id/tvTrainerInfo4"
+                    android:id="@+id/tvTrainerHeight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/ivTrainerPhoto"
-                    android:layout_below="@id/tvTrainerInfo3"
-                    android:layout_marginLeft="20dp"/>
+                    android:layout_below="@id/tvTrainerWeight"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/height"/>
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
@@ -62,8 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:textStyle="bold"
-                android:textAlignment="center"
-                />
+                android:textAlignment="center"/>
         </LinearLayout>
     </RelativeLayout>
 

@@ -9,62 +9,62 @@ import android.os.Parcelable;
 
 public class TrainerParams implements Parcelable {
 
-    @SerializedName("Speciality")
+    @SerializedName("speciality")
     @Expose
-    private String Speciality;
-    @SerializedName("Height")
+    private String speciality;
+    @SerializedName("height")
     @Expose
-    private String Height;
-    @SerializedName("Yrs of Training")
+    private String height;
+    @SerializedName("yrsOfTraining")
     @Expose
-    private String YrsOfTraining;
-    @SerializedName("Weight")
+    private String yrsOfTraining;
+    @SerializedName("weight")
     @Expose
-    private String Weight;
+    private String weight;
 
     /**
      * 
      * @return
-     *     The Speciality
+     *     The speciality
      */
     public String getSpeciality() {
-        return Speciality;
+        return speciality;
     }
 
     /**
      * 
      * @param Speciality
-     *     The Speciality
+     *     The speciality
      */
     public void setSpeciality(String Speciality) {
-        this.Speciality = Speciality;
+        this.speciality = Speciality;
     }
 
     /**
      * 
      * @return
-     *     The Height
+     *     The height
      */
     public String getHeight() {
-        return Height;
+        return height;
     }
 
     /**
      * 
      * @param Height
-     *     The Height
+     *     The height
      */
     public void setHeight(String Height) {
-        this.Height = Height;
+        this.height = Height;
     }
 
     /**
      * 
      * @return
-     *     The YrsOfTraining
+     *     The yrsOfTraining
      */
     public String getYrsOfTraining() {
-        return YrsOfTraining;
+        return yrsOfTraining;
     }
 
     /**
@@ -73,25 +73,25 @@ public class TrainerParams implements Parcelable {
      *     The Yrs of Training
      */
     public void setYrsOfTraining(String YrsOfTraining) {
-        this.YrsOfTraining = YrsOfTraining;
+        this.yrsOfTraining = YrsOfTraining;
     }
 
     /**
      * 
      * @return
-     *     The Weight
+     *     The weight
      */
     public String getWeight() {
-        return Weight;
+        return weight;
     }
 
     /**
      * 
      * @param Weight
-     *     The Weight
+     *     The weight
      */
     public void setWeight(String Weight) {
-        this.Weight = Weight;
+        this.weight = Weight;
     }
 
 
@@ -102,20 +102,20 @@ public class TrainerParams implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.Speciality);
-        dest.writeString(this.Height);
-        dest.writeString(this.YrsOfTraining);
-        dest.writeString(this.Weight);
+        dest.writeString(this.speciality);
+        dest.writeString(this.height);
+        dest.writeString(this.yrsOfTraining);
+        dest.writeString(this.weight);
     }
 
     public TrainerParams() {
     }
 
     protected TrainerParams(Parcel in) {
-        this.Speciality = in.readString();
-        this.Height = in.readString();
-        this.YrsOfTraining = in.readString();
-        this.Weight = in.readString();
+        this.speciality = in.readString();
+        this.height = in.readString();
+        this.yrsOfTraining = in.readString();
+        this.weight = in.readString();
     }
 
     public static final Parcelable.Creator<TrainerParams> CREATOR = new Parcelable.Creator<TrainerParams>() {

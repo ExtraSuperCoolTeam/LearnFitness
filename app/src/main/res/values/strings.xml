@@ -19,5 +19,9 @@
     <string name="get_directions">Get Directions</string>
     <string name="call">Call</string>
     <string name="google_developer_key">AIzaSyD7Ylp3sfQXPH0GmDaVcnQ1DPgdCRHBigY</string>
+    <string name="speciality">Specialty :</string>
+    <string name="experience">Years of Experience :</string>
+    <string name="weight">Weight :</string>
+    <string name="height">Height :</string>
 
 </resources>

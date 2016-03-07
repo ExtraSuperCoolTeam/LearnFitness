@@ -42,17 +42,7 @@ public class ExpandedWeekViewHolder extends RecyclerView.ViewHolder
 
     public void onClick(View v) {
         int position = getAdapterPosition();
-        // Intent i = new Intent(itemView.getContext(), LessonDetailActivity.class);
         Week week = mWeeks.get(position);
-//            i.putExtra("lesson", Parcels.wrap(article));
-
-//            itemView.getContext().startActivity(i);
-
-//        WeekFragment fragment = WeekFragment.newInstance(week);
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        ft.replace(R.id.flContent, fragment);
-//        ft.commit();
-
         if (mOnItemClickListener != null)
             mOnItemClickListener.onItemClick(v, week);
     }

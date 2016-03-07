@@ -25,10 +25,6 @@
         android:id="@+id/ivTrainerThumbnail"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginLeft="10dp"
-        android:src="@drawable/the_rock"
-        />
-
-
+        android:layout_marginLeft="10dp" />
 
 </RelativeLayout>
