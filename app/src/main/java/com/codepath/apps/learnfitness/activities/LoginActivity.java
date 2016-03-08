@@ -93,8 +93,11 @@ public class LoginActivity extends AppCompatActivity {
         // If the user is already logged in, skip the Login page and go directly to the LessonDepre List.
         AccessToken token = AccessToken.getCurrentAccessToken();
         if (token != null) {
+            Toast.makeText(LoginActivity.this, "An auth token WAS present!", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(this, LessonListActivity.class);
             startActivity(i);
+        } else {
+            Toast.makeText(LoginActivity.this, "No auth token was present!", Toast.LENGTH_SHORT).show();
         }
     }
 }
