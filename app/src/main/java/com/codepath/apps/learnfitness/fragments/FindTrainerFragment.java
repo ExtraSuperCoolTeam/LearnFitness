@@ -7,10 +7,12 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +46,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 import retrofit2.adapter.rxjava.HttpException;
@@ -85,9 +89,15 @@ public class FindTrainerFragment extends Fragment implements
             return null;
         }
 
+
         view = inflater.inflate(R.layout.fragment_find_trainers, container, false);
+        ButterKnife.bind(this, view);
+
 
         setUpMapIfNeeded();
+
+//        setUpBottomSheet();
+
         return view;
     }
 
@@ -95,6 +105,8 @@ public class FindTrainerFragment extends Fragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+
 
     public void populateMapWithSearchQuery(String query) {
         if (query.trim().isEmpty()) {

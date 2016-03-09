@@ -2,6 +2,7 @@ package com.codepath.apps.learnfitness.activities;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,16 +33,22 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class LessonListActivity extends AppCompatActivity implements WeeksListFragment.OnItemSelectedListener {
+    private static final String TAG = "LessonListActivity";
 
     public static final String MY_SHARED_PREFS = "MY_SHARED_PREFS4";
     public static final String CURRENT_WEEK_NUMBER = "CURRENT_WEEK_NUMBER";
 
-    @Bind(R.id.drawer_layout) DrawerLayout mDrawer;
+    @Bind(R.id.drawer_layout)
+    DrawerLayout mDrawer;
 
-    @Bind(R.id.nvView) NavigationView mNavigation;
+    @Bind(R.id.nvView)
+    NavigationView mNavigation;
+
     @Bind(R.id.fab)
     FloatingActionButton mFab;
 
+    @Bind(R.id.bottom_sheet)
+    View bottomSheet;
 
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
@@ -48,7 +56,6 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
     private Menu mMenu;
     private FindTrainerFragment mFindTrainerFragment;
     private CheckMyFormFragment mCheckMyFormFragment;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +74,7 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
         if (savedInstanceState == null) {
             // TODO: Is this duplicate of below?
             WeeksListFragment fragment = new WeeksListFragment();
+//            FindTrainerFragment fragment = new FindTrainerFragment();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.flContent, fragment);
             ft.commit();
@@ -86,7 +94,27 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
             }
         });
 
+        setUpBottomSheet();
+
     }
+
+    private void setUpBottomSheet() {
+
+        final BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
+        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(View bottomSheet, int newState) {
+                Log.d(TAG, "State changing");
+            }
+
+            @Override
+            public void onSlide(View bottomSheet, float slideOffset) {
+                Log.d(TAG, "onSlide");
+            }
+        });
+//        behavior.setPeekHeight(50);
+    }
+
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -208,6 +236,12 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
     public void showSearch(Boolean show) {
         MenuItem search = mMenu.findItem(R.id.action_search);
         search.setVisible(show);
+
+        if (show) {
+            bottomSheet.setVisibility(View.VISIBLE);
+        } else {
+            bottomSheet.setVisibility(View.GONE);
+        }
     }
 
     public void showFab(Boolean show) {

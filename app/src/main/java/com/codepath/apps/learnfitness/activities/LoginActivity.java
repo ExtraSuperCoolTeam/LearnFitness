@@ -13,8 +13,11 @@ import com.facebook.login.widget.LoginButton;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import butterknife.Bind;
@@ -22,6 +25,7 @@ import butterknife.ButterKnife;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
+
     @Bind(R.id.lbLogin)
     LoginButton lbLogin;
 
@@ -67,7 +71,6 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, "Error login", Toast.LENGTH_LONG).show();
                     }
                 });
-
     }
 
     @Override
