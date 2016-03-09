@@ -1,14 +1,10 @@
 package com.codepath.apps.learnfitness.adapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.codepath.apps.learnfitness.R;
@@ -31,12 +27,10 @@ public class CheckMyFormAdapter extends RecyclerView.Adapter<CheckMyFormAdapter.
         mForms = forms;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.tvFormLessonTitle)
         TextView lessonTitle;
-        @Bind(R.id.btnSubmitForm)
-        Button submit;
         @Bind(R.id.tvDescription)
         TextView description;
 
@@ -47,32 +41,26 @@ public class CheckMyFormAdapter extends RecyclerView.Adapter<CheckMyFormAdapter.
             super(itemView);
 
             ButterKnife.bind(this, itemView);
-            submit.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View v) {
-            int position = getAdapterPosition();
-            Form form = mForms.get(position);
+//        @Override
+//        public void onClick(View v) {
+//            int position = getAdapterPosition();
+////            Form form = mForms.get(position);
+////
+////            //Show the video camera
+////
+////            if (v.getId() != R.id.btnSubmitForm) {
+////                return;
+////            }
+////
+////            Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+////            if (takeVideoIntent.resolveActivity(itemView.getContext().getPackageManager()) != null) {
+////                ((Activity) itemView.getContext())
+////                        .startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
+////            }
+//        }
 
-            //Show the video camera
-
-            if (v.getId() != R.id.btnSubmitForm) {
-                return;
-            }
-
-            Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-            if (takeVideoIntent.resolveActivity(itemView.getContext().getPackageManager()) != null) {
-                ((Activity) itemView.getContext())
-                        .startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
-            }
-        }
-
-        void setOnClickListener(View v) {
-            if (v != null) {
-                v.setOnClickListener(this);
-            }
-        }
     }
 
     @Override

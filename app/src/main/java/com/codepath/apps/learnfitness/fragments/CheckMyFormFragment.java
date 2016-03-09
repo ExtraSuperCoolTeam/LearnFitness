@@ -56,4 +56,8 @@ public class CheckMyFormFragment extends Fragment {
 
         //Get the list of forms here
     }
+
+    public void showCreationDialog() {
+        //Make dialog 
+    }
 }

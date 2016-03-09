@@ -2,6 +2,7 @@ package com.codepath.apps.learnfitness.activities;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.fragments.CheckMyFormFragment;
 import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
 import com.codepath.apps.learnfitness.fragments.TrainerInfoFragment;
 import com.codepath.apps.learnfitness.fragments.WeekFragment;
@@ -36,12 +38,17 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
     @Bind(R.id.drawer_layout) DrawerLayout mDrawer;
 
     @Bind(R.id.nvView) NavigationView mNavigation;
+    @Bind(R.id.fab)
+    FloatingActionButton mFab;
+
 
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
     public static FragmentManager fragmentManager;
     private Menu mMenu;
     private FindTrainerFragment mFindTrainerFragment;
+    private CheckMyFormFragment mCheckMyFormFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +77,14 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
 //        FragmentManager fragmentManager = getSupportFragmentManager();
 //        fragmentManager.beginTransaction().replace(R.id.flContent, new WeeksListFragment()).commit();
         setTitle(R.string.title_activity_lesson_list);
+
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCheckMyFormFragment.showCreationDialog();
+
+            }
+        });
 
     }
 
@@ -128,7 +143,7 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
                 fragmentClass = FindTrainerFragment.class;
                 break;
             case R.id.nav_third_fragment:
-                fragmentClass = WeeksListFragment.class;
+                fragmentClass = CheckMyFormFragment.class;
                 break;
 
             default:
@@ -137,11 +152,14 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
         }
 
         showSearch(currentMenuItem.getItemId() == R.id.nav_second_fragment);
+        showFab(currentMenuItem.getItemId() == R.id.nav_third_fragment);
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
             if (fragmentClass == FindTrainerFragment.class) {
                 mFindTrainerFragment = (FindTrainerFragment) fragment;
+            } else if (fragmentClass == CheckMyFormFragment.class) {
+                mCheckMyFormFragment = (CheckMyFormFragment) fragment;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -190,6 +208,15 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
     public void showSearch(Boolean show) {
         MenuItem search = mMenu.findItem(R.id.action_search);
         search.setVisible(show);
+    }
+
+    public void showFab(Boolean show) {
+        if (show) {
+            mFab.setVisibility(View.VISIBLE);
+        } else {
+            mFab.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
