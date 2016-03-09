@@ -18,11 +18,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.apps.learnfitness.R;
 import com.codepath.apps.learnfitness.fragments.CheckMyFormFragment;
 import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
-import com.codepath.apps.learnfitness.fragments.TrainerInfoFragment;
 import com.codepath.apps.learnfitness.fragments.WeekFragment;
 import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
 import com.codepath.apps.learnfitness.models.Trainer;
@@ -50,12 +52,28 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
     @Bind(R.id.bottom_sheet)
     View bottomSheet;
 
+    @Bind(R.id.ivTrainerPhoto)
+    ImageView mImageViewTrainerPhoto;
+    @Bind(R.id.tvTrainerSpeciality)
+    TextView mTextViewTrainerSpeciality;
+    @Bind(R.id.tvTrainerExperience)
+    TextView mTextViewTrainerExperience;
+    @Bind(R.id.tvTrainerWeight)
+    TextView mTextViewTrainerWeight;
+    @Bind(R.id.tvTrainerHeight)
+    TextView mTextViewTrainerHeight;
+    @Bind(R.id.tvTrainerAddress)
+    TextView mTextViewTrainerAddress;
+    @Bind(R.id.tvTrainerCall)
+    TextView mTextViewTrainerCall;
+
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
     public static FragmentManager fragmentManager;
     private Menu mMenu;
     private FindTrainerFragment mFindTrainerFragment;
     private CheckMyFormFragment mCheckMyFormFragment;
+    private BottomSheetBehavior  mBehavior;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,13 +113,12 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
         });
 
         setUpBottomSheet();
-
     }
 
     private void setUpBottomSheet() {
 
-        final BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
-        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+        mBehavior = BottomSheetBehavior.from(bottomSheet);
+        mBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(View bottomSheet, int newState) {
                 Log.d(TAG, "State changing");
@@ -113,6 +130,31 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
             }
         });
 //        behavior.setPeekHeight(50);
+    }
+
+    private void setupTrainerDetailView(Trainer trainer) {
+
+        String speciality = mTextViewTrainerSpeciality.getText() + " " +
+                trainer.getTrainerParams().getSpeciality();
+        String experience = mTextViewTrainerExperience.getText() + " " +
+                trainer.getTrainerParams().getYrsOfTraining();
+        String weight = mTextViewTrainerWeight.getText() + " " +
+                trainer.getTrainerParams().getWeight();
+        String height = mTextViewTrainerHeight.getText() + " " +
+                trainer.getTrainerParams().getHeight();
+
+        mTextViewTrainerSpeciality.setText(speciality);
+        mTextViewTrainerExperience.setText(experience);
+        mTextViewTrainerWeight.setText(weight);
+        mTextViewTrainerHeight.setText(height);
+
+        Glide.with(LessonListActivity.this)
+                .load(trainer.getProfileUrl()).placeholder(R.mipmap.ic_wifi)
+                .into(mImageViewTrainerPhoto);
+
+        mTextViewTrainerAddress.setText(trainer.getAddress());
+        mTextViewTrainerCall.setText(trainer.getPhone());
+
     }
 
 
@@ -153,8 +195,15 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
     }
 
     public void showTrainerInfo(Trainer trainer) {
-        Fragment fragment = TrainerInfoFragment.newInstance(trainer);
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        if (trainer == null) {
+            bottomSheet.setVisibility(View.GONE);
+            return;
+        }
+
+        setupTrainerDetailView(trainer);
+        bottomSheet.setVisibility(View.VISIBLE);
+        mBehavior.setPeekHeight(100);
+
     }
 
     public void selectDrawerItem(MenuItem currentMenuItem) {
@@ -182,10 +231,12 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
         showSearch(currentMenuItem.getItemId() == R.id.nav_second_fragment);
         showFab(currentMenuItem.getItemId() == R.id.nav_third_fragment);
 
+
         try {
             fragment = (Fragment) fragmentClass.newInstance();
             if (fragmentClass == FindTrainerFragment.class) {
                 mFindTrainerFragment = (FindTrainerFragment) fragment;
+                showTrainerInfo(null);
             } else if (fragmentClass == CheckMyFormFragment.class) {
                 mCheckMyFormFragment = (CheckMyFormFragment) fragment;
             }

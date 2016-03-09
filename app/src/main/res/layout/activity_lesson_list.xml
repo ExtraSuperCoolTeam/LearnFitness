@@ -26,17 +26,148 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:id="@+id/bottom_sheet"
-        app:behavior_peekHeight="100dp"
+        app:behavior_peekHeight="0dp"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
 
-        <LinearLayout
+        <RelativeLayout
+            android:layout_gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
-            android:background="@color/primary">
+            android:layout_height="wrap_content"
+            android:background="@color/material_grey">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cvTrainerProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/ivTrainerPhoto"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp" />
+                    <TextView
+                        android:id="@+id/tvTrainerSpeciality"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/ivTrainerPhoto"
+                        android:layout_marginLeft="20dp"
+                        android:text="@string/speciality"/>
+                    <TextView
+                        android:id="@+id/tvTrainerExperience"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/ivTrainerPhoto"
+                        android:layout_below="@id/tvTrainerSpeciality"
+                        android:layout_marginLeft="20dp"
+                        android:text="@string/experience"/>
+                    <TextView
+                        android:id="@+id/tvTrainerWeight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/ivTrainerPhoto"
+                        android:layout_below="@id/tvTrainerExperience"
+                        android:layout_marginLeft="20dp"
+                        android:text="@string/weight"/>
+                    <TextView
+                        android:id="@+id/tvTrainerHeight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/ivTrainerPhoto"
+                        android:layout_below="@id/tvTrainerWeight"
+                        android:layout_marginLeft="20dp"
+                        android:text="@string/height"/>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:layout_below="@id/cvTrainerProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+                <TextView
+                    android:id="@+id/tvTrainerAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:textStyle="bold"
+                    android:textAlignment="center"/>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="15dp"/>
+
+            <RelativeLayout
+                android:id="@+id/rlTrainerDirections"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/white">
+
+                <ImageView
+                    android:id="@+id/ivTrainerDirectionsIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_trainer_direction"/>
+
+                <TextView
+                    android:id="@+id/tvTrainerGetDirections"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/get_directions"
+                    android:layout_toRightOf="@id/ivTrainerDirectionsIcon"
+                    />
+
+                <ImageView
+                    android:id="@+id/ivTrainerDirectionsArrow"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_right"
+
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlTrainerCall"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/white">
+
+                <ImageView
+                    android:id="@+id/ivTrainerCallIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_trainer_call"/>
+
+                <TextView
+                    android:id="@+id/tvTrainerCall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/call"
+                    android:layout_toRightOf="@id/ivTrainerCallIcon"
+                    />
+
+                <ImageView
+                    android:id="@+id/ivTrainerCallArrow"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_right"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right"/>
+            </RelativeLayout>
 
         </LinearLayout>
     </FrameLayout>

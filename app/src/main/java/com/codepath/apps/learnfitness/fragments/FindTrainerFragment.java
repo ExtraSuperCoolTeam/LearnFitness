@@ -61,7 +61,7 @@ import rx.schedulers.Schedulers;
 public class FindTrainerFragment extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, GoogleMap.OnInfoWindowClickListener {
+        LocationListener, GoogleMap.OnMarkerClickListener {
 
     private View view;
     private static final String TAG = "FindTrainerFragment";
@@ -137,11 +137,11 @@ public class FindTrainerFragment extends Fragment implements
                     public void onNext(List<Trainer> trainers) {
                         Log.i("FindTrainerFragment", "Found " + trainers.size() + " trainers");
                         mTrainers = Trainer.mapTrainerIdToTrainer(trainers);
-                        CustomWindowAdapter adapter = new CustomWindowAdapter(
-                                getActivity().getLayoutInflater(), mTrainers, getActivity());
-
+//                        CustomWindowAdapter adapter = new CustomWindowAdapter(
+//                                getActivity().getLayoutInflater(), mTrainers, getActivity());
+//
                         if (mMap != null) {
-                            mMap.setInfoWindowAdapter(adapter);
+//                            mMap.setInfoWindowAdapter(adapter);
                             for (String key : mTrainers.keySet()) {
                                 Trainer trainer = mTrainers.get(key);
                                 addMarkerforTrainer(trainer);
@@ -149,12 +149,6 @@ public class FindTrainerFragment extends Fragment implements
                         }
                     }
                 });
-    }
-
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-        Trainer trainer = mTrainers.get(marker.getTitle());
-        ((LessonListActivity)getActivity()).showTrainerInfo(trainer);
     }
 
     public void addMarkerforTrainer(Trainer trainer) {
@@ -197,7 +191,7 @@ public class FindTrainerFragment extends Fragment implements
 
         Toast.makeText(getActivity(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
         FindTrainerFragmentPermissionsDispatcher.getMyLocationWithCheck(this);
-        mMap.setOnInfoWindowClickListener(this);
+        mMap.setOnMarkerClickListener(this);
 //        populateMapWithSearchQuery("test");
 
 //        mMap.setOnMapLongClickListener(this);
@@ -375,6 +369,13 @@ public class FindTrainerFragment extends Fragment implements
 
             return false;
         }
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Trainer trainer = mTrainers.get(marker.getTitle());
+        ((LessonListActivity)getActivity()).showTrainerInfo(trainer);
+        return true;
     }
 
     // Define a DialogFragment that displays the error dialog
