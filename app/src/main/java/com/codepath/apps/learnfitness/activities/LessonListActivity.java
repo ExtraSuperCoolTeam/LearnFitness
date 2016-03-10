@@ -338,7 +338,7 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
     @Override
     public void onWeekSelected(View itemView, Week week) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, WeekFragment.newInstance(week)).commit();
+        fragmentManager.beginTransaction().add(R.id.flContent, WeekFragment.newInstance(week)).addToBackStack("week").commit();
     }
 
     protected void onResume() {

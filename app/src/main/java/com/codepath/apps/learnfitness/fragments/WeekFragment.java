@@ -30,16 +30,17 @@ import butterknife.ButterKnife;
 
 public class WeekFragment extends Fragment implements YouTubePlayer.OnInitializedListener {
     private static final String TAG = "WeekFragment";
+    
+    @Bind(R.id.tvTextContent)
+    TextView tvTextContent;
 
+    @Bind(R.id.rvWeekStepsList)
+    RecyclerView mRecyclerViewWeekSteps;
+
+    Week mWeek;
     private WeekStepsAdapter mAdapterWeekSteps;
     private List<Step> mSteps;
     LinearLayoutManager layoutManager;
-
-    //@Bind(R.id.ivImage) ImageView ivImage;
-    @Bind(R.id.tvTextContent) TextView tvTextContent;
-    @Bind(R.id.rvWeekStepsList) RecyclerView mRecyclerViewWeekSteps;
-
-    Week mWeek;
 
     private static final int RECOVERY_DIALOG_REQUEST = 1;
 
@@ -93,7 +94,6 @@ public class WeekFragment extends Fragment implements YouTubePlayer.OnInitialize
     public void onInitializationSuccess(YouTubePlayer.Provider provider,
                                         YouTubePlayer youTubePlayer,
                                         boolean wasRestored) {
-        Toast.makeText(getActivity(), "OMG", Toast.LENGTH_LONG).show();
         if (!wasRestored) {
             youTubePlayer.cueVideo(mWeek.getVideoId());
         }
