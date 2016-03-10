@@ -1,6 +1,8 @@
 package com.codepath.apps.learnfitness.activities;
 
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -54,18 +57,27 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
 
     @Bind(R.id.ivTrainerPhoto)
     ImageView mImageViewTrainerPhoto;
+
     @Bind(R.id.tvTrainerSpeciality)
     TextView mTextViewTrainerSpeciality;
+
     @Bind(R.id.tvTrainerExperience)
     TextView mTextViewTrainerExperience;
+
     @Bind(R.id.tvTrainerWeight)
     TextView mTextViewTrainerWeight;
+
     @Bind(R.id.tvTrainerHeight)
     TextView mTextViewTrainerHeight;
+
     @Bind(R.id.tvTrainerAddress)
     TextView mTextViewTrainerAddress;
+
     @Bind(R.id.tvTrainerCall)
     TextView mTextViewTrainerCall;
+
+    @Bind(R.id.rlTrainerCall)
+    RelativeLayout rlTrainerCall;
 
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
@@ -74,6 +86,7 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
     private FindTrainerFragment mFindTrainerFragment;
     private CheckMyFormFragment mCheckMyFormFragment;
     private BottomSheetBehavior  mBehavior;
+    private Trainer mTrainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,9 +107,10 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
             WeeksListFragment fragment = new WeeksListFragment();
 //            FindTrainerFragment fragment = new FindTrainerFragment();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.flContent, fragment);
-            ft.commit();
-
+            ft.replace(R.id.flContent, fragment).commit();
+            Log.d(TAG, "Should have just instantiated the WeeksListFragment");
+        } else {
+            Log.d(TAG, "did not instantiate WeeksListFragment");
         }
 
         mNavigation.getMenu().getItem(0).setChecked(true);
@@ -129,18 +143,29 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
                 Log.d(TAG, "onSlide");
             }
         });
+
+        rlTrainerCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mTrainer != null) {
+                    Intent i = new Intent(Intent.ACTION_CALL);
+                    i.setData(Uri.parse("tel:" + mTrainer.getPhone()));
+                    startActivity(i);
+                }
+            }
+        });
 //        behavior.setPeekHeight(50);
     }
 
     private void setupTrainerDetailView(Trainer trainer) {
 
-        String speciality = mTextViewTrainerSpeciality.getText() + " " +
+        String speciality =  "Specialty: " +
                 trainer.getTrainerParams().getSpeciality();
-        String experience = mTextViewTrainerExperience.getText() + " " +
+        String experience = "Years of Experience: " +
                 trainer.getTrainerParams().getYrsOfTraining();
-        String weight = mTextViewTrainerWeight.getText() + " " +
+        String weight = "Weight: " +
                 trainer.getTrainerParams().getWeight();
-        String height = mTextViewTrainerHeight.getText() + " " +
+        String height = "Height: " +
                 trainer.getTrainerParams().getHeight();
 
         mTextViewTrainerSpeciality.setText(speciality);
@@ -154,6 +179,7 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
 
         mTextViewTrainerAddress.setText(trainer.getAddress());
         mTextViewTrainerCall.setText(trainer.getPhone());
+
 
     }
 
@@ -195,6 +221,7 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
     }
 
     public void showTrainerInfo(Trainer trainer) {
+        mTrainer = trainer;
         if (trainer == null) {
             bottomSheet.setVisibility(View.GONE);
             return;
