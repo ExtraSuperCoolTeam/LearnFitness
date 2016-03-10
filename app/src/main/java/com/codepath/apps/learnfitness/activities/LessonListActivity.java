@@ -273,7 +273,11 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
 
         // Insert the fragment by replacing any existing fragment
         fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        if (fragmentClass == WeekFragment.class) {
+            fragmentManager.beginTransaction().add(R.id.flContent, fragment).addToBackStack("week").commit();
+        } else {
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        }
 
         // Highlight the selected item, update the title, and close the drawer
         Menu menu = mNavigation.getMenu();
