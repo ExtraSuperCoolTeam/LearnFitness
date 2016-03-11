@@ -87,6 +87,7 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
     private CheckMyFormFragment mCheckMyFormFragment;
     private BottomSheetBehavior  mBehavior;
     private Trainer mTrainer;
+    private WeeksListFragment mWeeksListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,20 +103,19 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
 
         setUpDrawerContent(mNavigation);
 
-        if (savedInstanceState == null) {
-            // TODO: Is this duplicate of below?
-            WeeksListFragment fragment = new WeeksListFragment();
-//            FindTrainerFragment fragment = new FindTrainerFragment();
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.flContent, fragment).commit();
-            Log.d(TAG, "Should have just instantiated the WeeksListFragment");
-        } else {
-            Log.d(TAG, "did not instantiate WeeksListFragment");
-        }
+        mFindTrainerFragment = new FindTrainerFragment();
+        mCheckMyFormFragment = new CheckMyFormFragment();
+        mWeeksListFragment = new WeeksListFragment();
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.flContent, mWeeksListFragment)
+                .commit();
+        Log.d(TAG, "Should have just instantiated the WeeksListFragment");
+
 
         mNavigation.getMenu().getItem(0).setChecked(true);
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        fragmentManager.beginTransaction().replace(R.id.flContent, new WeeksListFragment()).commit();
+
         setTitle(R.string.title_activity_lesson_list);
 
         mFab.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +154,6 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
                 }
             }
         });
-//        behavior.setPeekHeight(50);
     }
 
     private void setupTrainerDetailView(Trainer trainer) {
@@ -229,7 +228,7 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
 
         setupTrainerDetailView(trainer);
         bottomSheet.setVisibility(View.VISIBLE);
-        mBehavior.setPeekHeight(100);
+        mBehavior.setPeekHeight(150);
 
     }
 
@@ -242,34 +241,25 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
         switch(currentMenuItem.getItemId()) {
             case R.id.nav_first_fragment:
                 fragmentClass = WeeksListFragment.class;
+                fragment = mWeeksListFragment;
                 break;
             case R.id.nav_second_fragment:
                 fragmentClass = FindTrainerFragment.class;
+                fragment = mFindTrainerFragment;
                 break;
             case R.id.nav_third_fragment:
                 fragmentClass = CheckMyFormFragment.class;
+                fragment = mCheckMyFormFragment;
                 break;
 
             default:
                 fragmentClass = WeeksListFragment.class;
+                fragment = mWeeksListFragment;
                 break;
         }
 
         showSearch(currentMenuItem.getItemId() == R.id.nav_second_fragment);
         showFab(currentMenuItem.getItemId() == R.id.nav_third_fragment);
-
-
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-            if (fragmentClass == FindTrainerFragment.class) {
-                mFindTrainerFragment = (FindTrainerFragment) fragment;
-                showTrainerInfo(null);
-            } else if (fragmentClass == CheckMyFormFragment.class) {
-                mCheckMyFormFragment = (CheckMyFormFragment) fragment;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         // Insert the fragment by replacing any existing fragment
         fragmentManager = getSupportFragmentManager();
