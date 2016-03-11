@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
 
 public class WeekFragment extends Fragment implements YouTubePlayer.OnInitializedListener {
     private static final String TAG = "WeekFragment";
-    
+
     @Bind(R.id.tvTextContent)
     TextView tvTextContent;
 
@@ -56,7 +56,7 @@ public class WeekFragment extends Fragment implements YouTubePlayer.OnInitialize
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.lesson_fragment, container, false);
+        View v = inflater.inflate(R.layout.week_fragment, container, false);
         ButterKnife.bind(this, v);
 
         //mWeek = LessonDepre.getExample();
