@@ -45,7 +45,7 @@ public class WeeksListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.lesson_list_fragment, container, false);
+        View v = inflater.inflate(R.layout.weeks_list_fragment, container, false);
         ButterKnife.bind(this, v);
         setUpViews();
         return v;

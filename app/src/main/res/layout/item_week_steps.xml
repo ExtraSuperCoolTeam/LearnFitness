@@ -17,7 +17,9 @@
             <TextView
                 android:id="@+id/tvWeekStepsTitle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"/>
 
             <ImageView
                 android:id="@+id/ivWeekStepsImage"
@@ -33,7 +35,8 @@
                 android:layout_height="wrap_content"
                 android:maxLines="3"
                 android:ellipsize="end"
-                android:layout_below="@id/ivWeekStepsImage"/>
+                android:layout_below="@id/ivWeekStepsImage"
+                android:text="ASDF asldkfjalskdfj lkasdjflk jwejklsdakj lkjlwkejlkjslkdf kljwlekj"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>
