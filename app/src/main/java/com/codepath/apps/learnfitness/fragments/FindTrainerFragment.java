@@ -7,12 +7,10 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +21,6 @@ import android.widget.Toast;
 import com.codepath.apps.learnfitness.Manifest;
 import com.codepath.apps.learnfitness.R;
 import com.codepath.apps.learnfitness.activities.LessonListActivity;
-import com.codepath.apps.learnfitness.adapters.CustomWindowAdapter;
 import com.codepath.apps.learnfitness.models.Trainer;
 import com.codepath.apps.learnfitness.rest.MediaStoreService;
 import com.google.android.gms.common.ConnectionResult;
@@ -46,7 +43,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.HashMap;
 import java.util.List;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;

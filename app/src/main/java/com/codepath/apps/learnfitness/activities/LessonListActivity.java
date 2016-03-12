@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -75,8 +77,14 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
     @Bind(R.id.tvTrainerCall)
     TextView mTextViewTrainerCall;
 
+    @Bind(R.id.tvTrainerName)
+    TextView mTrainerName;
+
     @Bind(R.id.rlTrainerCall)
     RelativeLayout rlTrainerCall;
+
+    @Bind(R.id.llTrainerPeakInfo)
+    LinearLayout mTrainerPeakInfo;
 
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
@@ -135,10 +143,29 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
             @Override
             public void onStateChanged(View bottomSheet, int newState) {
                 Log.d(TAG, "State changing");
+                int color;
+                int textColor;
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        color = R.color.primary_dark;
+                        textColor = R.color.white;
+                    default:
+                        color = R.color.white;
+                        textColor = R.color.text_dark;
+
+                }
+                mTrainerPeakInfo.setBackgroundColor(ContextCompat.
+                        getColor(LessonListActivity.this, color));
+
+               //Put into styles the different text color
             }
 
             @Override
             public void onSlide(View bottomSheet, float slideOffset) {
+
+
+
                 Log.d(TAG, "onSlide");
             }
         });
@@ -165,11 +192,14 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
                 trainer.getTrainerParams().getWeight();
         String height = "Height: " +
                 trainer.getTrainerParams().getHeight();
+        String name = "Name: " + trainer.getName();
 
         mTextViewTrainerSpeciality.setText(speciality);
         mTextViewTrainerExperience.setText(experience);
         mTextViewTrainerWeight.setText(weight);
         mTextViewTrainerHeight.setText(height);
+        mTrainerName.setText(name);
+
 
         Glide.with(LessonListActivity.this)
                 .load(trainer.getProfileUrl()).placeholder(R.mipmap.ic_wifi)
