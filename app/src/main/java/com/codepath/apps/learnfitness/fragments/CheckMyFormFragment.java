@@ -5,6 +5,7 @@ import com.codepath.apps.learnfitness.adapters.CheckMyFormAdapter;
 import com.codepath.apps.learnfitness.models.Form;
 import com.codepath.apps.learnfitness.rest.MediaStoreService;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -39,6 +40,11 @@ public class CheckMyFormFragment extends Fragment {
     @Bind(R.id.rvCheckMyForms)
     RecyclerView rvForms;
     LinearLayoutManager layoutManager;
+
+    public static CheckMyFormFragment newInstance() {
+        CheckMyFormFragment checkMyFormFragment = new CheckMyFormFragment();
+        return checkMyFormFragment;
+    }
 
     @Nullable
     @Override
@@ -96,9 +102,29 @@ public class CheckMyFormFragment extends Fragment {
                 });
     }
 
+    // Define the listener of the interface type
+    // listener will the activity instance containing fragment
+    private OnCheckMyFormListener mOnCheckMyFormListener;
+
+    // Define the events that the fragment will use to communicate
+    public interface OnCheckMyFormListener {
+        // This can be any number of events to be sent to the activity
+        void onCheckMyFormDialog();
+    }
+
+    // Store the listener (activity) that will have events fired once the fragment is attached
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnCheckMyFormListener) {
+            mOnCheckMyFormListener = (OnCheckMyFormListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implement CheckMyFormFragment.OnCheckMyFormListener");
+        }
+    }
+
     public void showCreationDialog() {
-        //Make dialog
-
-
+        mOnCheckMyFormListener.onCheckMyFormDialog();
     }
 }
