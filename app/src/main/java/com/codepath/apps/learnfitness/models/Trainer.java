@@ -3,9 +3,6 @@ package com.codepath.apps.learnfitness.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -195,34 +192,6 @@ public class Trainer implements Parcelable {
             return new Trainer[size];
         }
     };
-
-    public static Trainer fromJSONObject(JSONObject object) {
-        Trainer trainer = new Trainer();
-        try {
-            trainer.id = object.getString("id");
-            trainer.name = object.getString("name");
-            trainer.address = object.getString("address");
-            trainer.profileUrl = object.getString("profileUrl");
-            trainer.phone = object.getString("phone");
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return trainer;
-    }
-
-    //TODO Fix the object to array
-
-    public static HashMap<String, Trainer> fromJSONArray(JSONObject object) {
-        HashMap<String, Trainer> trainers = new HashMap<>();
-
-        //todo for loop
-        Trainer trainer = fromJSONObject(object);
-        trainers.put(trainer.getId(), trainer);
-
-        return trainers;
-    }
 
     public static HashMap<String, Trainer> mapTrainerIdToTrainer(List<Trainer> trainers) {
         HashMap<String, Trainer> trainerMap = new HashMap<>();

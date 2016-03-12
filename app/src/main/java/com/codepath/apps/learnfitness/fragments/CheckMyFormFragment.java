@@ -1,28 +1,38 @@
 package com.codepath.apps.learnfitness.fragments;
 
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.adapters.CheckMyFormAdapter;
+import com.codepath.apps.learnfitness.models.Form;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.adapters.CheckMyFormAdapter;
-import com.codepath.apps.learnfitness.models.Form;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.adapter.rxjava.HttpException;
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by JaneChung on 3/6/16.
  */
 public class CheckMyFormFragment extends Fragment {
 
+    Subscription subscription;
     private CheckMyFormAdapter mAdapter;
     private List<Form> mForms;
 
@@ -43,8 +53,8 @@ public class CheckMyFormFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-       mAdapter = new CheckMyFormAdapter(mForms);
-
+        mForms = new ArrayList<>();
+        mAdapter = new CheckMyFormAdapter(mForms);
         //Todo onclick listener
 
     }
@@ -55,9 +65,40 @@ public class CheckMyFormFragment extends Fragment {
         rvForms.setLayoutManager(layoutManager);
 
         //Get the list of forms here
+        Observable<List<Form>> call = MediaStoreService.formsStore.fetchFormMessages();
+        subscription = call
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Form>>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.i("CheckMyFormFragment", "Api call success");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // cast to retrofit.HttpException to get the response code
+                        Log.i("CheckMyFormFragment", "in error");
+                        Log.i("CheckMyFormFragment", e.toString());
+
+                        if (e instanceof HttpException) {
+                            HttpException response = (HttpException) e;
+                            int code = response.code();
+                            Log.i("CheckMyFormFragment", "Http error code: " + code);
+                        }
+                    }
+
+                    @Override
+                    public void onNext(List<Form> forms) {
+                        mForms.addAll(forms);
+                        Log.i("CheckMyFormFragment", Integer.toString(mForms.size()));
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
     }
 
     public void showCreationDialog() {
-        //Make dialog 
+        //Make dialog
+
+
     }
 }
