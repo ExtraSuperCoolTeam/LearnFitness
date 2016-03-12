@@ -246,6 +246,8 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
             case R.id.nav_second_fragment:
                 fragmentClass = FindTrainerFragment.class;
                 fragment = mFindTrainerFragment;
+                mBehavior.setPeekHeight(0);
+
                 break;
             case R.id.nav_third_fragment:
                 fragmentClass = CheckMyFormFragment.class;
