@@ -33,6 +33,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class WeeksListFragment extends Fragment {
+    private static final String TAG = "WeeksListFragment";
 
     Subscription subscription;
     private LessonsAdapter mAdapter;
@@ -45,6 +46,7 @@ public class WeeksListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
         View v = inflater.inflate(R.layout.weeks_list_fragment, container, false);
         ButterKnife.bind(this, v);
         setUpViews();
@@ -53,6 +55,7 @@ public class WeeksListFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         //setUpProgressDialogForLoading();
 
@@ -115,31 +118,33 @@ public class WeeksListFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         rvLessons.setLayoutManager(layoutManager);
 
-        Observable<Lesson> call = MediaStoreService.contentStore.fetchContent();
+        final Observable<Lesson> call = MediaStoreService.contentStore.fetchContent();
         subscription = call
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Lesson>() {
                     @Override
                     public void onCompleted() {
-                        Log.i("WeeksListFragment", "Api call success");
+                        Log.i(TAG, "Api call success");
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         // cast to retrofit.HttpException to get the response code
-                        Log.i("WeeksListFragment", "in error");
-                        Log.i("WeeksListFragment", e.toString());
+                        Log.i(TAG, "in error");
+                        Log.i(TAG, e.toString());
 
                         if (e instanceof HttpException) {
                             HttpException response = (HttpException) e;
                             int code = response.code();
                         }
+
+                        call.retry();
                     }
 
                     @Override
                     public void onNext(Lesson lesson) {
                         mWeeks.addAll(lesson.getWeeks());
-                        Log.i("WeeksListFragment", lesson.getTitle());
+                        Log.i(TAG, lesson.getTitle());
 
                         SharedPreferences sharedPreferences =
                                 getActivity().getSharedPreferences(LessonListActivity.MY_SHARED_PREFS,

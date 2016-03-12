@@ -17,12 +17,12 @@
     <string name="facebook_app_id">1115574068475551</string>
 
     <string name="get_directions">Get Directions</string>
-    <string name="call">Call</string>
+    <string name="call">415-404-3039sssss</string>
     <string name="google_developer_key">AIzaSyD7Ylp3sfQXPH0GmDaVcnQ1DPgdCRHBigY</string>
-    <string name="speciality">Specialty :</string>
-    <string name="experience">Years of Experience :</string>
-    <string name="weight">Weight :</string>
-    <string name="height">Height :</string>
+    <string name="speciality">Specialty : Test Specialty</string>
+    <string name="experience">Years of Experience : 5years</string>
+    <string name="weight">Weight : 110 lbs</string>
+    <string name="height">Height : 150 lbs</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="message_send">Send</string>
     <string name="message_cancel">Cancel</string>

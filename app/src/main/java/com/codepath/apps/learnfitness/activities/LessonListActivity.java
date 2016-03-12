@@ -9,7 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -76,8 +77,14 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
     @Bind(R.id.tvTrainerCall)
     TextView mTextViewTrainerCall;
 
+    @Bind(R.id.tvTrainerName)
+    TextView mTrainerName;
+
     @Bind(R.id.rlTrainerCall)
     RelativeLayout rlTrainerCall;
+
+    @Bind(R.id.llTrainerPeakInfo)
+    LinearLayout mTrainerPeakInfo;
 
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
@@ -130,16 +137,35 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
     }
 
     private void setUpBottomSheet() {
-
+        Log.d(TAG, "setUpBottomSheet");
         mBehavior = BottomSheetBehavior.from(bottomSheet);
         mBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(View bottomSheet, int newState) {
                 Log.d(TAG, "State changing");
+                int color;
+                int textColor;
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        color = R.color.primary_dark;
+                        textColor = R.color.white;
+                    default:
+                        color = R.color.white;
+                        textColor = R.color.text_dark;
+
+                }
+                mTrainerPeakInfo.setBackgroundColor(ContextCompat.
+                        getColor(LessonListActivity.this, color));
+
+               //Put into styles the different text color
             }
 
             @Override
             public void onSlide(View bottomSheet, float slideOffset) {
+
+
+
                 Log.d(TAG, "onSlide");
             }
         });
@@ -166,11 +192,14 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
                 trainer.getTrainerParams().getWeight();
         String height = "Height: " +
                 trainer.getTrainerParams().getHeight();
+        String name = "Name: " + trainer.getName();
 
         mTextViewTrainerSpeciality.setText(speciality);
         mTextViewTrainerExperience.setText(experience);
         mTextViewTrainerWeight.setText(weight);
         mTextViewTrainerHeight.setText(height);
+        mTrainerName.setText(name);
+
 
         Glide.with(LessonListActivity.this)
                 .load(trainer.getProfileUrl()).placeholder(R.mipmap.ic_wifi)
@@ -221,15 +250,19 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
 
     public void showTrainerInfo(Trainer trainer) {
         mTrainer = trainer;
+
+        // If there is no current trainer, hide the bottom sheet.
         if (trainer == null) {
             bottomSheet.setVisibility(View.GONE);
             return;
         }
 
+        // Set up the details in the sheet.
         setupTrainerDetailView(trainer);
-        bottomSheet.setVisibility(View.VISIBLE);
-        mBehavior.setPeekHeight(150);
 
+        // Initialize to collapsed state and make it visible.
+        mBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheet.setVisibility(View.VISIBLE);
     }
 
     public void selectDrawerItem(MenuItem currentMenuItem) {
@@ -246,6 +279,7 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
             case R.id.nav_second_fragment:
                 fragmentClass = FindTrainerFragment.class;
                 fragment = mFindTrainerFragment;
+                bottomSheet.setVisibility(View.GONE);
                 break;
             case R.id.nav_third_fragment:
                 fragmentClass = CheckMyFormFragment.class;
@@ -258,7 +292,7 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
                 break;
         }
 
-        showSearch(currentMenuItem.getItemId() == R.id.nav_second_fragment);
+        showMapSpecificElements(currentMenuItem.getItemId() == R.id.nav_second_fragment);
         showFab(currentMenuItem.getItemId() == R.id.nav_third_fragment);
 
         // Insert the fragment by replacing any existing fragment
@@ -305,13 +339,14 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void showSearch(Boolean show) {
+    public void showMapSpecificElements(Boolean show) {
+
+        // Show or hide the search bar.
         MenuItem search = mMenu.findItem(R.id.action_search);
         search.setVisible(show);
 
-        if (show) {
-            bottomSheet.setVisibility(View.VISIBLE);
-        } else {
+        // Show or hide the bottomSheet.
+        if (!show) {
             bottomSheet.setVisibility(View.GONE);
         }
     }

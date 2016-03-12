@@ -7,12 +7,10 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +21,6 @@ import android.widget.Toast;
 import com.codepath.apps.learnfitness.Manifest;
 import com.codepath.apps.learnfitness.R;
 import com.codepath.apps.learnfitness.activities.LessonListActivity;
-import com.codepath.apps.learnfitness.adapters.CustomWindowAdapter;
 import com.codepath.apps.learnfitness.models.Trainer;
 import com.codepath.apps.learnfitness.rest.MediaStoreService;
 import com.google.android.gms.common.ConnectionResult;
@@ -46,7 +43,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.HashMap;
 import java.util.List;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
@@ -79,24 +75,20 @@ public class FindTrainerFragment extends Fragment implements
 	 * returned in Activity.onActivityResult
 	 */
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-    public static String REST_END_POINT = "https://learnxiny-mediastore.herokuapp.com/trainers";
-
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        Log.d(TAG, "onCreateView");
         if (container == null) {
             return null;
         }
 
-
         view = inflater.inflate(R.layout.fragment_find_trainers, container, false);
         ButterKnife.bind(this, view);
 
-
         setUpMapIfNeeded();
-
-//        setUpBottomSheet();
 
         return view;
     }
@@ -104,9 +96,16 @@ public class FindTrainerFragment extends Fragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(TAG, "onCreate");
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        loadMap(mMap);
+    }
 
     public void populateMapWithSearchQuery(String query) {
         if (query.trim().isEmpty()) {
@@ -169,16 +168,15 @@ public class FindTrainerFragment extends Fragment implements
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
             mapFragment = SupportMapFragment.newInstance();
-            mapFragment.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(GoogleMap googleMap) {
-                    loadMap(googleMap);
-                }
-            });
-            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-            transaction.add(R.id.trainer_map, mapFragment).commit();
-
         }
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                loadMap(googleMap);
+            }
+        });
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.add(R.id.trainer_map, mapFragment).commit();
     }
 
     protected void loadMap(GoogleMap googleMap) {
@@ -200,39 +198,50 @@ public class FindTrainerFragment extends Fragment implements
 
     @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
     void getMyLocation() {
-        if (mMap != null) {
-            // Now that map has loaded, let's get our location!
-            if (ActivityCompat.checkSelfPermission(getActivity(),
-                    android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-            mMap.setMyLocationEnabled(true);
+        Log.d(TAG, "getMyLocation");
+        // Now that map has loaded, let's get our location!
+        if (ActivityCompat.checkSelfPermission(getActivity(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+        if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                     .addApi(LocationServices.API)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this).build();
             connectClient();
+
+        } else {
+            Log.d(TAG, "getMyLocation reconnecting client");
+            mGoogleApiClient.reconnect();
         }
+
     }
 
     protected void connectClient() {
+        Log.d(TAG, "connectClient");
         // Connect the client.
         if (isGooglePlayServicesAvailable() && mGoogleApiClient != null) {
             mGoogleApiClient.connect();
+            Log.d(TAG, "connectClient is connecting client");
+        } else {
+            Log.d(TAG, "connectClient not connecting client");
         }
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         // TODO: move to current location.
+        Log.d(TAG, "onConnected");
 
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (location != null) {
@@ -248,6 +257,7 @@ public class FindTrainerFragment extends Fragment implements
     }
 
     protected void startLocationUpdates() {
+        Log.d(TAG, "startLocationUpdates");
         mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         if (ActivityCompat.checkSelfPermission(getActivity(),
