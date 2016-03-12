@@ -9,7 +9,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -130,7 +129,7 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
     }
 
     private void setUpBottomSheet() {
-
+        Log.d(TAG, "setUpBottomSheet");
         mBehavior = BottomSheetBehavior.from(bottomSheet);
         mBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -221,15 +220,19 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
 
     public void showTrainerInfo(Trainer trainer) {
         mTrainer = trainer;
+
+        // If there is no current trainer, hide the bottom sheet.
         if (trainer == null) {
             bottomSheet.setVisibility(View.GONE);
             return;
         }
 
+        // Set up the details in the sheet.
         setupTrainerDetailView(trainer);
-        bottomSheet.setVisibility(View.VISIBLE);
-        mBehavior.setPeekHeight(150);
 
+        // Initialize to collapsed state and make it visible.
+        mBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheet.setVisibility(View.VISIBLE);
     }
 
     public void selectDrawerItem(MenuItem currentMenuItem) {
@@ -246,8 +249,7 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
             case R.id.nav_second_fragment:
                 fragmentClass = FindTrainerFragment.class;
                 fragment = mFindTrainerFragment;
-                mBehavior.setPeekHeight(0);
-
+                bottomSheet.setVisibility(View.GONE);
                 break;
             case R.id.nav_third_fragment:
                 fragmentClass = CheckMyFormFragment.class;
@@ -260,7 +262,7 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
                 break;
         }
 
-        showSearch(currentMenuItem.getItemId() == R.id.nav_second_fragment);
+        showMapSpecificElements(currentMenuItem.getItemId() == R.id.nav_second_fragment);
         showFab(currentMenuItem.getItemId() == R.id.nav_third_fragment);
 
         // Insert the fragment by replacing any existing fragment
@@ -307,13 +309,14 @@ public class LessonListActivity extends AppCompatActivity implements WeeksListFr
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void showSearch(Boolean show) {
+    public void showMapSpecificElements(Boolean show) {
+
+        // Show or hide the search bar.
         MenuItem search = mMenu.findItem(R.id.action_search);
         search.setVisible(show);
 
-        if (show) {
-            bottomSheet.setVisibility(View.VISIBLE);
-        } else {
+        // Show or hide the bottomSheet.
+        if (!show) {
             bottomSheet.setVisibility(View.GONE);
         }
     }
