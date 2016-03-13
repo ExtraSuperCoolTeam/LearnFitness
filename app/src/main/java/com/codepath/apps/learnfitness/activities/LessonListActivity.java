@@ -1,6 +1,14 @@
 package com.codepath.apps.learnfitness.activities;
 
 
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+
 import com.bumptech.glide.Glide;
 import com.codepath.apps.learnfitness.R;
 import com.codepath.apps.learnfitness.fragments.CheckMyFormFragment;
@@ -11,12 +19,21 @@ import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
 import com.codepath.apps.learnfitness.models.Trainer;
 import com.codepath.apps.learnfitness.models.Week;
 import com.codepath.apps.learnfitness.util.VideoUtility;
+import com.codepath.apps.learnfitness.youtubeupload.Auth;
 import com.facebook.appevents.AppEventsLogger;
 
+import android.accounts.AccountManager;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
@@ -24,6 +41,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -34,10 +52,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Arrays;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -118,9 +140,10 @@ public class LessonListActivity extends AppCompatActivity
     private static final int RESULT_PICK_IMAGE_CROP = 4;
     private static final int RESULT_VIDEO_CAP = 5;
     private static final int REQUEST_DIRECT_TAG = 6;
-//    final HttpTransport transport = AndroidHttp.newCompatibleTransport();
-//    final JsonFactory jsonFactory = new GsonFactory();
-//    GoogleAccountCredential credential;
+    final HttpTransport transport = AndroidHttp.newCompatibleTransport();
+    final JsonFactory jsonFactory = new GsonFactory();
+    GoogleAccountCredential credential;
+    private UploadBroadcastReceiver broadcastReceiver;
 //    private ImageLoader mImageLoader;
     private String mChosenAccountName;
     private Uri mFileURI = null;
@@ -128,11 +151,28 @@ public class LessonListActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().requestFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lesson_list);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
+
+        // youtube account info for upload service
+        credential = GoogleAccountCredential.usingOAuth2(
+                getApplicationContext(), Arrays.asList(Auth.SCOPES));
+        // set exponential backoff policy
+        credential.setBackOff(new ExponentialBackOff());
+
+        if (savedInstanceState != null) {
+            mChosenAccountName = savedInstanceState.getString(ACCOUNT_KEY);
+        } else {
+            loadAccount();
+        }
+
+        credential.setSelectedAccountName(mChosenAccountName);
+
+        //
 
         drawerToggle = setUpDrawerToggle();
 
@@ -188,12 +228,11 @@ public class LessonListActivity extends AppCompatActivity
                 mTrainerPeakInfo.setBackgroundColor(ContextCompat.
                         getColor(LessonListActivity.this, color));
 
-               //Put into styles the different text color
+                //Put into styles the different text color
             }
 
             @Override
             public void onSlide(View bottomSheet, float slideOffset) {
-
 
 
                 Log.d(TAG, "onSlide");
@@ -399,6 +438,13 @@ public class LessonListActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         AppEventsLogger.activateApp(this);
+
+        if (broadcastReceiver == null)
+            broadcastReceiver = new UploadBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter(
+                REQUEST_AUTHORIZATION_INTENT);
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -424,70 +470,131 @@ public class LessonListActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i(TAG, "onActivityResult");
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            Log.i(TAG, "back in onActivityResult");
-            mVideoRecordFileURI = data.getData();
-            if (mVideoRecordFileURI != null) {
-                Log.i(TAG, "Video path: " +
-                        VideoUtility.getRealPathFromURI(getApplicationContext(), mVideoRecordFileURI));
-
-                mComposeFormMessageFragment.setRecordedVideoUrl(
-                        VideoUtility.getRealPathFromURI(getApplicationContext(),
-                        mVideoRecordFileURI));
-            }
+    public void startUpload() {
+        if (mVideoRecordFileURI != null) {
+            Intent uploadIntent = new Intent(this, UploadService.class);
+            uploadIntent.setData(mVideoRecordFileURI);
+            uploadIntent.putExtra(ACCOUNT_KEY, mChosenAccountName);
+            startService(uploadIntent);
+            Toast.makeText(this, R.string.youtube_upload_started,
+                    Toast.LENGTH_LONG).show();
         }
     }
 
-//    void prepareUpload() {
-//        ensureLoader();
-//
-//        credential = GoogleAccountCredential.usingOAuth2(
-//                getApplicationContext(), Arrays.asList(Auth.SCOPES));
-//        // set exponential backoff policy
-//        credential.setBackOff(new ExponentialBackOff());
-//        loadAccount();
-//        credential.setSelectedAccountName(mChosenAccountName);
-//    }
-//
-//    public void uploadVideo(View view) {
-//        if (mChosenAccountName == null) {
-//            return;
-//        }
-//        // if a video is picked or recorded.
-//        if (mVideoRecordFileURI != null) {
-//            Intent uploadIntent = new Intent(this, UploadService.class);
-//            uploadIntent.setData(mVideoRecordFileURI);
-//            uploadIntent.putExtra(ACCOUNT_KEY, mChosenAccountName);
-//            startService(uploadIntent);
-//            Toast.makeText(this, R.string.youtube_upload_started,
-//                    Toast.LENGTH_LONG).show();
-//            // Go back to MainActivity after upload
-//            finish();
-//        }
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i(TAG, "onActivityResult");
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_GMS_ERROR_DIALOG:
+                break;
+            case RESULT_VIDEO_CAP:
+                if (resultCode == RESULT_OK) {
+                    Log.i(TAG, "back in onActivityResult");
+                    mVideoRecordFileURI = data.getData();
+                    if (mVideoRecordFileURI != null) {
+                        Log.i(TAG, "Video path: " +
+                                VideoUtility.getRealPathFromURI(getApplicationContext(), mVideoRecordFileURI));
+                        mComposeFormMessageFragment.setRecordedVideoUrl(
+                                VideoUtility.getRealPathFromURI(getApplicationContext(),
+                                        mVideoRecordFileURI));
 
-//    private void ensureLoader() {
-//        if (mImageLoader == null) {
-//            // Get the ImageLoader through your singleton class.
-//            mImageLoader = NetworkSingleton.getInstance(this).getImageLoader();
-//        }
-//    }
-//
-//    private void loadAccount() {
-//        SharedPreferences sp = PreferenceManager
-//                .getDefaultSharedPreferences(this);
-//        mChosenAccountName = sp.getString(ACCOUNT_KEY, null);
-//
-//    }
-//
-//    private void saveAccount() {
-//        SharedPreferences sp = PreferenceManager
-//                .getDefaultSharedPreferences(this);
-//        sp.edit().putString(ACCOUNT_KEY, mChosenAccountName).commit();
-//    }
+                        mComposeFormMessageFragment.showVideo(mVideoRecordFileURI);
+                    }
+                }
+                break;
+
+            case REQUEST_GOOGLE_PLAY_SERVICES:
+                if (resultCode == Activity.RESULT_OK) {
+                    haveGooglePlayServices();
+                } else {
+                    checkGooglePlayServicesAvailable();
+                }
+                break;
+
+            case REQUEST_AUTHORIZATION:
+                if (resultCode != Activity.RESULT_OK) {
+                    chooseAccount();
+                }
+                break;
+
+            case REQUEST_ACCOUNT_PICKER:
+                if (resultCode == Activity.RESULT_OK && data != null
+                        && data.getExtras() != null) {
+                    String accountName = data.getExtras().getString(
+                            AccountManager.KEY_ACCOUNT_NAME);
+                    if (accountName != null) {
+                        mChosenAccountName = accountName;
+                        credential.setSelectedAccountName(accountName);
+                        saveAccount();
+                    }
+                }
+                break;
+            }
+    }
+
+    private void loadAccount() {
+        SharedPreferences sp = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        mChosenAccountName = sp.getString(ACCOUNT_KEY, null);
+        if (mChosenAccountName == null) {
+            chooseAccount();
+        }
+        invalidateOptionsMenu();
+    }
+
+    private void saveAccount() {
+        SharedPreferences sp = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        sp.edit().putString(ACCOUNT_KEY, mChosenAccountName).commit();
+    }
+    private void chooseAccount() {
+        startActivityForResult(credential.newChooseAccountIntent(),
+                REQUEST_ACCOUNT_PICKER);
+    }
 
 
+    /**
+     * Check that Google Play services APK is installed and up to date.
+     */
+    private boolean checkGooglePlayServicesAvailable() {
+        final int connectionStatusCode = GooglePlayServicesUtil
+                .isGooglePlayServicesAvailable(this);
+        if (GooglePlayServicesUtil.isUserRecoverableError(connectionStatusCode)) {
+            showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode);
+            return false;
+        }
+        return true;
+    }
+    public void showGooglePlayServicesAvailabilityErrorDialog(
+            final int connectionStatusCode) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Dialog dialog = GooglePlayServicesUtil.getErrorDialog(
+                        connectionStatusCode, LessonListActivity.this,
+                        REQUEST_GOOGLE_PLAY_SERVICES);
+                dialog.show();
+            }
+        });
+    }
+
+    private void haveGooglePlayServices() {
+        // check if there is already an account selected
+        if (credential.getSelectedAccountName() == null) {
+            // ask user to choose account
+            chooseAccount();
+        }
+    }
+
+    private class UploadBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(REQUEST_AUTHORIZATION_INTENT)) {
+                Log.d(TAG, "Request auth received - executing the intent");
+                Intent toRun = intent
+                        .getParcelableExtra(REQUEST_AUTHORIZATION_INTENT_PARAM);
+                startActivityForResult(toRun, REQUEST_AUTHORIZATION);
+            }
+        }
+    }
 }

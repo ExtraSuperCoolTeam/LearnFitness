@@ -4,6 +4,7 @@ import com.codepath.apps.learnfitness.R;
 
 import android.app.DialogFragment;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -12,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.MediaController;
+import android.widget.VideoView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,6 +38,9 @@ public class ComposeFormMessageFragment extends DialogFragment {
 
     @Bind(R.id.btnComposeMessageSend)
     Button mButtonComposeFormMessageSend;
+
+    @Bind(R.id.vvComposeFormVideo)
+    VideoView mVideoViewComposeFormVideo;
 
     public static ComposeFormMessageFragment newInstance() {
         ComposeFormMessageFragment composeFormMessageFragment = new ComposeFormMessageFragment();
@@ -81,6 +87,10 @@ public class ComposeFormMessageFragment extends DialogFragment {
             Log.i("ComposeFormMessage", "Didnt get video path :(");
         }
 
+        if (mOnRecordVideoListener == null) {
+            mOnRecordVideoListener = (OnRecordVideoListener) getActivity();
+        }
+        mOnRecordVideoListener.startUpload();
         dismiss();
     }
 
@@ -90,6 +100,7 @@ public class ComposeFormMessageFragment extends DialogFragment {
     public interface OnRecordVideoListener {
         // This can be any number of events to be sent to the activity
         void onRecordVideo(View view);
+        void startUpload();
     }
 
     // Store the listener (activity) that will have events fired once the fragment is attached
@@ -110,5 +121,13 @@ public class ComposeFormMessageFragment extends DialogFragment {
 
     public void setRecordedVideoUrl(String recordedVideoUrl) {
         this.recordedVideoUrl = recordedVideoUrl;
+    }
+
+    public void showVideo(Uri localVideoUri) {
+        mVideoViewComposeFormVideo.setVisibility(View.VISIBLE);
+        mVideoViewComposeFormVideo.setVideoURI(localVideoUri);
+        mVideoViewComposeFormVideo.setMediaController(new MediaController(getActivity()));
+        mVideoViewComposeFormVideo.requestFocus();
+        mVideoViewComposeFormVideo.start();
     }
 }
