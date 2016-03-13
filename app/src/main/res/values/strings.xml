@@ -42,7 +42,6 @@
     <string name="connection_to_google_play_failed">Connection to Play Services failed.</string>
     <string name="youtube_upload">YouTube upload</string>
     <string name="not_signed_in">Not signed in</string>
-    <string name="dev_setup_explanation">If you\'re seeing this screen, congratulations! You\'ve set up the dependencies for YouTube Direct Lite correctly. You just need to set up the following for the app to work correctly:</string>
     <string name="error">Error</string>
     <string name="error_format">[Error] %s</string>
     <string name="refresh">Refresh</string>
@@ -71,5 +70,9 @@
     <string name="video_submitted_to_ytdl">Video submitted to YTDL</string>
     <string name="playing_uploaded_video">Playing uploaded video</string>
     <string name="playing_the_video_in_upload_progress">Playing the video in upload progress</string>
+    <string name="label_week">Week</string>
+    <string name="snackbar_form_post_complete">Your message to Trainer is posted successfully</string>
+    <string name="toast_form_message_submitted">Your request is submitted</string>
+    <string name="toast_form_record_video_failure">Something went wrong with video recording</string>
 
 </resources>

@@ -1,9 +1,12 @@
 package com.codepath.apps.learnfitness.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by JaneChung on 3/6/16.
  */
-public class Form {
+public class Form implements Parcelable {
 
     String id;
     String trainerId;
@@ -13,7 +16,6 @@ public class Form {
     String message = "";
 
     String videoId;
-
 
     public String getId() {
         return id;
@@ -71,5 +73,45 @@ public class Form {
         this.message = message;
     }
 
+
     //Todo get form from api
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.trainerId);
+        dest.writeString(this.weekTitle);
+        dest.writeString(this.weekNumber);
+        dest.writeString(this.feedback);
+        dest.writeString(this.message);
+        dest.writeString(this.videoId);
+    }
+
+    public Form() {
+    }
+
+    protected Form(Parcel in) {
+        this.id = in.readString();
+        this.trainerId = in.readString();
+        this.weekTitle = in.readString();
+        this.weekNumber = in.readString();
+        this.feedback = in.readString();
+        this.message = in.readString();
+        this.videoId = in.readString();
+    }
+
+    public static final Parcelable.Creator<Form> CREATOR = new Parcelable.Creator<Form>() {
+        public Form createFromParcel(Parcel source) {
+            return new Form(source);
+        }
+
+        public Form[] newArray(int size) {
+            return new Form[size];
+        }
+    };
 }

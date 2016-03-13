@@ -16,6 +16,7 @@ import com.codepath.apps.learnfitness.fragments.ComposeFormMessageFragment;
 import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
 import com.codepath.apps.learnfitness.fragments.WeekFragment;
 import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
+import com.codepath.apps.learnfitness.models.Form;
 import com.codepath.apps.learnfitness.models.Trainer;
 import com.codepath.apps.learnfitness.models.Week;
 import com.codepath.apps.learnfitness.util.VideoUtility;
@@ -33,11 +34,13 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -128,6 +131,9 @@ public class LessonListActivity extends AppCompatActivity
 
     private Uri mVideoRecordFileURI = null;
     public static final String ACCOUNT_KEY = "accountName";
+    public static final String FORM_INFO = "formInfo";
+    public static final String RECEIVER = "receiver";
+    public static final String FORM_ID = "formId";
     public static final String MESSAGE_KEY = "message";
     public static final String YOUTUBE_ID = "youtubeId";
     public static final String YOUTUBE_WATCH_URL_PREFIX = "http://www.youtube.com/watch?v=";
@@ -147,6 +153,7 @@ public class LessonListActivity extends AppCompatActivity
 //    private ImageLoader mImageLoader;
     private String mChosenAccountName;
     private Uri mFileURI = null;
+    LessonListActivityReceiver mLessonListActivityReceiver;
 
 
     @Override
@@ -159,6 +166,7 @@ public class LessonListActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         // youtube account info for upload service
+        setupServiceReceiver();
         credential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(Auth.SCOPES));
         // set exponential backoff policy
@@ -171,7 +179,6 @@ public class LessonListActivity extends AppCompatActivity
         }
 
         credential.setSelectedAccountName(mChosenAccountName);
-
         //
 
         drawerToggle = setUpDrawerToggle();
@@ -276,8 +283,6 @@ public class LessonListActivity extends AppCompatActivity
 
         mTextViewTrainerAddress.setText(trainer.getAddress());
         mTextViewTrainerCall.setText(trainer.getPhone());
-
-
     }
 
 
@@ -385,7 +390,6 @@ public class LessonListActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         mMenu = menu;
         getMenuInflater().inflate(R.menu.menu_search, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
@@ -409,7 +413,6 @@ public class LessonListActivity extends AppCompatActivity
     }
 
     public void showMapSpecificElements(Boolean show) {
-
         // Show or hide the search bar.
         MenuItem search = mMenu.findItem(R.id.action_search);
         search.setVisible(show);
@@ -458,7 +461,6 @@ public class LessonListActivity extends AppCompatActivity
 
         mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance();
         mComposeFormMessageFragment.show(getFragmentManager(), ComposeFormMessageFragment.TAG);
-        Log.i(TAG, "Back after record");
     }
 
     @Override
@@ -470,11 +472,13 @@ public class LessonListActivity extends AppCompatActivity
     }
 
     @Override
-    public void startUpload() {
+    public void startUpload(Form form) {
         if (mVideoRecordFileURI != null) {
             Intent uploadIntent = new Intent(this, UploadService.class);
             uploadIntent.setData(mVideoRecordFileURI);
             uploadIntent.putExtra(ACCOUNT_KEY, mChosenAccountName);
+            uploadIntent.putExtra(FORM_INFO, form);
+            uploadIntent.putExtra(RECEIVER, mLessonListActivityReceiver);
             startService(uploadIntent);
             Toast.makeText(this, R.string.youtube_upload_started,
                     Toast.LENGTH_LONG).show();
@@ -596,5 +600,23 @@ public class LessonListActivity extends AppCompatActivity
                 startActivityForResult(toRun, REQUEST_AUTHORIZATION);
             }
         }
+    }
+
+    // Setup the callback for when data is received from the upload service
+    public void setupServiceReceiver() {
+        mLessonListActivityReceiver = new LessonListActivityReceiver(new Handler());
+        // This is where we specify what happens when data is received from the service
+        mLessonListActivityReceiver.setReceiver(new LessonListActivityReceiver.Receiver() {
+            @Override
+            public void onReceiveResult(int resultCode, Bundle resultData) {
+                if (resultCode == RESULT_OK) {
+                    String resultValue = resultData.getString("resultValue");
+                    //Toast.makeText(LessonListActivity.this, resultValue, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(android.R.id.content), R.string.snackbar_form_post_complete,
+                            Snackbar.LENGTH_SHORT)
+                            .show(); // Don’t forget to show!
+                }
+            }
+        });
     }
 }

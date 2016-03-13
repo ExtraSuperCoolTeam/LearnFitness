@@ -23,18 +23,31 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.youtube.YouTube;
 import com.google.common.collect.Lists;
 
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.models.Form;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
 import com.codepath.apps.learnfitness.youtubeupload.Auth;
 
+import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.os.ResultReceiver;
 import android.util.Log;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+
+import retrofit2.adapter.rxjava.HttpException;
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * @author Ibrahim Ulukaya <ulukaya@google.com>
@@ -68,10 +81,14 @@ public class UploadService extends IntentService {
     final HttpTransport transport = AndroidHttp.newCompatibleTransport();
     final JsonFactory jsonFactory = new GsonFactory();
     GoogleAccountCredential credential;
+    private Form mFormToPost;
+    private static final String HEADER_CONTENT_TYPE_JSON = "application/json";
     /**
      * tracks the number of upload attempts
      */
     private int mUploadAttemptCount;
+    private Subscription subscription;
+    ResultReceiver mLessonListActivityReceiver;
 
     public UploadService() {
         super("YTUploadService");
@@ -98,6 +115,9 @@ public class UploadService extends IntentService {
         Uri fileUri = intent.getData();
 
         String chosenAccountName = intent.getStringExtra(LessonListActivity.ACCOUNT_KEY);
+        mFormToPost = intent.getParcelableExtra(LessonListActivity.FORM_INFO);
+        // Extract the receiver passed into the service
+        mLessonListActivityReceiver = intent.getParcelableExtra(LessonListActivity.RECEIVER);
 
         Log.i(TAG, "fileURI: " + fileUri);
         Log.i(TAG, "chosenAccountName: " + chosenAccountName);
@@ -108,7 +128,7 @@ public class UploadService extends IntentService {
         credential.setSelectedAccountName(chosenAccountName);
         credential.setBackOff(new ExponentialBackOff());
 
-        String appName = "YouTube Direct Lite";
+        String appName = getResources().getString(R.string.app_name);
         final YouTube youtube =
                 new YouTube.Builder(transport, jsonFactory, credential).setApplicationName(
                         appName).build();
@@ -125,6 +145,42 @@ public class UploadService extends IntentService {
             String videoId = tryUpload(fileUri, youtube);
             if (videoId != null) {
                 Log.i(TAG, String.format("Uploaded video with ID: %s", videoId));
+
+                //POST to backend server
+                mFormToPost.setVideoId(videoId);
+                Observable<Form> call =
+                        MediaStoreService.formsStore.postFormMessages(HEADER_CONTENT_TYPE_JSON,
+                                mFormToPost);
+                subscription = call
+                    .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<Form>() {
+                            @Override
+                            public void onCompleted() {
+                                Log.i(TAG, "POST form call success");
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                // cast to retrofit.HttpException to get the response code
+                                Log.i(TAG, "in error");
+                                Log.i(TAG, e.toString());
+
+                                if (e instanceof HttpException) {
+                                    HttpException response = (HttpException) e;
+                                    int code = response.code();
+                                    Log.i(TAG, "Http error code: " + code);
+                                }
+                            }
+
+                            @Override
+                            public void onNext(Form form) {
+                                Log.i(TAG, form.getFeedback());
+                                Bundle bundle = new Bundle();
+                                bundle.putString(LessonListActivity.FORM_ID, form.getId());
+                                mLessonListActivityReceiver.send(Activity.RESULT_OK, bundle);
+                            }
+                        });
+
                 tryShowSelectableNotification(videoId, youtube);
                 return;
             } else {
@@ -192,5 +248,6 @@ public class UploadService extends IntentService {
         }
         return videoId;
     }
+
 
 }

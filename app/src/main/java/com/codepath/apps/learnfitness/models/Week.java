@@ -235,4 +235,9 @@ public class Week implements Parcelable {
             return new Week[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return weekTitle;
+    }
 }

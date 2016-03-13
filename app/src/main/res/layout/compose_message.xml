@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="4dp"
@@ -8,40 +8,60 @@
     android:paddingTop="4dp"
     android:weightSum="1">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Enter Name"
-        android:id="@+id/tvMessageComposeEnterName" />
-
-    <EditText
+    <RelativeLayout
+        android:id="@+id/rlMessageSection"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/etComposeMessageSendersName" />
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_week"
+            android:id="@+id/tvMessageComposeWeekTitle"
+            android:layout_marginRight="5dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Enter New Message"
-        android:id="@+id/tvComposeMessageEnterMessage" />
+        <Spinner
+            android:id="@+id/spWeeksTitleList"
+            android:spinnerMode="dropdown"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@id/tvMessageComposeWeekTitle"/>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:gravity="top"
-        android:id="@+id/etComposeMessageText"
-        android:layout_weight="0.70" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enter New Message"
+            android:id="@+id/tvComposeMessageEnterMessage"
+            android:layout_below="@id/tvMessageComposeWeekTitle"/>
 
-    <VideoView
-        android:id="@+id/vvComposeFormVideo"
-        android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:gravity="top"
+            android:id="@+id/etComposeMessageText"
+            android:layout_weight="0.70"
+            android:layout_below="@id/tvComposeMessageEnterMessage"/>
+    </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rlComposeMessageVideoView"
+        android:visibility="gone"
+        android:layout_below="@id/rlMessageSection">
+        <VideoView
+            android:id="@+id/vvComposeFormVideo"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlActionSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rlComposeMessageVideoView">
 
         <!--
         <View
@@ -85,5 +105,4 @@
 
     </RelativeLayout>
 
-
-</LinearLayout>
+</RelativeLayout>

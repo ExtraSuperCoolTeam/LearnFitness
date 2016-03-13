@@ -32,7 +32,7 @@ import rx.schedulers.Schedulers;
  * Created by JaneChung on 3/6/16.
  */
 public class CheckMyFormFragment extends Fragment {
-
+    private static final String TAG = "CheckMyFormFragment";
     Subscription subscription;
     private CheckMyFormAdapter mAdapter;
     private List<Form> mForms;
@@ -77,26 +77,26 @@ public class CheckMyFormFragment extends Fragment {
                 .subscribe(new Subscriber<List<Form>>() {
                     @Override
                     public void onCompleted() {
-                        Log.i("CheckMyFormFragment", "Api call success");
+                        Log.i(TAG, "Api call success");
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         // cast to retrofit.HttpException to get the response code
-                        Log.i("CheckMyFormFragment", "in error");
-                        Log.i("CheckMyFormFragment", e.toString());
+                        Log.i(TAG, "in error");
+                        Log.i(TAG, e.toString());
 
                         if (e instanceof HttpException) {
                             HttpException response = (HttpException) e;
                             int code = response.code();
-                            Log.i("CheckMyFormFragment", "Http error code: " + code);
+                            Log.i(TAG, "Http error code: " + code);
                         }
                     }
 
                     @Override
                     public void onNext(List<Form> forms) {
                         mForms.addAll(forms);
-                        Log.i("CheckMyFormFragment", Integer.toString(mForms.size()));
+                        Log.i(TAG, Integer.toString(mForms.size()));
                         mAdapter.notifyDataSetChanged();
                     }
                 });
