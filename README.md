@@ -22,9 +22,9 @@ MVP
   * [X] User can identify the week they are on by UI/UX difference on the current week.
 * [X] User can tap on a week to see a detailed view of that material.
   * [X] User can watch the week's video, follow through instructions, read description on this page.
-* [ ] User can navigate to "check my form" screen
-  * [ ] User can post videos of their form offline to the trainer
-  * [ ] user can view the latest response from the trainer 
+* [x] User can navigate to "check my form" screen
+  * [x] User can post videos of their form offline to the trainer
+  * [x] user can view the latest response from the trainer
 * [X] User can search for a trainer close to their location.
   * [X] User can see a map view with pins of the results.
   * [X] User can click into a specific result to get the full details about a trainer.
@@ -33,7 +33,7 @@ MVP
 Optional
 
 * [ ] User can see a map or a list view for the trainer search results.
-* [ ] User can call the trainer directly from the find a trainer map fragment 
+* [x] User can call the trainer directly from the find a trainer map fragment
 
 Bonus
 * [ ] User can access multiple courses using the same app.
@@ -44,8 +44,11 @@ Bonus
 https://github.com/ExtraSuperCoolTeam/LearnFitness-Mediastore
 
 ## Video Walkthrough
+Here's a walkthrough of Sprint 2  user stories:
 
-Here's a walkthrough of implemented user stories:
+![Alt text](learnfitness-sprint2.gif?raw=true "Video Walkthrough")
+
+Here's a walkthrough of Sprint 1 user stories:
 
 <img src='http://i.imgur.com/Qy9REGl.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
