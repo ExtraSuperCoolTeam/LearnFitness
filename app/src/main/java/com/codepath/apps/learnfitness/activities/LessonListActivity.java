@@ -19,6 +19,7 @@ import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
 import com.codepath.apps.learnfitness.models.Form;
 import com.codepath.apps.learnfitness.models.Trainer;
 import com.codepath.apps.learnfitness.models.Week;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
 import com.codepath.apps.learnfitness.util.VideoUtility;
 import com.codepath.apps.learnfitness.youtubeupload.Auth;
 import com.facebook.appevents.AppEventsLogger;
@@ -66,11 +67,17 @@ import java.util.Arrays;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.adapter.rxjava.HttpException;
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class LessonListActivity extends AppCompatActivity
         implements WeeksListFragment.OnItemSelectedListener,
         CheckMyFormFragment.OnCheckMyFormListener,
-        ComposeFormMessageFragment.OnRecordVideoListener {
+        ComposeFormMessageFragment.OnFormMessageListener {
     private static final String TAG = "LessonListActivity";
 
     public static final String MY_SHARED_PREFS = "MY_SHARED_PREFS4";
@@ -134,6 +141,7 @@ public class LessonListActivity extends AppCompatActivity
     public static final String FORM_INFO = "formInfo";
     public static final String RECEIVER = "receiver";
     public static final String FORM_ID = "formId";
+    private static final String HEADER_CONTENT_TYPE_JSON = "application/json";
     public static final String MESSAGE_KEY = "message";
     public static final String YOUTUBE_ID = "youtubeId";
     public static final String YOUTUBE_WATCH_URL_PREFIX = "http://www.youtube.com/watch?v=";
@@ -154,6 +162,7 @@ public class LessonListActivity extends AppCompatActivity
     private String mChosenAccountName;
     private Uri mFileURI = null;
     LessonListActivityReceiver mLessonListActivityReceiver;
+    private Subscription subscription;
 
 
     @Override
@@ -458,9 +467,10 @@ public class LessonListActivity extends AppCompatActivity
 
     @Override
     public void onCheckMyFormDialog() {
-
+        mFab.setVisibility(View.GONE);
         mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance();
-        mComposeFormMessageFragment.show(getFragmentManager(), ComposeFormMessageFragment.TAG);
+        //mComposeFormMessageFragment.show(getSupportFragmentManager(), ComposeFormMessageFragment.TAG);
+        fragmentManager.beginTransaction().replace(R.id.flContent, mComposeFormMessageFragment).commit();
     }
 
     @Override
@@ -483,6 +493,54 @@ public class LessonListActivity extends AppCompatActivity
             Toast.makeText(this, R.string.youtube_upload_started,
                     Toast.LENGTH_LONG).show();
         }
+
+        fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
+        mFab.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void startPostWithoutVideo(Form form) {
+        Observable<Form> call =
+            MediaStoreService.formsStore.postFormMessages(HEADER_CONTENT_TYPE_JSON,
+                    form);
+            subscription = call
+            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Subscriber<Form>() {
+                @Override
+                public void onCompleted() {
+                    Log.i(TAG, "POST form call success");
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    // cast to retrofit.HttpException to get the response code
+                    Log.i(TAG, "in error");
+                    Log.i(TAG, e.toString());
+
+                    if (e instanceof HttpException) {
+                        HttpException response = (HttpException) e;
+                        int code = response.code();
+                        Log.i(TAG, "Http error code: " + code);
+                    }
+                }
+
+                @Override
+                public void onNext(Form form) {
+                    Log.i(TAG, form.getFeedback());
+                }
+            });
+
+        fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
+        mFab.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void composeMessageCancel() {
+        fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
+        mFab.setVisibility(View.VISIBLE);
     }
 
     @Override

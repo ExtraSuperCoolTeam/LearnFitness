@@ -6,11 +6,11 @@ import com.codepath.apps.learnfitness.models.Lesson;
 import com.codepath.apps.learnfitness.models.Week;
 import com.codepath.apps.learnfitness.rest.MediaStoreService;
 
-import android.app.DialogFragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,10 +19,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.MediaController;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import java.util.ArrayList;
@@ -42,7 +41,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by spandhare on 3/11/16.
  */
-public class ComposeFormMessageFragment extends DialogFragment {
+public class ComposeFormMessageFragment extends Fragment {
 
     Subscription subscription;
     public static final String TAG = "ComposeFormMessage";
@@ -53,8 +52,11 @@ public class ComposeFormMessageFragment extends DialogFragment {
     private List<Week> mWeeks;
     private ArrayAdapter<Week> mWeekArrayAdapter;
 
+    @Bind(R.id.btnComposeFormMessageCancel)
+    Button mButtonComposeFormMessageCancel;
+
     @Bind(R.id.btnComposeFormMessageRecord)
-    Button mButtonComposeFormMessageRecord;
+    ImageView mButtonComposeFormMessageRecord;
 
     @Bind(R.id.btnComposeMessageSend)
     Button mButtonComposeFormMessageSend;
@@ -68,8 +70,14 @@ public class ComposeFormMessageFragment extends DialogFragment {
     @Bind(R.id.etComposeMessageText)
     EditText mEditTextMessageText;
 
-    @Bind(R.id.rlComposeMessageVideoView)
-    RelativeLayout mRelativeLayoutVideoView;
+//    @Bind(R.id.rlComposeMessageVideoView)
+//    RelativeLayout mRelativeLayoutVideoView;
+
+    @Bind(R.id.vMessageVideoPlaceHolder)
+    View mViewVideoPlaceHolder;
+
+    @Bind(R.id.vMessageItemsSeperator2)
+    View mViewSeapratorBelowVideo;
 
     public static ComposeFormMessageFragment newInstance() {
         ComposeFormMessageFragment composeFormMessageFragment = new ComposeFormMessageFragment();
@@ -95,36 +103,36 @@ public class ComposeFormMessageFragment extends DialogFragment {
 
         final Observable<Lesson> call = MediaStoreService.contentStore.fetchContent();
         subscription = call
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Lesson>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.i(TAG, "Api call success");
+            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Subscriber<Lesson>() {
+                @Override
+                public void onCompleted() {
+                    Log.i(TAG, "Api call success");
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    // cast to retrofit.HttpException to get the response code
+                    Log.i(TAG, "in error");
+                    Log.i(TAG, e.toString());
+
+                    if (e instanceof HttpException) {
+                        HttpException response = (HttpException) e;
+                        int code = response.code();
                     }
+                    call.retry();
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        // cast to retrofit.HttpException to get the response code
-                        Log.i(TAG, "in error");
-                        Log.i(TAG, e.toString());
+                @Override
+                public void onNext(Lesson lesson) {
+                    mWeeks.addAll(lesson.getWeeks());
+                    Log.i(TAG, lesson.getTitle());
 
-                        if (e instanceof HttpException) {
-                            HttpException response = (HttpException) e;
-                            int code = response.code();
-                        }
-                        call.retry();
-                    }
+                    //TODO mSpinnerWeeksTitleList set the default from preferences
+                    mSpinnerWeeksTitleList.setAdapter(mWeekArrayAdapter);
 
-                    @Override
-                    public void onNext(Lesson lesson) {
-                        mWeeks.addAll(lesson.getWeeks());
-                        Log.i(TAG, lesson.getTitle());
-
-                        //mSpinnerWeeksTitleList set the default from preferences
-                        mSpinnerWeeksTitleList.setAdapter(mWeekArrayAdapter);
-
-                    }
-                });
+                }
+            });
 
         return rootView;
     }
@@ -138,56 +146,64 @@ public class ComposeFormMessageFragment extends DialogFragment {
     public void recordVideo(View view) {
         Log.i(TAG, "In record video");
 
-        if (mOnRecordVideoListener == null) {
-            mOnRecordVideoListener = (OnRecordVideoListener) getActivity();
+        if (mOnFormMessageListener == null) {
+            mOnFormMessageListener = (OnFormMessageListener) getActivity();
         }
-        mOnRecordVideoListener.onRecordVideo(view);
+        mOnFormMessageListener.onRecordVideo(view);
     }
 
     @OnClick(R.id.btnComposeMessageSend)
     public void sendMessage(View view) {
+
+        //TODO check if empty fields and ignore post
+        Week selectedWeek = (Week) mSpinnerWeeksTitleList.getSelectedItem();
+        Form form = new Form();
+        form.setWeekTitle(selectedWeek.getWeekTitle());
+        form.setWeekNumber(selectedWeek.getWeekNumber());
+        form.setMessage(mEditTextMessageText.getText().toString());
+
         if (!TextUtils.isEmpty(recordedVideoUrl)) {
             Log.i(TAG, "Received path:" + recordedVideoUrl);
-            if (mOnRecordVideoListener == null) {
-                mOnRecordVideoListener = (OnRecordVideoListener) getActivity();
+            if (mOnFormMessageListener == null) {
+                mOnFormMessageListener = (OnFormMessageListener) getActivity();
             }
 
-            Week selectedWeek = (Week) mSpinnerWeeksTitleList.getSelectedItem();
-            Form form = new Form();
-            form.setWeekTitle(selectedWeek.getWeekTitle());
-            form.setWeekNumber(selectedWeek.getWeekNumber());
-            form.setMessage(mEditTextMessageText.getText().toString());
-
-            mOnRecordVideoListener.startUpload(form);
-
-            Toast.makeText(getActivity(), R.string.toast_form_message_submitted,
-                    Toast.LENGTH_SHORT).show();
+            mOnFormMessageListener.startUpload(form);
+//            Toast.makeText(getActivity(), R.string.toast_form_message_submitted,
+//                    Toast.LENGTH_SHORT).show();
         } else {
             Log.i(TAG, "Didn't get video path :(");
-            Toast.makeText(getActivity(), R.string.toast_form_record_video_failure,
-                    Toast.LENGTH_SHORT).show();
+            mOnFormMessageListener.startPostWithoutVideo(form);
         }
-        dismiss();
     }
 
-    private OnRecordVideoListener mOnRecordVideoListener;
+    @OnClick(R.id.btnComposeFormMessageCancel)
+    public void cancelMessage() {
+        if (mOnFormMessageListener == null) {
+            mOnFormMessageListener = (OnFormMessageListener) getActivity();
+        }
+        mOnFormMessageListener.composeMessageCancel();
+    }
+    private OnFormMessageListener mOnFormMessageListener;
 
     // Define the events that the fragment will use to communicate
-    public interface OnRecordVideoListener {
+    public interface OnFormMessageListener {
         // This can be any number of events to be sent to the activity
         void onRecordVideo(View view);
         void startUpload(Form form);
+        void startPostWithoutVideo(Form form);
+        void composeMessageCancel();
     }
 
     // Store the listener (activity) that will have events fired once the fragment is attached
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnRecordVideoListener) {
-            mOnRecordVideoListener = (OnRecordVideoListener) context;
+        if (context instanceof OnFormMessageListener) {
+            mOnFormMessageListener = (OnFormMessageListener) context;
         } else {
             throw new ClassCastException(context.toString()
-                    + " must implement ComposeFormMessageFragment.OnRecordVideoListener");
+                    + " must implement ComposeFormMessageFragment.OnFormMessageListener");
         }
     }
 
@@ -200,10 +216,16 @@ public class ComposeFormMessageFragment extends DialogFragment {
     }
 
     public void showVideo(Uri localVideoUri) {
-        mRelativeLayoutVideoView.setVisibility(View.VISIBLE);
+
+        mEditTextMessageText.setMaxLines(3);
+        mViewSeapratorBelowVideo.setVisibility(View.VISIBLE);
+        mViewVideoPlaceHolder.setVisibility(View.GONE);
+        mVideoViewComposeFormVideo.setVisibility(View.VISIBLE);
         mVideoViewComposeFormVideo.setVideoURI(localVideoUri);
         mVideoViewComposeFormVideo.setMediaController(new MediaController(getActivity()));
         mVideoViewComposeFormVideo.requestFocus();
         mVideoViewComposeFormVideo.start();
+
+        mViewSeapratorBelowVideo.setVisibility(View.VISIBLE);
     }
 }

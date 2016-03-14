@@ -5,73 +5,77 @@
     android:paddingBottom="4dp"
     android:paddingLeft="4dp"
     android:paddingRight="4dp"
-    android:paddingTop="4dp"
-    android:weightSum="1">
+    android:paddingTop="4dp">
 
-    <RelativeLayout
-        android:id="@+id/rlMessageSection"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_week"
+        android:id="@+id/tvMessageComposeWeekTitle"
+        android:layout_marginRight="5dp"/>
+
+    <Spinner
+        android:id="@+id/spWeeksTitleList"
+        android:spinnerMode="dropdown"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_week"
-            android:id="@+id/tvMessageComposeWeekTitle"
-            android:layout_marginRight="5dp"/>
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@id/tvMessageComposeWeekTitle"/>
 
-        <Spinner
-            android:id="@+id/spWeeksTitleList"
-            android:spinnerMode="dropdown"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_toRightOf="@id/tvMessageComposeWeekTitle"/>
+    <View
+        android:id="@+id/vMessageItemsSeperator"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@id/tvMessageComposeWeekTitle"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Enter New Message"
-            android:id="@+id/tvComposeMessageEnterMessage"
-            android:layout_below="@id/tvMessageComposeWeekTitle"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:ems="10"
-            android:gravity="top"
-            android:id="@+id/etComposeMessageText"
-            android:layout_weight="0.70"
-            android:layout_below="@id/tvComposeMessageEnterMessage"/>
-    </RelativeLayout>
-
-    <RelativeLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/rlComposeMessageVideoView"
+        android:text="Enter New Message"
+        android:id="@+id/tvComposeMessageEnterMessage"
+        android:layout_below="@id/vMessageItemsSeperator"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:inputType="textMultiLine"
+        android:id="@+id/etComposeMessageText"
+        android:ems="10"
+        android:gravity="top"
+        android:layout_below="@id/tvComposeMessageEnterMessage"/>
+
+    <View
+        android:id="@+id/vMessageVideoPlaceHolder"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/etComposeMessageText"/>
+
+    <VideoView
+        android:id="@+id/vvComposeFormVideo"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
         android:visibility="gone"
-        android:layout_below="@id/rlMessageSection">
-        <VideoView
-            android:id="@+id/vvComposeFormVideo"
-            android:layout_width="match_parent"
-            android:layout_height="200dp" />
-    </RelativeLayout>
+        android:layout_below="@id/etComposeMessageText"/>
+
+    <View
+        android:id="@+id/vMessageItemsSeperator2"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@id/vvComposeFormVideo"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:id="@+id/rlActionSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rlComposeMessageVideoView">
+        android:layout_below="@id/vMessageItemsSeperator2">
 
-        <!--
-        <View
-            android:id="@+id/vMessageItemsSeperator"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@android:color/darker_gray"/>
-
-            android:layout_below="@+id/vMessageItemsSeperator"
-        -->
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -80,7 +84,8 @@
             android:layout_gravity="end"
             style="?android:attr/borderlessButtonStyle"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            />
 
         <View
             android:id="@+id/vMessageItemsHorizontalSeperator"
@@ -96,13 +101,21 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/message_record_video"
-            android:id="@+id/btnComposeFormMessageRecord"
+            android:text="@string/message_record_cancel"
+            android:id="@+id/btnComposeFormMessageCancel"
             android:layout_toLeftOf="@id/vMessageItemsHorizontalSeperator"
             style="?android:attr/borderlessButtonStyle"
             android:layout_alignTop="@id/btnComposeMessageSend"
             android:layout_alignBottom="@id/btnComposeMessageSend"/>
 
-    </RelativeLayout>
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:id="@+id/btnComposeFormMessageRecord"
+            android:layout_toLeftOf="@id/btnComposeFormMessageCancel"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_record_icon"
+            android:layout_alignTop="@id/btnComposeMessageSend"/>
 
+    </RelativeLayout>
 </RelativeLayout>

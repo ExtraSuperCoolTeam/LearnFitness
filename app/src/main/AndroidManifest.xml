@@ -61,7 +61,6 @@
             android:name="com.codepath.apps.learnfitness.activities.UploadService"
             android:exported="true" />
 
-        <!--
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/app_name"
@@ -82,16 +81,18 @@
                     android:scheme="oauth" />
             </intent-filter>
         </activity>
-        -->
+
         <activity
             android:name=".activities.LessonListActivity"
             android:label="@string/title_activity_lesson_list"
             android:theme="@style/AppTheme.NoActionBar" >
+            <!--
                 <intent-filter>
                     <action android:name="android.intent.action.MAIN" />
 
                     <category android:name="android.intent.category.LAUNCHER" />
                 </intent-filter>
+                -->
             </activity>
         <activity
             android:name="com.facebook.FacebookActivity"

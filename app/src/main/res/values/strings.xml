@@ -38,7 +38,7 @@
 
     <string name="title_activity_display_message">My Message</string>
     <string name="google_play_not_available">Google Play Services not available</string>
-    <string name="youtube_upload_started">YouTube Direct Lite upload started</string>
+    <string name="youtube_upload_started">YouTube upload started</string>
     <string name="connection_to_google_play_failed">Connection to Play Services failed.</string>
     <string name="youtube_upload">YouTube upload</string>
     <string name="not_signed_in">Not signed in</string>
@@ -74,5 +74,6 @@
     <string name="snackbar_form_post_complete">Your message to Trainer is posted successfully</string>
     <string name="toast_form_message_submitted">Your request is submitted</string>
     <string name="toast_form_record_video_failure">Something went wrong with video recording</string>
+    <string name="message_record_cancel">Cancel</string>
 
 </resources>
