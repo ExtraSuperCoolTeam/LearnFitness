@@ -235,11 +235,9 @@ public class LessonListActivity extends AppCompatActivity
         plSlidingPanel.addPanelSlideListener(new PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
-//                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams();
-//
-//                mImageViewTrainerPhoto.setLayoutParams(layoutParams);
-//                mImageViewTrainerPhoto.
-                mImageViewTrainerPhoto.setVisibility(View.GONE);
+                RelativeLayout.LayoutParams boxMargins = new RelativeLayout.LayoutParams(mTrainerPeakInfo.getLayoutParams());
+                boxMargins.topMargin = (int)(500 * slideOffset);
+                mTrainerPeakInfo.setLayoutParams(boxMargins);
             }
 
             @Override

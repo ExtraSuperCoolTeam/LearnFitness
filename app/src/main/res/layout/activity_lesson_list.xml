@@ -73,7 +73,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/rlBottomSheet"
         android:visibility="gone"
         android:background="@color/material_grey">
@@ -88,7 +88,7 @@
             android:layout_height="100dp"
             android:orientation="vertical"
             android:id="@+id/llTrainerPeakInfo"
-            android:layout_below="@id/ivTrainerPhoto"
+            android:layout_alignParentTop="true"
             android:background="#fff">
 
             <TextView
