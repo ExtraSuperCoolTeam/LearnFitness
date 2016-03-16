@@ -81,5 +81,8 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.18'
     //compile 'com.google.apis:google-api-services-youtube:v3-rev163-1.21.0'
 
+    // Sliding up panel.
+    compile 'com.sothree.slidinguppanel:library:3.3.0'
+
 
 }

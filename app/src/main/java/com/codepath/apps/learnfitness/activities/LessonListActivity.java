@@ -1,29 +1,6 @@
 package com.codepath.apps.learnfitness.activities;
 
 
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.util.ExponentialBackOff;
-
-import com.bumptech.glide.Glide;
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.fragments.CheckMyFormFragment;
-import com.codepath.apps.learnfitness.fragments.ComposeFormMessageFragment;
-import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
-import com.codepath.apps.learnfitness.fragments.WeekFragment;
-import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
-import com.codepath.apps.learnfitness.models.Form;
-import com.codepath.apps.learnfitness.models.Trainer;
-import com.codepath.apps.learnfitness.models.Week;
-import com.codepath.apps.learnfitness.rest.MediaStoreService;
-import com.codepath.apps.learnfitness.util.VideoUtility;
-import com.codepath.apps.learnfitness.youtubeupload.Auth;
-import com.facebook.appevents.AppEventsLogger;
-
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Dialog;
@@ -38,13 +15,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -62,6 +37,29 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.fragments.CheckMyFormFragment;
+import com.codepath.apps.learnfitness.fragments.ComposeFormMessageFragment;
+import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
+import com.codepath.apps.learnfitness.fragments.WeekFragment;
+import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
+import com.codepath.apps.learnfitness.models.Form;
+import com.codepath.apps.learnfitness.models.Trainer;
+import com.codepath.apps.learnfitness.models.Week;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
+import com.codepath.apps.learnfitness.util.VideoUtility;
+import com.codepath.apps.learnfitness.youtubeupload.Auth;
+import com.facebook.appevents.AppEventsLogger;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.Arrays;
 
@@ -92,8 +90,8 @@ public class LessonListActivity extends AppCompatActivity
     @Bind(R.id.fab)
     FloatingActionButton mFab;
 
-    @Bind(R.id.bottom_sheet)
-    View bottomSheet;
+    @Bind(R.id.rlBottomSheet)
+    RelativeLayout rlBottomSheet;
 
     @Bind(R.id.ivTrainerPhoto)
     ImageView mImageViewTrainerPhoto;
@@ -125,6 +123,9 @@ public class LessonListActivity extends AppCompatActivity
     @Bind(R.id.llTrainerPeakInfo)
     LinearLayout mTrainerPeakInfo;
 
+    @Bind(R.id.plSlidingPanel)
+    SlidingUpPanelLayout plSlidingPanel;
+
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
     public static FragmentManager fragmentManager;
@@ -132,7 +133,6 @@ public class LessonListActivity extends AppCompatActivity
     private FindTrainerFragment mFindTrainerFragment;
     private CheckMyFormFragment mCheckMyFormFragment;
     ComposeFormMessageFragment mComposeFormMessageFragment;
-    private BottomSheetBehavior  mBehavior;
     private Trainer mTrainer;
     private WeeksListFragment mWeeksListFragment;
 
@@ -142,9 +142,7 @@ public class LessonListActivity extends AppCompatActivity
     public static final String RECEIVER = "receiver";
     public static final String FORM_ID = "formId";
     private static final String HEADER_CONTENT_TYPE_JSON = "application/json";
-    public static final String MESSAGE_KEY = "message";
-    public static final String YOUTUBE_ID = "youtubeId";
-    public static final String YOUTUBE_WATCH_URL_PREFIX = "http://www.youtube.com/watch?v=";
+
     static final String REQUEST_AUTHORIZATION_INTENT = "com.google.example.yt.RequestAuth";
     static final String REQUEST_AUTHORIZATION_INTENT_PARAM = "com.google.example.yt.RequestAuth.param";
     private static final int REQUEST_GOOGLE_PLAY_SERVICES = 0;
@@ -158,7 +156,6 @@ public class LessonListActivity extends AppCompatActivity
     final JsonFactory jsonFactory = new GsonFactory();
     GoogleAccountCredential credential;
     private UploadBroadcastReceiver broadcastReceiver;
-//    private ImageLoader mImageLoader;
     private String mChosenAccountName;
     private Uri mFileURI = null;
     LessonListActivityReceiver mLessonListActivityReceiver;
@@ -178,6 +175,7 @@ public class LessonListActivity extends AppCompatActivity
         setupServiceReceiver();
         credential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(Auth.SCOPES));
+
         // set exponential backoff policy
         credential.setBackOff(new ExponentialBackOff());
 
@@ -188,7 +186,6 @@ public class LessonListActivity extends AppCompatActivity
         }
 
         credential.setSelectedAccountName(mChosenAccountName);
-        //
 
         drawerToggle = setUpDrawerToggle();
 
@@ -224,36 +221,36 @@ public class LessonListActivity extends AppCompatActivity
 
     private void setUpBottomSheet() {
         Log.d(TAG, "setUpBottomSheet");
-        mBehavior = BottomSheetBehavior.from(bottomSheet);
-        mBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(View bottomSheet, int newState) {
-                Log.d(TAG, "State changing");
-                int color;
-                int textColor;
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_DRAGGING:
-                    case BottomSheetBehavior.STATE_EXPANDED:
-                        color = R.color.primary_dark;
-                        textColor = R.color.white;
-                    default:
-                        color = R.color.white;
-                        textColor = R.color.text_dark;
-
-                }
-                mTrainerPeakInfo.setBackgroundColor(ContextCompat.
-                        getColor(LessonListActivity.this, color));
-
-                //Put into styles the different text color
-            }
-
-            @Override
-            public void onSlide(View bottomSheet, float slideOffset) {
-
-
-                Log.d(TAG, "onSlide");
-            }
-        });
+//        mBehavior = BottomSheetBehavior.from(bottomSheet);
+//        mBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+//            @Override
+//            public void onStateChanged(View bottomSheet, int newState) {
+//                Log.d(TAG, "State changing");
+//                int color;
+//                int textColor;
+//                switch (newState) {
+//                    case BottomSheetBehavior.STATE_DRAGGING:
+//                    case BottomSheetBehavior.STATE_EXPANDED:
+//                        color = R.color.primary_dark;
+//                        textColor = R.color.white;
+//                    default:
+//                        color = R.color.white;
+//                        textColor = R.color.text_dark;
+//
+//                }
+//                mTrainerPeakInfo.setBackgroundColor(ContextCompat.
+//                        getColor(LessonListActivity.this, color));
+//
+//                //Put into styles the different text color
+//            }
+//
+//            @Override
+//            public void onSlide(View bottomSheet, float slideOffset) {
+//
+//
+//                Log.d(TAG, "onSlide");
+//            }
+//        });
 
         rlTrainerCall.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -315,9 +312,19 @@ public class LessonListActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
     private ActionBarDrawerToggle setUpDrawerToggle() {
         return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open,
-                R.string.drawer_close);
+                R.string.drawer_close) {
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+
+                // When the drawer is opened, hide the bottom panel.
+                plSlidingPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+            }
+        };
     }
 
     private void setUpDrawerContent(NavigationView navigationView) {
@@ -336,7 +343,7 @@ public class LessonListActivity extends AppCompatActivity
 
         // If there is no current trainer, hide the bottom sheet.
         if (trainer == null) {
-            bottomSheet.setVisibility(View.GONE);
+            plSlidingPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
             return;
         }
 
@@ -344,8 +351,7 @@ public class LessonListActivity extends AppCompatActivity
         setupTrainerDetailView(trainer);
 
         // Initialize to collapsed state and make it visible.
-        mBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        bottomSheet.setVisibility(View.VISIBLE);
+        plSlidingPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
     }
 
     public void selectDrawerItem(MenuItem currentMenuItem) {
@@ -362,7 +368,6 @@ public class LessonListActivity extends AppCompatActivity
             case R.id.nav_second_fragment:
                 fragmentClass = FindTrainerFragment.class;
                 fragment = mFindTrainerFragment;
-                bottomSheet.setVisibility(View.GONE);
                 break;
             case R.id.nav_third_fragment:
                 fragmentClass = CheckMyFormFragment.class;
@@ -428,7 +433,7 @@ public class LessonListActivity extends AppCompatActivity
 
         // Show or hide the bottomSheet.
         if (!show) {
-            bottomSheet.setVisibility(View.GONE);
+            plSlidingPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
         }
     }
 

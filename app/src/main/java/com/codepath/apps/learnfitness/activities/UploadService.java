@@ -14,20 +14,6 @@
 
 package com.codepath.apps.learnfitness.activities;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.youtube.YouTube;
-import com.google.common.collect.Lists;
-
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.models.Form;
-import com.codepath.apps.learnfitness.rest.MediaStoreService;
-import com.codepath.apps.learnfitness.youtubeupload.Auth;
-
 import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;
@@ -37,6 +23,19 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.os.ResultReceiver;
 import android.util.Log;
+
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.models.Form;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
+import com.codepath.apps.learnfitness.youtubeupload.Auth;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.youtube.YouTube;
+import com.google.common.collect.Lists;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
