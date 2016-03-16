@@ -15,11 +15,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -31,6 +33,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -60,6 +63,8 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
 import java.util.Arrays;
 
@@ -221,37 +226,45 @@ public class LessonListActivity extends AppCompatActivity
 
     private void setUpBottomSheet() {
         Log.d(TAG, "setUpBottomSheet");
-//        mBehavior = BottomSheetBehavior.from(bottomSheet);
-//        mBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-//            @Override
-//            public void onStateChanged(View bottomSheet, int newState) {
-//                Log.d(TAG, "State changing");
-//                int color;
-//                int textColor;
-//                switch (newState) {
-//                    case BottomSheetBehavior.STATE_DRAGGING:
-//                    case BottomSheetBehavior.STATE_EXPANDED:
-//                        color = R.color.primary_dark;
-//                        textColor = R.color.white;
-//                    default:
-//                        color = R.color.white;
-//                        textColor = R.color.text_dark;
-//
-//                }
-//                mTrainerPeakInfo.setBackgroundColor(ContextCompat.
-//                        getColor(LessonListActivity.this, color));
-//
-//                //Put into styles the different text color
-//            }
-//
-//            @Override
-//            public void onSlide(View bottomSheet, float slideOffset) {
-//
-//
-//                Log.d(TAG, "onSlide");
-//            }
-//        });
 
+        // Indicate that the bottom panel should be completely on top of the background.
+        // This gets rid of the initial wiggle of the map.
+        plSlidingPanel.setOverlayed(true);
+
+        // Add a listen for position changes of the bottom panel.
+        plSlidingPanel.addPanelSlideListener(new PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+//                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams();
+//
+//                mImageViewTrainerPhoto.setLayoutParams(layoutParams);
+//                mImageViewTrainerPhoto.
+                mImageViewTrainerPhoto.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+                Log.d(TAG, "State changing");
+                int color;
+                int textColor;
+                if (newState == PanelState.DRAGGING || newState == PanelState.EXPANDED) {
+                    color = R.color.primary_dark;
+                    textColor = R.color.white;
+                } else {
+                    color = R.color.white;
+                    textColor = R.color.text_dark;
+
+                }
+                mTrainerPeakInfo.setBackgroundColor(ContextCompat.
+                        getColor(LessonListActivity.this, color));
+                int parsedTextColor = ContextCompat.
+                        getColor(LessonListActivity.this, textColor);
+                mTrainerName.setTextColor(parsedTextColor);
+                mTextViewTrainerSpeciality.setTextColor(parsedTextColor);
+
+                //Put into styles the different text color
+            }
+        });
         rlTrainerCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
