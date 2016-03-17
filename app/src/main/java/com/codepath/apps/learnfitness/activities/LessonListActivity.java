@@ -22,7 +22,6 @@ import com.codepath.apps.learnfitness.models.Week;
 import com.codepath.apps.learnfitness.rest.MediaStoreService;
 import com.codepath.apps.learnfitness.util.VideoUtility;
 import com.codepath.apps.learnfitness.youtubeupload.Auth;
-import com.facebook.appevents.AppEventsLogger;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
@@ -462,9 +461,9 @@ public class LessonListActivity extends AppCompatActivity
         fragmentManager.beginTransaction().add(R.id.flContent, WeekFragment.newInstance(week)).addToBackStack("week").commit();
     }
 
+    @Override
     protected void onResume() {
         super.onResume();
-        AppEventsLogger.activateApp(this);
 
         if (broadcastReceiver == null)
             broadcastReceiver = new UploadBroadcastReceiver();
@@ -474,11 +473,6 @@ public class LessonListActivity extends AppCompatActivity
                 broadcastReceiver, intentFilter);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        AppEventsLogger.deactivateApp(this);
-    }
 
     @Override
     public void onCheckMyFormDialog() {
