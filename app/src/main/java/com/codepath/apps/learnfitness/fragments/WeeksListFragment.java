@@ -23,8 +23,6 @@ import android.view.ViewGroup;
 import java.util.LinkedList;
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
 import rx.Subscriber;
@@ -41,88 +39,25 @@ public class WeeksListFragment extends Fragment {
 
     LinearLayoutManager layoutManager;
     ProgressDialog pd;
-    @Bind(R.id.rvLessonsList) RecyclerView rvLessons;
+    //@Bind(R.id.rvLessonsList)
+    RecyclerView rvLessons;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
         View v = inflater.inflate(R.layout.weeks_list_fragment, container, false);
-        ButterKnife.bind(this, v);
-        setUpViews();
-        return v;
-    }
+        //ButterKnife.bind(this, v);
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate");
-        super.onCreate(savedInstanceState);
-
-        //TODO setup progressbar
-        //setUpProgressDialogForLoading();
-
-        mWeeks = new LinkedList<>();
-        mAdapter = new LessonsAdapter(mWeeks);
-
-        mAdapter.setOnItemClickListener(new LessonsAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View itemView, Week week) {
-                Log.i("WeeksListFragment", "back to fragment");
-                //Toast.makeText(getActivity(), "In fragment clicklistener", Toast.LENGTH_SHORT).show();
-                mOnItemSelectedListener.onWeekSelected(itemView, week);
-            }
-
-            @Override
-            public void onItemExpand(View itemView, Week week) {
-                Log.i("WeeksListFragment", "asking to expand");
-
-
-                SharedPreferences sharedPreferences =
-                        getActivity().getSharedPreferences(LessonListActivity.MY_SHARED_PREFS,
-                                Context.MODE_PRIVATE);
-
-                int previousWeekNumber =
-                        Integer.parseInt(sharedPreferences.
-                                getString(LessonListActivity.CURRENT_WEEK_NUMBER, "1")) - 1;
-
-                if (previousWeekNumber >= 0 && previousWeekNumber < mWeeks.size()) {
-                    Week previous = mWeeks.get(previousWeekNumber);
-                    previous.setIsCurrent(false);
-                    mAdapter.notifyItemChanged(previousWeekNumber);
-                }
-
-
-                int newlySelectedWeekNumber = Integer.parseInt(week.getWeekNumber()) - 1;
-                Week newlySelectedWeek = mWeeks.get(newlySelectedWeekNumber);
-                newlySelectedWeek.setIsCurrent(true);
-                mAdapter.notifyItemChanged(newlySelectedWeekNumber);
-
-                if (newlySelectedWeekNumber >= 0 && newlySelectedWeekNumber <= mWeeks.size()) {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(LessonListActivity.CURRENT_WEEK_NUMBER,
-                            Integer.toString(newlySelectedWeekNumber + 1));
-
-                    editor.commit();
-                }
-            }
-        });
-    }
-
-
-    //Stub for later
-    public void populateLessonsList() {
-        //Get lessons from api
-        //show and unshow pd
-    }
-
-    public void setUpViews() {
+        rvLessons = (RecyclerView)v.findViewById(R.id.rvLessonsList);
         rvLessons.setAdapter(mAdapter);
         layoutManager = new LinearLayoutManager(getActivity());
+
         rvLessons.setLayoutManager(layoutManager);
 
         final Observable<Lesson> call = MediaStoreService.contentStore.fetchContent();
         subscription = call
-            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Lesson>() {
                     @Override
                     public void onCompleted() {
@@ -166,6 +101,76 @@ public class WeeksListFragment extends Fragment {
                         mAdapter.notifyDataSetChanged();
                     }
                 });
+
+        //setUpViews(v);
+        return v;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
+        super.onCreate(savedInstanceState);
+
+        //TODO setup progressbar
+        //setUpProgressDialogForLoading();
+
+        mWeeks = new LinkedList<>();
+        mAdapter = new LessonsAdapter(mWeeks);
+
+        mAdapter.setOnItemClickListener(new LessonsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, Week week) {
+                Log.i("WeeksListFragment", "back to fragment");
+                //Toast.makeText(getActivity(), "In fragment clicklistener", Toast.LENGTH_SHORT).show();
+                mOnItemSelectedListener.onWeekSelected(itemView, week);
+            }
+
+            @Override
+            public void onItemExpand(View itemView, Week week) {
+                Log.i("WeeksListFragment", "asking to expand");
+
+
+                SharedPreferences sharedPreferences =
+                        getActivity().getSharedPreferences(LessonListActivity.MY_SHARED_PREFS,
+                                Context.MODE_PRIVATE);
+
+                int previousWeekNumber =
+                        Integer.parseInt(sharedPreferences.
+                                getString(LessonListActivity.CURRENT_WEEK_NUMBER, "1")) - 1;
+
+                Log.i("WeeksListFragment", "prev weeknumber: " + previousWeekNumber);
+                if (previousWeekNumber >= 0 && previousWeekNumber < mWeeks.size()) {
+                    Week previous = mWeeks.get(previousWeekNumber);
+                    previous.setIsCurrent(false);
+
+                    Log.i("WeeksListFragment", "calling notify: " + previousWeekNumber);
+                    mAdapter.notifyItemChanged(previousWeekNumber);
+
+                    Log.i("WeeksListFragment", "after notify: " + previousWeekNumber);
+                }
+
+
+                int newlySelectedWeekNumber = Integer.parseInt(week.getWeekNumber()) - 1;
+                Week newlySelectedWeek = mWeeks.get(newlySelectedWeekNumber);
+                newlySelectedWeek.setIsCurrent(true);
+
+                Log.i("WeeksListFragment", "before newly selected notify: " + newlySelectedWeekNumber);
+                mAdapter.notifyItemChanged(newlySelectedWeekNumber);
+
+                Log.i("WeeksListFragment", "after newly selected notify: " + newlySelectedWeekNumber);
+
+                if (newlySelectedWeekNumber >= 0 && newlySelectedWeekNumber <= mWeeks.size()) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(LessonListActivity.CURRENT_WEEK_NUMBER,
+                            Integer.toString(newlySelectedWeekNumber + 1));
+
+                    Log.i("WeeksListFragment", "before pref editor commit: ");
+                    editor.commit();
+                    Log.i("WeeksListFragment", "after  pref editor commit: ");
+
+                }
+            }
+        });
     }
 
     public void setUpProgressDialogForLoading() {
