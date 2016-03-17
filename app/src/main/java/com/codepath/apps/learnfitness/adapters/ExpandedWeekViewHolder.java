@@ -32,11 +32,11 @@ public class ExpandedWeekViewHolder extends RecyclerView.ViewHolder
     public ExpandedWeekViewHolder(Context context, LessonsAdapter.OnItemClickListener listener,
                                   View itemView, List<Week> weeks) {
         super(itemView);
+        ButterKnife.bind(this, itemView);
 
         mContext = context;
         mOnItemClickListener = listener;
         mWeeks = weeks;
-        ButterKnife.bind(this, itemView);
         itemView.setOnClickListener(this);
     }
 
