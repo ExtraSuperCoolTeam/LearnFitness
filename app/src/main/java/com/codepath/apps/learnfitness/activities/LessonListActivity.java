@@ -1,6 +1,32 @@
 package com.codepath.apps.learnfitness.activities;
 
 
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+
+import com.bumptech.glide.Glide;
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.fragments.CheckMyFormFragment;
+import com.codepath.apps.learnfitness.fragments.ComposeFormMessageFragment;
+import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
+import com.codepath.apps.learnfitness.fragments.WeekFragment;
+import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
+import com.codepath.apps.learnfitness.models.Form;
+import com.codepath.apps.learnfitness.models.Trainer;
+import com.codepath.apps.learnfitness.models.Week;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
+import com.codepath.apps.learnfitness.util.VideoUtility;
+import com.codepath.apps.learnfitness.youtubeupload.Auth;
+import com.facebook.appevents.AppEventsLogger;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
+
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Dialog;
@@ -15,7 +41,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -33,38 +58,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.fragments.CheckMyFormFragment;
-import com.codepath.apps.learnfitness.fragments.ComposeFormMessageFragment;
-import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
-import com.codepath.apps.learnfitness.fragments.WeekFragment;
-import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
-import com.codepath.apps.learnfitness.models.Form;
-import com.codepath.apps.learnfitness.models.Trainer;
-import com.codepath.apps.learnfitness.models.Week;
-import com.codepath.apps.learnfitness.rest.MediaStoreService;
-import com.codepath.apps.learnfitness.util.VideoUtility;
-import com.codepath.apps.learnfitness.youtubeupload.Auth;
-import com.facebook.appevents.AppEventsLogger;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.util.ExponentialBackOff;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
 import java.util.Arrays;
 
@@ -236,7 +235,7 @@ public class LessonListActivity extends AppCompatActivity
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
                 RelativeLayout.LayoutParams boxMargins = new RelativeLayout.LayoutParams(mTrainerPeakInfo.getLayoutParams());
-                boxMargins.topMargin = (int)(500 * slideOffset);
+                boxMargins.topMargin = (int) (500 * slideOffset);
                 mTrainerPeakInfo.setLayoutParams(boxMargins);
             }
 
@@ -499,6 +498,10 @@ public class LessonListActivity extends AppCompatActivity
 
     @Override
     public void startUpload(Form form) {
+        if (mChosenAccountName == null) {
+            chooseAccount();
+        }
+
         if (mVideoRecordFileURI != null) {
             Intent uploadIntent = new Intent(this, UploadService.class);
             uploadIntent.setData(mVideoRecordFileURI);
@@ -615,9 +618,9 @@ public class LessonListActivity extends AppCompatActivity
         SharedPreferences sp = PreferenceManager
                 .getDefaultSharedPreferences(this);
         mChosenAccountName = sp.getString(ACCOUNT_KEY, null);
-        if (mChosenAccountName == null) {
-            chooseAccount();
-        }
+//        if (mChosenAccountName == null) {
+//            chooseAccount();
+//        }
         invalidateOptionsMenu();
     }
 
