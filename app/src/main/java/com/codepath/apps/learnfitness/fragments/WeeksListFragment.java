@@ -55,6 +55,10 @@ public class WeeksListFragment extends Fragment {
 
         rvLessons.setLayoutManager(layoutManager);
 
+        RecyclerView.ItemDecoration itemDecoration = new
+                DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST);
+        rvLessons.addItemDecoration(itemDecoration);
+
         final Observable<Lesson> call = MediaStoreService.contentStore.fetchContent();
         subscription = call
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
