@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content">
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:background="@color/primary">
 
     <ImageView
         android:layout_width="match_parent"
@@ -20,6 +21,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
+        android:src="@drawable/play_button"
        />
 
     <TextView
@@ -28,13 +30,15 @@
         android:id="@+id/tvTitle"
         android:layout_below="@id/ivImage"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"/>
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/textWhite"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tvDescription"
         android:layout_below="@+id/tvTitle"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp"
+        android:textColor="@color/textWhite"/>
     
 </RelativeLayout>

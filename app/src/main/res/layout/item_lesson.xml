@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content">
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:background="@color/primary_dark">
 
     <TextView
         android:layout_width="wrap_content"
@@ -8,7 +9,9 @@
         android:id="@+id/tvWeek"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_margin="10dp"
+        android:layout_margin="15dp"
+        android:textSize="20sp"
+        android:textColor="@color/textWhite"
         android:text="Week 1"/>
 
     <TextView
@@ -16,8 +19,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvLessonTitle"
         android:layout_below="@+id/tvWeek"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="15dp"
+        android:textSize="15sp"
         android:layout_marginBottom="10dp"
+        android:textColor="@color/textWhite"
         android:text="Jumping Jacks"/>
 
     <ImageView

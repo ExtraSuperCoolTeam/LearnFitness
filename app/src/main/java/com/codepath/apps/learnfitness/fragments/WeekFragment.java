@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.learnfitness.R;
@@ -31,8 +30,8 @@ import butterknife.ButterKnife;
 public class WeekFragment extends Fragment implements YouTubePlayer.OnInitializedListener {
     private static final String TAG = "WeekFragment";
 
-    @Bind(R.id.tvTextContent)
-    TextView tvTextContent;
+//    @Bind(R.id.tvTextContent)
+//    TextView tvTextContent;
 
     @Bind(R.id.rvWeekStepsList)
     RecyclerView mRecyclerViewWeekSteps;
@@ -70,7 +69,7 @@ public class WeekFragment extends Fragment implements YouTubePlayer.OnInitialize
         mRecyclerViewWeekSteps.setLayoutManager(layoutManager);
 
         // Update the text content and image.
-        tvTextContent.setText(mWeek.getLongDescription());
+//        tvTextContent.setText(mWeek.getLongDescription());
         //Glide.with(getActivity()).load(mWeek.getPhotoUrl()).into(ivImage);
 
         // Switch in a new YouTubePlayerSupportFragment

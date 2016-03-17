@@ -12,12 +12,12 @@
         android:layout_centerHorizontal="true"
         android:visibility="visible" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvTextContent"
-        android:maxLines="3"
-        android:ellipsize="end"/>
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/tvTextContent"-->
+        <!--android:maxLines="3"-->
+        <!--android:ellipsize="end"/>-->
 
     <!--
     <ImageView
