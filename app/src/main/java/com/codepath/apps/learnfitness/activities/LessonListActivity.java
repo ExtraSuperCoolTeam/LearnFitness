@@ -39,7 +39,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.codepath.apps.learnfitness.R;
 import com.codepath.apps.learnfitness.fragments.CheckMyFormFragment;
 import com.codepath.apps.learnfitness.fragments.ComposeFormMessageFragment;
@@ -313,9 +312,11 @@ public class LessonListActivity extends AppCompatActivity
         mTrainerName.setText(name);
 
 
-        Glide.with(LessonListActivity.this)
-                .load(trainer.getProfileUrl()).placeholder(R.mipmap.ic_wifi)
-                .into(mImageViewTrainerPhoto);
+        //Todo: Fix this with real image
+//        Glide.with(LessonListActivity.this)
+//                .load(trainer.getProfileUrl()).placeholder(R.mipmap.ic_wifi)
+//                .into(mImageViewTrainerPhoto);
+
 
         mTextViewTrainerAddress.setText(trainer.getAddress());
         mTextViewTrainerCall.setText(trainer.getPhone());
