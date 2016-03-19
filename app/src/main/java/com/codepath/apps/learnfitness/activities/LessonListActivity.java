@@ -228,9 +228,27 @@ public class LessonListActivity extends AppCompatActivity
         plSlidingPanel.addPanelSlideListener(new PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
-                RelativeLayout.LayoutParams boxMargins = new RelativeLayout.LayoutParams(mTrainerPeakInfo.getLayoutParams());
-                boxMargins.topMargin = (int) (400 * slideOffset);
-                mTrainerPeakInfo.setLayoutParams(boxMargins);
+
+
+                int color;
+                int textColor;
+                if (slideOffset <= 0) {
+                    color = R.color.white;
+                    textColor = R.color.text_dark;
+                } else {
+                    color = R.color.primary;
+                    textColor = R.color.white;
+                    RelativeLayout.LayoutParams boxMargins = new RelativeLayout.LayoutParams(mTrainerPeakInfo.getLayoutParams());
+                    boxMargins.topMargin = (int) (400 * slideOffset);
+                    mTrainerPeakInfo.setLayoutParams(boxMargins);
+                }
+
+                mTrainerPeakInfo.setBackgroundColor(ContextCompat.
+                        getColor(LessonListActivity.this, color));
+                int parsedTextColor = ContextCompat.
+                        getColor(LessonListActivity.this, textColor);
+                mTrainerName.setTextColor(parsedTextColor);
+                mTextViewTrainerSpeciality.setTextColor(parsedTextColor);
             }
 
             @Override
@@ -238,20 +256,28 @@ public class LessonListActivity extends AppCompatActivity
                 Log.d(TAG, "State changing");
                 int color;
                 int textColor;
-                if (newState == PanelState.DRAGGING || newState == PanelState.EXPANDED) {
-                    color = R.color.primary;
-                    textColor = R.color.white;
-                } else {
+
+                if (newState == PanelState.COLLAPSED) {
                     color = R.color.white;
                     textColor = R.color.text_dark;
-
+                    mTrainerPeakInfo.setBackgroundColor(ContextCompat.
+                            getColor(LessonListActivity.this, color));
+                    int parsedTextColor = ContextCompat.
+                            getColor(LessonListActivity.this, textColor);
+                    mTrainerName.setTextColor(parsedTextColor);
+                    mTextViewTrainerSpeciality.setTextColor(parsedTextColor);
                 }
-                mTrainerPeakInfo.setBackgroundColor(ContextCompat.
-                        getColor(LessonListActivity.this, color));
-                int parsedTextColor = ContextCompat.
-                        getColor(LessonListActivity.this, textColor);
-                mTrainerName.setTextColor(parsedTextColor);
-                mTextViewTrainerSpeciality.setTextColor(parsedTextColor);
+
+//                if (newState == PanelState.DRAGGING || newState == PanelState.EXPANDED) {
+//                    color = R.color.primary;
+//                    textColor = R.color.white;
+//                } else {
+//                    color = R.color.white;
+//                    textColor = R.color.text_dark;
+//
+//                }
+
+
 
                 //Put into styles the different text color
             }
@@ -512,32 +538,32 @@ public class LessonListActivity extends AppCompatActivity
         Observable<Form> call =
             MediaStoreService.formsStore.postFormMessages(HEADER_CONTENT_TYPE_JSON,
                     form);
-            call
-            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<Form>() {
-                @Override
-                public void onCompleted() {
-                    Log.i(TAG, "POST form call success");
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                    // cast to retrofit.HttpException to get the response code
-                    Log.i(TAG, "in error");
-                    Log.i(TAG, e.toString());
-
-                    if (e instanceof HttpException) {
-                        HttpException response = (HttpException) e;
-                        int code = response.code();
-                        Log.i(TAG, "Http error code: " + code);
+        call
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Form>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.i(TAG, "POST form call success");
                     }
-                }
 
-                @Override
-                public void onNext(Form form) {
-                    Log.i(TAG, form.getFeedback());
+                    @Override
+                    public void onError(Throwable e) {
+                        // cast to retrofit.HttpException to get the response code
+                        Log.i(TAG, "in error");
+                        Log.i(TAG, e.toString());
+
+                        if (e instanceof HttpException) {
+                            HttpException response = (HttpException) e;
+                            int code = response.code();
+                            Log.i(TAG, "Http error code: " + code);
+                        }
+                    }
+
+                    @Override
+                    public void onNext(Form form) {
+                        Log.i(TAG, form.getFeedback());
                 }
-            });
+                });
 
         composeMessageCancel();
         showFab(true);
