@@ -1,9 +1,5 @@
 package com.codepath.apps.learnfitness.adapters;
 
-import com.bumptech.glide.Glide;
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.models.Week;
-
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -11,6 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.models.Week;
 
 import java.util.List;
 
@@ -103,13 +102,13 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         //ImageView iv = expandedWeekViewHolder.image;
 
         if (expandedWeekViewHolder != null) {
-            expandedWeekViewHolder.image.setImageResource(0);
+           // expandedWeekViewHolder.image.setImageResource(0);
 
             if (!TextUtils.isEmpty(imageURL)) {
-                Glide.with(context).load(imageURL)
-                        .fitCenter()
-                        .placeholder(R.mipmap.ic_wifi)
-                        .into(expandedWeekViewHolder.image);
+//                Glide.with(context).load(imageURL)
+//                        .fitCenter()
+//                        .placeholder(R.mipmap.ic_wifi)
+//                        .into(expandedWeekViewHolder.image);
             }
             String title = week.getWeekTitle();
             String number = week.getWeekNumber();
@@ -124,13 +123,13 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         if (collapsedWeekViewHolder != null) {
             //ImageView i = collapsedWeekViewHolder.thumbnail;
-            collapsedWeekViewHolder.thumbnail.setImageResource(0);
+            //collapsedWeekViewHolder.thumbnail.setImageResource(0);
 
             if (!TextUtils.isEmpty(imageURL)) {
-                Glide.with(context).load(imageURL)
-                        .fitCenter()
-                        .placeholder(R.mipmap.ic_wifi)
-                        .into(collapsedWeekViewHolder.thumbnail);
+//                Glide.with(context).load(imageURL)
+//                        .fitCenter()
+//                        .placeholder(R.mipmap.ic_wifi)
+//                        .into(collapsedWeekViewHolder.thumbnail);
             }
 
             collapsedWeekViewHolder.week.setText("Week " + week.getWeekNumber());
