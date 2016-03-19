@@ -52,7 +52,6 @@ import com.codepath.apps.learnfitness.models.Week;
 import com.codepath.apps.learnfitness.rest.MediaStoreService;
 import com.codepath.apps.learnfitness.util.VideoUtility;
 import com.codepath.apps.learnfitness.youtubeupload.Auth;
-import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -71,7 +70,6 @@ import butterknife.ButterKnife;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
 import rx.Subscriber;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -160,10 +158,7 @@ public class LessonListActivity extends AppCompatActivity
     GoogleAccountCredential credential;
     private UploadBroadcastReceiver broadcastReceiver;
     private String mChosenAccountName;
-    private Uri mFileURI = null;
     LessonListActivityReceiver mLessonListActivityReceiver;
-    private Subscription subscription;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -461,9 +456,9 @@ public class LessonListActivity extends AppCompatActivity
         fragmentManager.beginTransaction().add(R.id.flContent, WeekFragment.newInstance(week)).addToBackStack("week").commit();
     }
 
+    @Override
     protected void onResume() {
         super.onResume();
-        AppEventsLogger.activateApp(this);
 
         if (broadcastReceiver == null)
             broadcastReceiver = new UploadBroadcastReceiver();
@@ -473,18 +468,13 @@ public class LessonListActivity extends AppCompatActivity
                 broadcastReceiver, intentFilter);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        AppEventsLogger.deactivateApp(this);
-    }
 
     @Override
     public void onCheckMyFormDialog() {
-        mFab.setVisibility(View.GONE);
+        showFab(false);
         mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance();
         //mComposeFormMessageFragment.show(getSupportFragmentManager(), ComposeFormMessageFragment.TAG);
-        fragmentManager.beginTransaction().replace(R.id.flContent, mComposeFormMessageFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).addToBackStack("compose").commit();
     }
 
     @Override
@@ -514,7 +504,7 @@ public class LessonListActivity extends AppCompatActivity
 
         fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
         fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
-        mFab.setVisibility(View.VISIBLE);
+        showFab(true);
     }
 
     @Override
@@ -522,7 +512,7 @@ public class LessonListActivity extends AppCompatActivity
         Observable<Form> call =
             MediaStoreService.formsStore.postFormMessages(HEADER_CONTENT_TYPE_JSON,
                     form);
-            subscription = call
+            call
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Subscriber<Form>() {
                 @Override
@@ -549,16 +539,15 @@ public class LessonListActivity extends AppCompatActivity
                 }
             });
 
-        fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
-        mFab.setVisibility(View.VISIBLE);
+        composeMessageCancel();
+        showFab(true);
     }
 
     @Override
     public void composeMessageCancel() {
         fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
         fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
-        mFab.setVisibility(View.VISIBLE);
+        showFab(true);
     }
 
     @Override
@@ -617,17 +606,32 @@ public class LessonListActivity extends AppCompatActivity
         SharedPreferences sp = PreferenceManager
                 .getDefaultSharedPreferences(this);
         mChosenAccountName = sp.getString(ACCOUNT_KEY, null);
-//        if (mChosenAccountName == null) {
-//            chooseAccount();
-//        }
         invalidateOptionsMenu();
     }
 
+    /**
+     * Check if an account has been chosen, and launch the account picker if not.
+     */
+    public void checkLogin() {
+        if (mChosenAccountName == null) {
+            chooseAccount();
+        } else {
+            Log.d(TAG, "Don't need to choose an account");
+        }
+    }
+
+    /**
+     * Store the account name that was chosen as a login.
+     */
     private void saveAccount() {
         SharedPreferences sp = PreferenceManager
                 .getDefaultSharedPreferences(this);
         sp.edit().putString(ACCOUNT_KEY, mChosenAccountName).commit();
     }
+
+    /**
+     * Launch the google account picker.
+     */
     private void chooseAccount() {
         startActivityForResult(credential.newChooseAccountIntent(),
                 REQUEST_ACCOUNT_PICKER);

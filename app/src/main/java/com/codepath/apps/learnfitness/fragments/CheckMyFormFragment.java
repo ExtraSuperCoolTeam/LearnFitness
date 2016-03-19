@@ -1,6 +1,7 @@
 package com.codepath.apps.learnfitness.fragments;
 
 import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.activities.LessonListActivity;
 import com.codepath.apps.learnfitness.adapters.CheckMyFormAdapter;
 import com.codepath.apps.learnfitness.models.Form;
 import com.codepath.apps.learnfitness.rest.MediaStoreService;
@@ -62,6 +63,8 @@ public class CheckMyFormFragment extends Fragment {
         mForms = new ArrayList<>();
         mAdapter = new CheckMyFormAdapter(mForms);
         //Todo onclick listener
+
+        ((LessonListActivity)getActivity()).checkLogin();
 
     }
 
