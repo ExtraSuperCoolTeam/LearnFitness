@@ -1,13 +1,16 @@
 package com.codepath.apps.learnfitness.activities;
 
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.ExponentialBackOff;
+
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.learnfitness.R;
@@ -78,7 +81,8 @@ import rx.schedulers.Schedulers;
 public class LessonListActivity extends AppCompatActivity
         implements WeeksListFragment.OnItemSelectedListener,
         CheckMyFormFragment.OnCheckMyFormListener,
-        ComposeFormMessageFragment.OnFormMessageListener {
+        ComposeFormMessageFragment.OnFormMessageListener,
+        GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "LessonListActivity";
 
     public static final String MY_SHARED_PREFS = "MY_SHARED_PREFS4";
@@ -163,6 +167,7 @@ public class LessonListActivity extends AppCompatActivity
     private Uri mFileURI = null;
     LessonListActivityReceiver mLessonListActivityReceiver;
     private Subscription subscription;
+    private GoogleApiClient mGoogleApiClient;
 
 
     @Override
@@ -220,6 +225,23 @@ public class LessonListActivity extends AppCompatActivity
         });
 
         setUpBottomSheet();
+
+        setUpLoginMechanism();
+    }
+
+    private void setUpLoginMechanism() {
+//        // Configure sign-in to request the user's ID, email address, and basic
+//        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestEmail()
+//                .build();
+//
+//        // Build a GoogleApiClient with access to the Google Sign-In API and the
+//        // options specified by gso.
+//        mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+//                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+//                .build();
     }
 
     private void setUpBottomSheet() {
@@ -612,17 +634,32 @@ public class LessonListActivity extends AppCompatActivity
         SharedPreferences sp = PreferenceManager
                 .getDefaultSharedPreferences(this);
         mChosenAccountName = sp.getString(ACCOUNT_KEY, null);
-//        if (mChosenAccountName == null) {
-//            chooseAccount();
-//        }
         invalidateOptionsMenu();
     }
 
+    /**
+     * Check if an account has been chosen, and launch the account picker if not.
+     */
+    public void checkLogin() {
+        if (mChosenAccountName == null) {
+            chooseAccount();
+        } else {
+            Log.d(TAG, "Don't need to choose an account");
+        }
+    }
+
+    /**
+     * Store the account name that was chosen as a login.
+     */
     private void saveAccount() {
         SharedPreferences sp = PreferenceManager
                 .getDefaultSharedPreferences(this);
         sp.edit().putString(ACCOUNT_KEY, mChosenAccountName).commit();
     }
+
+    /**
+     * Launch the google account picker.
+     */
     private void chooseAccount() {
         startActivityForResult(credential.newChooseAccountIntent(),
                 REQUEST_ACCOUNT_PICKER);
@@ -659,6 +696,12 @@ public class LessonListActivity extends AppCompatActivity
             // ask user to choose account
             chooseAccount();
         }
+    }
+
+    // When a google auth request fails.
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 
     private class UploadBroadcastReceiver extends BroadcastReceiver {
