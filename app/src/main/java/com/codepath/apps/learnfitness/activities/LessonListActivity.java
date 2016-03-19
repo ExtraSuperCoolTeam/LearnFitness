@@ -1,34 +1,6 @@
 package com.codepath.apps.learnfitness.activities;
 
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.util.ExponentialBackOff;
-
-
-import com.bumptech.glide.Glide;
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.fragments.CheckMyFormFragment;
-import com.codepath.apps.learnfitness.fragments.ComposeFormMessageFragment;
-import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
-import com.codepath.apps.learnfitness.fragments.WeekFragment;
-import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
-import com.codepath.apps.learnfitness.models.Form;
-import com.codepath.apps.learnfitness.models.Trainer;
-import com.codepath.apps.learnfitness.models.Week;
-import com.codepath.apps.learnfitness.rest.MediaStoreService;
-import com.codepath.apps.learnfitness.util.VideoUtility;
-import com.codepath.apps.learnfitness.youtubeupload.Auth;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
-
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Dialog;
@@ -67,6 +39,30 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.fragments.CheckMyFormFragment;
+import com.codepath.apps.learnfitness.fragments.ComposeFormMessageFragment;
+import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
+import com.codepath.apps.learnfitness.fragments.WeekFragment;
+import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
+import com.codepath.apps.learnfitness.models.Form;
+import com.codepath.apps.learnfitness.models.Trainer;
+import com.codepath.apps.learnfitness.models.Week;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
+import com.codepath.apps.learnfitness.util.VideoUtility;
+import com.codepath.apps.learnfitness.youtubeupload.Auth;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
+
 import java.util.Arrays;
 
 import butterknife.Bind;
@@ -74,15 +70,13 @@ import butterknife.ButterKnife;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
 import rx.Subscriber;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class LessonListActivity extends AppCompatActivity
         implements WeeksListFragment.OnItemSelectedListener,
         CheckMyFormFragment.OnCheckMyFormListener,
-        ComposeFormMessageFragment.OnFormMessageListener,
-        GoogleApiClient.OnConnectionFailedListener {
+        ComposeFormMessageFragment.OnFormMessageListener {
     private static final String TAG = "LessonListActivity";
 
     public static final String MY_SHARED_PREFS = "MY_SHARED_PREFS4";
@@ -164,11 +158,7 @@ public class LessonListActivity extends AppCompatActivity
     GoogleAccountCredential credential;
     private UploadBroadcastReceiver broadcastReceiver;
     private String mChosenAccountName;
-    private Uri mFileURI = null;
     LessonListActivityReceiver mLessonListActivityReceiver;
-    private Subscription subscription;
-    private GoogleApiClient mGoogleApiClient;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,23 +215,6 @@ public class LessonListActivity extends AppCompatActivity
         });
 
         setUpBottomSheet();
-
-        setUpLoginMechanism();
-    }
-
-    private void setUpLoginMechanism() {
-//        // Configure sign-in to request the user's ID, email address, and basic
-//        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestEmail()
-//                .build();
-//
-//        // Build a GoogleApiClient with access to the Google Sign-In API and the
-//        // options specified by gso.
-//        mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-//                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-//                .build();
     }
 
     private void setUpBottomSheet() {
@@ -498,10 +471,10 @@ public class LessonListActivity extends AppCompatActivity
 
     @Override
     public void onCheckMyFormDialog() {
-        mFab.setVisibility(View.GONE);
+        showFab(false);
         mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance();
         //mComposeFormMessageFragment.show(getSupportFragmentManager(), ComposeFormMessageFragment.TAG);
-        fragmentManager.beginTransaction().replace(R.id.flContent, mComposeFormMessageFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).addToBackStack("compose").commit();
     }
 
     @Override
@@ -531,7 +504,7 @@ public class LessonListActivity extends AppCompatActivity
 
         fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
         fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
-        mFab.setVisibility(View.VISIBLE);
+        showFab(true);
     }
 
     @Override
@@ -539,7 +512,7 @@ public class LessonListActivity extends AppCompatActivity
         Observable<Form> call =
             MediaStoreService.formsStore.postFormMessages(HEADER_CONTENT_TYPE_JSON,
                     form);
-            subscription = call
+            call
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Subscriber<Form>() {
                 @Override
@@ -566,16 +539,15 @@ public class LessonListActivity extends AppCompatActivity
                 }
             });
 
-        fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
-        mFab.setVisibility(View.VISIBLE);
+        composeMessageCancel();
+        showFab(true);
     }
 
     @Override
     public void composeMessageCancel() {
         fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
         fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
-        mFab.setVisibility(View.VISIBLE);
+        showFab(true);
     }
 
     @Override
@@ -696,12 +668,6 @@ public class LessonListActivity extends AppCompatActivity
             // ask user to choose account
             chooseAccount();
         }
-    }
-
-    // When a google auth request fails.
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
     }
 
     private class UploadBroadcastReceiver extends BroadcastReceiver {
