@@ -1,6 +1,7 @@
 package com.codepath.apps.learnfitness.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,6 +24,7 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private List<Week> mWeeks;
     private Context context;
     private final int CURRENT_LESSON = 0, LESSON = 1;
+    private Week currentWeek;
 
     public LessonsAdapter(List<Week> weeks) {
         mWeeks = weeks;
@@ -32,6 +34,7 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemViewType(int position) {
         Week week = mWeeks.get(position);
         if (week.isCurrent()) {
+            currentWeek = week;
             return CURRENT_LESSON;
         }
         return LESSON;
@@ -131,9 +134,23 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 //                        .placeholder(R.mipmap.ic_wifi)
 //                        .into(collapsedWeekViewHolder.thumbnail);
             }
-
             collapsedWeekViewHolder.week.setText("Week " + week.getWeekNumber());
             collapsedWeekViewHolder.lessonTitle.setText(week.getWeekTitle());
+
+            //Todo make this so that it's part of lesson model
+//            int currentWeekInt = Integer.valueOf(currentWeek.getWeekNumber());
+//            int weekInt = Integer.valueOf(week.getWeekNumber());
+            int currentWeekInt = 3;
+            int weekInt = Integer.valueOf(week.getWeekNumber());
+
+            if (weekInt < currentWeekInt) {
+                collapsedWeekViewHolder.mLesson
+                        .setBackgroundColor(ContextCompat.getColor(context, R.color.primary_dark));
+            } else if (weekInt > currentWeekInt) {
+                collapsedWeekViewHolder.mLesson
+                        .setBackgroundColor(ContextCompat.getColor(context, R.color.to_complete));
+            }
+
         }
     }
 

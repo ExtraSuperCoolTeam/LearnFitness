@@ -7,6 +7,7 @@
     <color name="primary_dark">#3B3736</color>
     <color name="primary_light">#B2EBF2</color>
     <color name="accent">#FA6A66</color>
+    <color name="to_complete">#625e5e</color>
 
 
     <color name="material_grey">#DADFE3</color>
