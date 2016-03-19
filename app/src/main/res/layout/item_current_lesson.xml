@@ -8,7 +8,7 @@
         android:layout_height="300dp"
         android:id="@+id/ivImage"
         android:scaleType="fitXY"
-        android:src="@drawable/cardio"/>
+        android:src="@drawable/cardio2"/>
 
     <!-- android:src="@drawable/placeholder_lesson"
      android:src="@drawable/play_button"

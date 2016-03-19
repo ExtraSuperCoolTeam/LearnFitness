@@ -27,10 +27,11 @@
 
             <ImageView
                 android:id="@+id/ivWeekStepsImage"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_width="240dp"
+                android:layout_height="270dp"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="true"
+                android:layout_centerHorizontal="true"
                 android:layout_below="@id/tvWeekStepsTitle"
                 android:layout_marginBottom="10dp"/>
 

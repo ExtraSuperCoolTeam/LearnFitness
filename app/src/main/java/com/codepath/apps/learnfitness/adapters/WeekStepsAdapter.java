@@ -1,9 +1,5 @@
 package com.codepath.apps.learnfitness.adapters;
 
-import com.bumptech.glide.Glide;
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.models.Step;
-
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.models.Step;
 
 import java.util.List;
 
@@ -66,8 +65,24 @@ public class WeekStepsAdapter extends RecyclerView.Adapter<WeekStepsAdapter.View
         viewHolder.mTextViewWeekStepsDescription.setText(step.getStepDescription());
 
         //TODO add placeholder and error
-        Glide.with(viewHolder.mContext).load(step.getStepImageUrl())
-                .into(viewHolder.mImageViewWeekStepsImage);
+//        Glide.with(viewHolder.mContext).load(step.getStepImageUrl())
+//                .into(viewHolder.mImageViewWeekStepsImage);
+
+        switch (position) {
+
+            case 0:
+                viewHolder.mImageViewWeekStepsImage.setImageResource(R.drawable.warrior_one);
+                break;
+            case 1:
+                viewHolder.mImageViewWeekStepsImage.setImageResource(R.drawable.warrior_two);
+                break;
+            case 2:
+                viewHolder.mImageViewWeekStepsImage.setImageResource(R.drawable.warrior_three);
+                break;
+            default:
+                viewHolder.mImageViewWeekStepsImage.setImageResource(R.drawable.warrior_one);
+                break;
+        }
 
     }
 
