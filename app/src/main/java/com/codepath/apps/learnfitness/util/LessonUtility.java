@@ -12,7 +12,7 @@ import android.content.SharedPreferences;
 public class LessonUtility {
 
     public static int getCurrentWeek() {
-        int weekNumber =  1;
+        int weekNumber =  2;
         SharedPreferences sharedPreferences = null;
         if (FitnessApplication.getAppContext() != null) {
             sharedPreferences =
