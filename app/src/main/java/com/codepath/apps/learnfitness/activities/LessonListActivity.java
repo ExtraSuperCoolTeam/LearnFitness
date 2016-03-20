@@ -318,6 +318,9 @@ public class LessonListActivity extends AppCompatActivity
             case "Lifting":
                 mSpecialtyIcon.setImageResource(R.drawable.lifting_icon);
                 break;
+            case "Yoga":
+                mSpecialtyIcon.setImageResource(R.drawable.yoga_icon);
+                break;
             default:
                 mSpecialtyIcon.setImageResource(R.drawable.cardio_icon);
                 break;
@@ -589,7 +592,7 @@ public class LessonListActivity extends AppCompatActivity
                 public void onNext(MyFormMessage myFormMessage) {
                     Log.i(TAG, myFormMessage.getId());
                 }
-                });
+            });
 
         fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
         //fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();

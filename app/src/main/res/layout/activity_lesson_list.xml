@@ -78,7 +78,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/rlBottomSheet"
         android:visibility="gone"
         android:background="@color/textWhite">
@@ -170,7 +170,7 @@
                     android:layout_margin="10dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/ic_trainer_direction"/>
+                    android:src="@drawable/red_marker"/>
 
                 <TextView
                     android:id="@+id/tvTrainerAddressLine1"
@@ -207,7 +207,7 @@
                     android:layout_margin="10dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/ic_trainer_call"/>
+                    android:src="@drawable/phone_icon"/>
 
                 <TextView
                     android:id="@+id/tvTrainerCall"
@@ -216,6 +216,7 @@
                     android:layout_centerInParent="true"
                     android:gravity="center"
                     android:text="@string/call"
+                    android:textStyle="bold"
                     android:layout_below="@id/ivTrainerCallIcon"
                     />
             </RelativeLayout>

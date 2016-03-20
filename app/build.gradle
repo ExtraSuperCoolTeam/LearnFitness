@@ -69,13 +69,12 @@ dependencies {
     compile 'com.google.api-client:google-api-client-android:+'
     compile 'com.google.api-client:google-api-client-gson:+'
     compile 'com.mcxiaoke.volley:library:1.0.18'
-    //compile 'com.google.apis:google-api-services-youtube:v3-rev163-1.21.0'
 
     // Sliding up panel.
     compile 'com.sothree.slidinguppanel:library:3.3.0'
 
     // PercentRelativeLayout
-    compile "com.android.support:percent:23.2.0"
+    compile "com.android.support:percent:22.2.0"
 
     //apache common lang
     compile 'org.apache.commons:commons-lang3:3.4'

@@ -40,6 +40,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -68,6 +69,7 @@ public class FindTrainerFragment extends Fragment implements
     private Double latitude, longitude;
     private LocationRequest mLocationRequest;
     private HashMap<String, Trainer> mTrainers;
+    private List<Marker> mMarkers;
     Subscription subscription;
 
     /*
@@ -97,6 +99,7 @@ public class FindTrainerFragment extends Fragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mMarkers = new ArrayList<>();
         Log.d(TAG, "onCreate");
     }
 
@@ -138,6 +141,7 @@ public class FindTrainerFragment extends Fragment implements
                         mTrainers = Trainer.mapTrainerIdToTrainer(trainers);
 
                         if (mMap != null) {
+                            mMarkers.clear();
                             for (String key : mTrainers.keySet()) {
                                 Trainer trainer = mTrainers.get(key);
                                 addMarkerforTrainer(trainer);
@@ -152,7 +156,6 @@ public class FindTrainerFragment extends Fragment implements
         //Todo: Get the actual location from trainer
         BitmapDescriptor defaultMarker = BitmapDescriptorFactory
                 .defaultMarker(BitmapDescriptorFactory.HUE_RED);
-        //LatLng trainerPosition = new LatLng(37.7739, -122.431297);
         LatLng trainerPosition = new LatLng(Double.parseDouble(trainer.getLocation().getLatitude()),
                 Double.parseDouble(trainer.getLocation().getLongitude()));
 
@@ -161,6 +164,9 @@ public class FindTrainerFragment extends Fragment implements
                 .title(trainer.getId())
                 .icon(BitmapDescriptorFactory
                         .fromResource(R.drawable.blue_map_marker)));
+
+        mMarkers.add(marker);
+
     }
 
     public void setUpMapIfNeeded() {
@@ -380,10 +386,20 @@ public class FindTrainerFragment extends Fragment implements
         }
     }
 
+    private void clearMarkers() {
+        for (Marker marker : mMarkers) {
+            marker.setIcon(BitmapDescriptorFactory
+                    .fromResource(R.drawable.blue_map_marker));
+        }
+    }
     @Override
     public boolean onMarkerClick(Marker marker) {
         Trainer trainer = mTrainers.get(marker.getTitle());
         ((LessonListActivity)getActivity()).showTrainerInfo(trainer);
+
+        clearMarkers();
+        marker.setIcon(BitmapDescriptorFactory
+                .fromResource(R.drawable.red_map_marker));
         return true;
     }
 
