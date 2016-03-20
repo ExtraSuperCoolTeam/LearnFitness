@@ -22,4 +22,7 @@ public class MediaStoreService {
 
     public static FormEndpointInterface formsStore =
             retrofit.create(FormEndpointInterface.class);
+
+    public static FormMessagesEndpointInterface formsMessagesStore =
+            retrofit.create(FormMessagesEndpointInterface.class);
 }

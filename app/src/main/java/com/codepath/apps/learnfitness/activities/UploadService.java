@@ -14,6 +14,20 @@
 
 package com.codepath.apps.learnfitness.activities;
 
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.youtube.YouTube;
+import com.google.common.collect.Lists;
+
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.models.MyFormMessage;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
+import com.codepath.apps.learnfitness.youtubeupload.Auth;
+
 import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;
@@ -23,19 +37,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.os.ResultReceiver;
 import android.util.Log;
-
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.models.Form;
-import com.codepath.apps.learnfitness.rest.MediaStoreService;
-import com.codepath.apps.learnfitness.youtubeupload.Auth;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.youtube.YouTube;
-import com.google.common.collect.Lists;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -80,7 +81,8 @@ public class UploadService extends IntentService {
     final HttpTransport transport = AndroidHttp.newCompatibleTransport();
     final JsonFactory jsonFactory = new GsonFactory();
     GoogleAccountCredential credential;
-    private Form mFormToPost;
+    //private Form mFormToPost;
+    private MyFormMessage mMyFormMessageToPost;
     private static final String HEADER_CONTENT_TYPE_JSON = "application/json";
     /**
      * tracks the number of upload attempts
@@ -114,7 +116,7 @@ public class UploadService extends IntentService {
         Uri fileUri = intent.getData();
 
         String chosenAccountName = intent.getStringExtra(LessonListActivity.ACCOUNT_KEY);
-        mFormToPost = intent.getParcelableExtra(LessonListActivity.FORM_INFO);
+        mMyFormMessageToPost = intent.getParcelableExtra(LessonListActivity.FORM_INFO);
         // Extract the receiver passed into the service
         mLessonListActivityReceiver = intent.getParcelableExtra(LessonListActivity.RECEIVER);
 
@@ -146,13 +148,13 @@ public class UploadService extends IntentService {
                 Log.i(TAG, String.format("Uploaded video with ID: %s", videoId));
 
                 //POST to backend server
-                mFormToPost.setVideoId(videoId);
-                Observable<Form> call =
-                        MediaStoreService.formsStore.postFormMessages(HEADER_CONTENT_TYPE_JSON,
-                                mFormToPost);
+                mMyFormMessageToPost.setVideoId(videoId);
+                Observable<MyFormMessage> call =
+                        MediaStoreService.formsMessagesStore.postMyFormMessage(HEADER_CONTENT_TYPE_JSON,
+                                mMyFormMessageToPost);
                 subscription = call
                     .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<Form>() {
+                        .subscribe(new Subscriber<MyFormMessage>() {
                             @Override
                             public void onCompleted() {
                                 Log.i(TAG, "POST form call success");
@@ -172,10 +174,10 @@ public class UploadService extends IntentService {
                             }
 
                             @Override
-                            public void onNext(Form form) {
-                                Log.i(TAG, form.getFeedback());
+                            public void onNext(MyFormMessage myFormMessage) {
+                                Log.i(TAG, myFormMessage.getId());
                                 Bundle bundle = new Bundle();
-                                bundle.putString(LessonListActivity.FORM_ID, form.getId());
+                                bundle.putString(LessonListActivity.FORM_ID, myFormMessage.getId());
                                 mLessonListActivityReceiver.send(Activity.RESULT_OK, bundle);
                             }
                         });

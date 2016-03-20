@@ -75,5 +75,6 @@
     <string name="toast_form_message_submitted">Your request is submitted</string>
     <string name="toast_form_record_video_failure">Something went wrong with video recording</string>
     <string name="message_record_cancel">Cancel</string>
+    <string name="message_hint">How can we help you?</string>
 
 </resources>

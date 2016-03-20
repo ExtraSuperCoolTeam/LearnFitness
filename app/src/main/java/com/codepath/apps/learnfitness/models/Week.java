@@ -238,6 +238,6 @@ public class Week implements Parcelable {
 
     @Override
     public String toString() {
-        return weekTitle;
+        return "Week: " + weekTitle;
     }
 }

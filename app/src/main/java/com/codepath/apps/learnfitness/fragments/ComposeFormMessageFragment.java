@@ -1,8 +1,8 @@
 package com.codepath.apps.learnfitness.fragments;
 
 import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.models.Form;
 import com.codepath.apps.learnfitness.models.Lesson;
+import com.codepath.apps.learnfitness.models.MyFormMessage;
 import com.codepath.apps.learnfitness.models.Week;
 import com.codepath.apps.learnfitness.rest.MediaStoreService;
 
@@ -70,15 +70,6 @@ public class ComposeFormMessageFragment extends Fragment {
     @Bind(R.id.etComposeMessageText)
     EditText mEditTextMessageText;
 
-//    @Bind(R.id.rlComposeMessageVideoView)
-//    RelativeLayout mRelativeLayoutVideoView;
-
-    @Bind(R.id.vMessageVideoPlaceHolder)
-    View mViewVideoPlaceHolder;
-
-    @Bind(R.id.vMessageItemsSeperator2)
-    View mViewSeapratorBelowVideo;
-
     public static ComposeFormMessageFragment newInstance() {
         ComposeFormMessageFragment composeFormMessageFragment = new ComposeFormMessageFragment();
 
@@ -92,7 +83,7 @@ public class ComposeFormMessageFragment extends Fragment {
 
         mWeeks = new ArrayList<>();
         mWeekArrayAdapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_list_item_1, mWeeks);
+                R.layout.spinnertext, mWeeks);
     }
 
     @Nullable
@@ -157,10 +148,16 @@ public class ComposeFormMessageFragment extends Fragment {
 
         //TODO check if empty fields and ignore post
         Week selectedWeek = (Week) mSpinnerWeeksTitleList.getSelectedItem();
-        Form form = new Form();
-        form.setWeekTitle(selectedWeek.getWeekTitle());
-        form.setWeekNumber(selectedWeek.getWeekNumber());
-        form.setMessage(mEditTextMessageText.getText().toString());
+//        Form form = new Form();
+//        form.setWeekTitle(selectedWeek.getWeekTitle());
+//        form.setWeekNumber(selectedWeek.getWeekNumber());
+//        form.setMessage(mEditTextMessageText.getText().toString());
+
+        MyFormMessage myFormMessage = new MyFormMessage();
+        myFormMessage.setWeekTitle(selectedWeek.getWeekTitle());
+        myFormMessage.setWeekNumber(selectedWeek.getWeekNumber());
+        myFormMessage.setMessage(mEditTextMessageText.getText().toString());
+        myFormMessage.setTimeStamp(Long.toString(System.currentTimeMillis()));
 
         if (!TextUtils.isEmpty(recordedVideoUrl)) {
             Log.i(TAG, "Received path:" + recordedVideoUrl);
@@ -168,12 +165,10 @@ public class ComposeFormMessageFragment extends Fragment {
                 mOnFormMessageListener = (OnFormMessageListener) getActivity();
             }
 
-            mOnFormMessageListener.startUpload(form);
-//            Toast.makeText(getActivity(), R.string.toast_form_message_submitted,
-//                    Toast.LENGTH_SHORT).show();
+            mOnFormMessageListener.startUpload(myFormMessage);
         } else {
             Log.i(TAG, "Didn't get video path :(");
-            mOnFormMessageListener.startPostWithoutVideo(form);
+            mOnFormMessageListener.startPostWithoutVideo(myFormMessage);
         }
     }
 
@@ -184,15 +179,25 @@ public class ComposeFormMessageFragment extends Fragment {
         }
         mOnFormMessageListener.composeMessageCancel();
     }
+
+    @OnClick(R.id.btnComposeFormMessageGallery)
+    public void lookupVideoGallery() {
+        if (mOnFormMessageListener == null) {
+            mOnFormMessageListener = (OnFormMessageListener) getActivity();
+        }
+        mOnFormMessageListener.launchVideoGallery();
+    }
+
     private OnFormMessageListener mOnFormMessageListener;
 
     // Define the events that the fragment will use to communicate
     public interface OnFormMessageListener {
         // This can be any number of events to be sent to the activity
         void onRecordVideo(View view);
-        void startUpload(Form form);
-        void startPostWithoutVideo(Form form);
+        void startUpload(MyFormMessage myFormMessage);
+        void startPostWithoutVideo(MyFormMessage myFormMessage);
         void composeMessageCancel();
+        void launchVideoGallery();
     }
 
     // Store the listener (activity) that will have events fired once the fragment is attached
@@ -218,14 +223,10 @@ public class ComposeFormMessageFragment extends Fragment {
     public void showVideo(Uri localVideoUri) {
 
         mEditTextMessageText.setMaxLines(3);
-        mViewSeapratorBelowVideo.setVisibility(View.VISIBLE);
-        mViewVideoPlaceHolder.setVisibility(View.GONE);
         mVideoViewComposeFormVideo.setVisibility(View.VISIBLE);
         mVideoViewComposeFormVideo.setVideoURI(localVideoUri);
         mVideoViewComposeFormVideo.setMediaController(new MediaController(getActivity()));
         mVideoViewComposeFormVideo.requestFocus();
         mVideoViewComposeFormVideo.start();
-
-        mViewSeapratorBelowVideo.setVisibility(View.VISIBLE);
     }
 }

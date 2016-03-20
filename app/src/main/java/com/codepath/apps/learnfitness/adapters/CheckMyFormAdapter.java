@@ -2,7 +2,7 @@ package com.codepath.apps.learnfitness.adapters;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.models.Form;
+import com.codepath.apps.learnfitness.models.TrainerReply;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -22,10 +22,10 @@ import butterknife.ButterKnife;
  * Created by JaneChung on 3/6/16.
  */
 public class CheckMyFormAdapter extends RecyclerView.Adapter<CheckMyFormAdapter.ViewHolder> {
+    private static final String TAG = "CheckMyFormAdapter";
+    private List<TrainerReply> mForms;
 
-    private List<Form> mForms;
-
-    public CheckMyFormAdapter(List<Form> forms) {
+    public CheckMyFormAdapter(List<TrainerReply> forms) {
         mForms = forms;
     }
 
@@ -40,33 +40,11 @@ public class CheckMyFormAdapter extends RecyclerView.Adapter<CheckMyFormAdapter.
 
         Context mContext;
 
-        static final int REQUEST_VIDEO_CAPTURE = 1;
-
-
         public ViewHolder(View itemView,  Context context) {
             super(itemView);
             mContext = context;
             ButterKnife.bind(this, itemView);
         }
-
-//        @Override
-//        public void onClick(View v) {
-//            int position = getAdapterPosition();
-////            Form form = mForms.get(position);
-////
-////            //Show the video camera
-////
-////            if (v.getId() != R.id.btnSubmitForm) {
-////                return;
-////            }
-////
-////            Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-////            if (takeVideoIntent.resolveActivity(itemView.getContext().getPackageManager()) != null) {
-////                ((Activity) itemView.getContext())
-////                        .startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
-////            }
-//        }
-
     }
 
     @Override
@@ -82,17 +60,17 @@ public class CheckMyFormAdapter extends RecyclerView.Adapter<CheckMyFormAdapter.
 
     @Override
     public void onBindViewHolder ( final ViewHolder holder, int position){
-        Form form = mForms.get(position);
+        TrainerReply trainerReply = mForms.get(position);
 
-        String lesson = form.getWeekTitle();
-        String description = form.getFeedback();
+        //String lesson = form.getWeekTitle();
+        String description = trainerReply.getFormMessageReply().getFeedback();
 
-        Log.i("CheckMyFormAdapter", description);
-        holder.lessonTitle.setText(lesson);
+        Log.i(TAG, trainerReply.getTrainer().getProfileUrl());
+        //holder.lessonTitle.setText(lesson);
         holder.description.setText(description);
 
         //TODO Need to change backend to include trainer with form reply
-        Glide.with(holder.mContext).load(R.drawable.rock_trainer).placeholder(R.drawable.rock_trainer).error(R.drawable.rock_trainer)
+        Glide.with(holder.mContext).load(trainerReply.getTrainer().getProfileUrl()).placeholder(R.drawable.rock_trainer).error(R.drawable.rock_trainer)
                 .into(holder.mImageViewSenderTrainer);
     }
 

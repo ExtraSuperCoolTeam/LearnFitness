@@ -14,9 +14,10 @@ import com.codepath.apps.learnfitness.R;
 import com.codepath.apps.learnfitness.fragments.CheckMyFormFragment;
 import com.codepath.apps.learnfitness.fragments.ComposeFormMessageFragment;
 import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
+import com.codepath.apps.learnfitness.fragments.MyFormMessageListFragment;
 import com.codepath.apps.learnfitness.fragments.WeekFragment;
 import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
-import com.codepath.apps.learnfitness.models.Form;
+import com.codepath.apps.learnfitness.models.MyFormMessage;
 import com.codepath.apps.learnfitness.models.Trainer;
 import com.codepath.apps.learnfitness.models.Week;
 import com.codepath.apps.learnfitness.rest.MediaStoreService;
@@ -78,8 +79,9 @@ import rx.schedulers.Schedulers;
 
 public class LessonListActivity extends AppCompatActivity
         implements WeeksListFragment.OnItemSelectedListener,
-        CheckMyFormFragment.OnCheckMyFormListener,
-        ComposeFormMessageFragment.OnFormMessageListener {
+        MyFormMessageListFragment.OnMyFormMessagesListener,
+        ComposeFormMessageFragment.OnFormMessageListener,
+        CheckMyFormFragment.OnCheckMyFormListener {
     private static final String TAG = "LessonListActivity";
 
     public static final String MY_SHARED_PREFS = "MY_SHARED_PREFS4";
@@ -136,6 +138,7 @@ public class LessonListActivity extends AppCompatActivity
     private Menu mMenu;
     private FindTrainerFragment mFindTrainerFragment;
     private CheckMyFormFragment mCheckMyFormFragment;
+    private MyFormMessageListFragment mMyFormMessageListFragment;
     ComposeFormMessageFragment mComposeFormMessageFragment;
     private Trainer mTrainer;
     private WeeksListFragment mWeeksListFragment;
@@ -156,6 +159,7 @@ public class LessonListActivity extends AppCompatActivity
     private static final int RESULT_PICK_IMAGE_CROP = 4;
     private static final int RESULT_VIDEO_CAP = 5;
     private static final int REQUEST_DIRECT_TAG = 6;
+    private static final int REQUEST_TAKE_GALLERY_VIDEO = 7;
     final HttpTransport transport = AndroidHttp.newCompatibleTransport();
     final JsonFactory jsonFactory = new GsonFactory();
     GoogleAccountCredential credential;
@@ -198,7 +202,8 @@ public class LessonListActivity extends AppCompatActivity
         setUpDrawerContent(mNavigation);
 
         mFindTrainerFragment = new FindTrainerFragment();
-        mCheckMyFormFragment = new CheckMyFormFragment();
+        //mCheckMyFormFragment = new CheckMyFormFragment();
+        mMyFormMessageListFragment = new MyFormMessageListFragment();
         mWeeksListFragment = new WeeksListFragment();
 
         getSupportFragmentManager()
@@ -215,7 +220,8 @@ public class LessonListActivity extends AppCompatActivity
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCheckMyFormFragment.showCreationDialog();
+                //mCheckMyFormFragment.showCreationDialog();
+                mMyFormMessageListFragment.showCreationDialog();
 
             }
         });
@@ -381,7 +387,8 @@ public class LessonListActivity extends AppCompatActivity
                 break;
             case R.id.nav_third_fragment:
                 fragmentClass = CheckMyFormFragment.class;
-                fragment = mCheckMyFormFragment;
+                //fragment = mCheckMyFormFragment;
+                fragment = mMyFormMessageListFragment;
                 break;
 
             default:
@@ -486,6 +493,14 @@ public class LessonListActivity extends AppCompatActivity
         mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance();
         //mComposeFormMessageFragment.show(getSupportFragmentManager(), ComposeFormMessageFragment.TAG);
         fragmentManager.beginTransaction().replace(R.id.flContent, mComposeFormMessageFragment).commit();
+        //fragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).commit();
+    }
+
+    @Override
+    public void onFormMessageSelected(View itemView, MyFormMessage myFormMessage) {
+
+        CheckMyFormFragment mCheckMyFormFragment = CheckMyFormFragment.newInstance(myFormMessage);
+        fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
     }
 
     @Override
@@ -497,7 +512,7 @@ public class LessonListActivity extends AppCompatActivity
     }
 
     @Override
-    public void startUpload(Form form) {
+    public void startUpload(MyFormMessage myFormMessage) {
         if (mChosenAccountName == null) {
             chooseAccount();
         }
@@ -506,7 +521,7 @@ public class LessonListActivity extends AppCompatActivity
             Intent uploadIntent = new Intent(this, UploadService.class);
             uploadIntent.setData(mVideoRecordFileURI);
             uploadIntent.putExtra(ACCOUNT_KEY, mChosenAccountName);
-            uploadIntent.putExtra(FORM_INFO, form);
+            uploadIntent.putExtra(FORM_INFO, myFormMessage);
             uploadIntent.putExtra(RECEIVER, mLessonListActivityReceiver);
             startService(uploadIntent);
             Toast.makeText(this, R.string.youtube_upload_started,
@@ -514,18 +529,19 @@ public class LessonListActivity extends AppCompatActivity
         }
 
         fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
+        //fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
         mFab.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void startPostWithoutVideo(Form form) {
-        Observable<Form> call =
-            MediaStoreService.formsStore.postFormMessages(HEADER_CONTENT_TYPE_JSON,
-                    form);
+    public void startPostWithoutVideo(MyFormMessage myFormMessage) {
+        Observable<MyFormMessage> call =
+            MediaStoreService.formsMessagesStore.postMyFormMessage(HEADER_CONTENT_TYPE_JSON,
+                    myFormMessage);
             subscription = call
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<Form>() {
+            .subscribe(new Subscriber<MyFormMessage>() {
                 @Override
                 public void onCompleted() {
                     Log.i(TAG, "POST form call success");
@@ -545,21 +561,31 @@ public class LessonListActivity extends AppCompatActivity
                 }
 
                 @Override
-                public void onNext(Form form) {
-                    Log.i(TAG, form.getFeedback());
+                public void onNext(MyFormMessage myFormMessage) {
+                    Log.i(TAG, myFormMessage.getId());
                 }
             });
 
         fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
+        //fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
         mFab.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void composeMessageCancel() {
         fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
+        //fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
         mFab.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void launchVideoGallery() {
+        Intent intent = new Intent();
+        intent.setType("video/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Video"), REQUEST_TAKE_GALLERY_VIDEO);
     }
 
     @Override
@@ -608,6 +634,21 @@ public class LessonListActivity extends AppCompatActivity
                         mChosenAccountName = accountName;
                         credential.setSelectedAccountName(accountName);
                         saveAccount();
+                    }
+                }
+                break;
+
+            case REQUEST_TAKE_GALLERY_VIDEO:
+                if (resultCode == RESULT_OK) {
+                    mVideoRecordFileURI = data.getData();
+                    // OI FILE Manager
+                    if (mVideoRecordFileURI != null) {
+                        Log.i(TAG, "Selected video path" +
+                                VideoUtility.getRealPathFromURI(getApplicationContext(), mVideoRecordFileURI));
+                        // MEDIA GALLERY
+                        mComposeFormMessageFragment.setRecordedVideoUrl(
+                                VideoUtility.getRealPathFromURI(getApplicationContext(), mVideoRecordFileURI));
+                        mComposeFormMessageFragment.showVideo(mVideoRecordFileURI);
                     }
                 }
                 break;
