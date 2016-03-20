@@ -45,9 +45,9 @@ public class CheckMyFormFragment extends Fragment
     implements YouTubePlayer.OnInitializedListener {
 
     private static final String TAG = "CheckMyFormFragment";
+    private static final String MY_FORM_MESSAGE = "myFormMessageInfo";
     Subscription subscription;
     private CheckMyFormAdapter mAdapter;
-    //private List<Form> mForms;
     private List<TrainerReply> mTrainerReplies;
 
     @Bind(R.id.rvCheckMyForms)
@@ -66,7 +66,7 @@ public class CheckMyFormFragment extends Fragment
     public static CheckMyFormFragment newInstance(MyFormMessage myFormMessage) {
         CheckMyFormFragment checkMyFormFragment = new CheckMyFormFragment();
         Bundle args = new Bundle();
-        args.putParcelable("myFormMessageInfo", myFormMessage);
+        args.putParcelable(MY_FORM_MESSAGE, myFormMessage);
         checkMyFormFragment.setArguments(args);
         return checkMyFormFragment;
     }
@@ -74,7 +74,7 @@ public class CheckMyFormFragment extends Fragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_check_my_form, container, false);
+        View v = inflater.inflate(R.layout.fragment_check_my_form_replies, container, false);
         ButterKnife.bind(this, v);
         setUpViews();
         return v;
@@ -93,7 +93,7 @@ public class CheckMyFormFragment extends Fragment
         layoutManager = new LinearLayoutManager(getActivity());
         rvForms.setLayoutManager(layoutManager);
 
-        myFormMessage = getArguments().getParcelable("myFormMessageInfo");
+        myFormMessage = getArguments().getParcelable(MY_FORM_MESSAGE);
         mTextViewFormMessageDetail.setText(myFormMessage.getMessage());
 
         if (!TextUtils.isEmpty(myFormMessage.getVideoId())) {
@@ -107,44 +107,15 @@ public class CheckMyFormFragment extends Fragment
             youTubePlayerFragment.initialize(getString(R.string.google_developer_key), this);
         }
 
-        //Get the list of forms here
-//        Observable<List<Form>> call = MediaStoreService.formsStore.fetchFormMessages();
-//        subscription = call
-//                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Subscriber<List<Form>>() {
-//                    @Override
-//                    public void onCompleted() {
-//                        Log.i(TAG, "Api call success");
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        // cast to retrofit.HttpException to get the response code
-//                        Log.i(TAG, "in error");
-//                        Log.i(TAG, e.toString());
-//
-//                        if (e instanceof HttpException) {
-//                            HttpException response = (HttpException) e;
-//                            int code = response.code();
-//                            Log.i(TAG, "Http error code: " + code);
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onNext(List<Form> forms) {
-//                        mForms.addAll(forms);
-//                        Log.i(TAG, Integer.toString(mForms.size()));
-//                        mAdapter.notifyDataSetChanged();
-//                    }
-//                });
-
-        Observable<List<TrainerReply>> call = MediaStoreService.formsMessagesStore.fetchFormMessageRepliesByMessageId(myFormMessage.getId());
+        Observable<List<TrainerReply>> call =
+                MediaStoreService.formsMessagesStore.
+                        fetchFormMessageRepliesByMessageId(myFormMessage.getId());
         subscription = call
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Subscriber<List<TrainerReply>>() {
                 @Override
                 public void onCompleted() {
-                    Log.i(TAG, "Api call success");
+                    Log.i(TAG, "Trainer reply api call success");
                 }
 
                 @Override

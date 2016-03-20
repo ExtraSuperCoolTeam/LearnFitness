@@ -26,6 +26,10 @@ public class Trainer implements Parcelable {
     @SerializedName("profileUrl")
     @Expose
     private String profileUrl;
+    @SerializedName("handle")
+    @Expose
+    private String handle;
+
     @SerializedName("trainerParams")
     @Expose
     private TrainerParams trainerParams;
@@ -128,6 +132,14 @@ public class Trainer implements Parcelable {
         this.profileUrl = profileUrl;
     }
 
+    public String getHandle() {
+        return handle;
+    }
+
+    public void setHandle(String handle) {
+        this.handle = handle;
+    }
+
     /**
      * 
      * @return
@@ -166,6 +178,7 @@ public class Trainer implements Parcelable {
         dest.writeString(this.address);
         dest.writeString(this.phone);
         dest.writeString(this.profileUrl);
+        dest.writeString(this.handle);
         dest.writeParcelable(this.trainerParams, flags);
         dest.writeParcelable(this.location, flags);
     }
@@ -179,6 +192,7 @@ public class Trainer implements Parcelable {
         this.address = in.readString();
         this.phone = in.readString();
         this.profileUrl = in.readString();
+        this.handle = in.readString();
         this.trainerParams = in.readParcelable(TrainerParams.class.getClassLoader());
         this.location = in.readParcelable(Location.class.getClassLoader());
     }

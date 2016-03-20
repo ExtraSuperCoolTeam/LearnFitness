@@ -60,8 +60,6 @@ public class WeekFragment extends Fragment implements YouTubePlayer.OnInitialize
         View v = inflater.inflate(R.layout.week_fragment, container, false);
         ButterKnife.bind(this, v);
 
-        //mWeek = LessonDepre.getExample();
-
         mWeek = getArguments().getParcelable("weekInfo");
         mSteps = new ArrayList<>();
         mAdapterWeekSteps = new WeekStepsAdapter(mSteps);

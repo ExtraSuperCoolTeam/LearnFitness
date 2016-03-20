@@ -1,51 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:padding="5dp">
+<android.support.v7.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/cvMessages"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <android.support.v7.widget.CardView
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/cvMessages">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <include layout="@layout/view_trainer_profile_holder"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:orientation="vertical">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                app:civ_border_width="1dp"
-                android:id="@+id/ivSenderTrainer"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginRight="16dp"
-                app:civ_border_color="#FFFCE4EC"/>
+            <include layout="@layout/view_trainer_info_header"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"/>
 
             <TextView
-                android:layout_marginTop="30dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvFormLessonTitle"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@id/ivSenderTrainer"
-                android:text="Lesson 1"
-                android:layout_marginLeft="15dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvSenderRepyComment"
+            android:autoLink="all"
+            android:linksClickable="true"
+            android:background="@color/white" />
 
-            <TextView
-                android:id="@+id/tvSenderRepyComment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:layout_below="@+id/ivSenderTrainer"
-                android:layout_alignParentLeft="true"
-                android:text=";lkasdfj;lasjf;lasjdfafjdsaldflasj;lfalj a;lsdkfasdlfasdlf;dasjfksad;lkfjas;dklfj;alsdfj \n sldfkjsdlfjdslfjsdlfjdslkfj"/>
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>
 
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:orientation="vertical"-->
+    <!--android:layout_width="match_parent" android:layout_height="wrap_content"-->
+    <!--android:padding="5dp">-->
 
-</LinearLayout>
+    <!--<android.support.v7.widget.CardView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/cvMessages">-->
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="16dp">-->
+
+            <!--<de.hdodenhof.circleimageview.CircleImageView-->
+                <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                <!--android:layout_width="40dp"-->
+                <!--android:layout_height="40dp"-->
+                <!--app:civ_border_width="1dp"-->
+                <!--android:id="@+id/ivSenderTrainer"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_alignParentTop="true"-->
+                <!--android:layout_marginRight="16dp"-->
+                <!--app:civ_border_color="#FFFCE4EC"/>-->
+
+            <!--<TextView-->
+                <!--android:layout_marginTop="30dp"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/tvFormLessonTitle"-->
+                <!--android:layout_alignParentStart="true"-->
+                <!--android:layout_alignParentLeft="true"-->
+                <!--android:layout_toLeftOf="@id/ivSenderTrainer"-->
+                <!--android:text="Lesson 1"-->
+                <!--android:layout_marginLeft="15dp"/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/tvSenderRepyComment"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="15dp"-->
+                <!--android:layout_below="@+id/ivSenderTrainer"-->
+                <!--android:layout_alignParentLeft="true"-->
+                <!--android:text=";lkasdfj;lasjf;lasjdfafjdsaldflasj;lfalj a;lsdkfasdlfasdlf;dasjfksad;lkfjas;dklfj;alsdfj \n sldfkjsdlfjdslfjsdlfjdslkfj"/>-->
+
+        <!--</RelativeLayout>-->
+    <!--</android.support.v7.widget.CardView>-->
+
+<!--</LinearLayout>-->
+

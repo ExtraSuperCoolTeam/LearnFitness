@@ -3,6 +3,7 @@ package com.codepath.apps.learnfitness.adapters;
 import com.bumptech.glide.Glide;
 import com.codepath.apps.learnfitness.R;
 import com.codepath.apps.learnfitness.models.TrainerReply;
+import com.codepath.apps.learnfitness.util.TimeFormatUtility;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -23,20 +24,29 @@ import butterknife.ButterKnife;
  */
 public class CheckMyFormAdapter extends RecyclerView.Adapter<CheckMyFormAdapter.ViewHolder> {
     private static final String TAG = "CheckMyFormAdapter";
-    private List<TrainerReply> mForms;
+    private List<TrainerReply> mTrainerReplies;
 
-    public CheckMyFormAdapter(List<TrainerReply> forms) {
-        mForms = forms;
+    public CheckMyFormAdapter(List<TrainerReply> trainerReplies) {
+        mTrainerReplies = trainerReplies;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.ivSenderTrainer)
-        ImageView mImageViewSenderTrainer;
-        @Bind(R.id.tvFormLessonTitle)
-        TextView lessonTitle;
+        @Bind(R.id.tvTrainerName)
+        TextView mTextViewTrainerName;
+
+        @Bind(R.id.tvTrainerHandle)
+        TextView mTextViewTrainerHandle;
+
+        @Bind(R.id.tvReplyTimeSend)
+        TextView mTextViewReplyTimeSend;
+
+
+        @Bind(R.id.ivTrainerProfileImage)
+        ImageView mImageViewTrainerProfileImage;
+
         @Bind(R.id.tvSenderRepyComment)
-        TextView description;
+        TextView mTextViewReplyText;
 
         Context mContext;
 
@@ -60,23 +70,29 @@ public class CheckMyFormAdapter extends RecyclerView.Adapter<CheckMyFormAdapter.
 
     @Override
     public void onBindViewHolder ( final ViewHolder holder, int position){
-        TrainerReply trainerReply = mForms.get(position);
+        Log.i(TAG, "Position is: " + position + "");
+        TrainerReply trainerReply = mTrainerReplies.get(position);
 
-        //String lesson = form.getWeekTitle();
-        String description = trainerReply.getFormMessageReply().getFeedback();
+        holder.mTextViewTrainerName.setText( trainerReply.getTrainer().getName());
+        holder.mTextViewTrainerHandle.setText("@" + trainerReply.getTrainer().getHandle());
+        holder.mTextViewReplyTimeSend.setText(
+                TimeFormatUtility.getRelativeTimeFromTimesMillis(trainerReply.getFormMessageReply()
+                .getTimeStamp()));
+
+        String reply = trainerReply.getFormMessageReply().getFeedback();
+        holder.mTextViewReplyText.setText(reply);
 
         Log.i(TAG, trainerReply.getTrainer().getProfileUrl());
-        //holder.lessonTitle.setText(lesson);
-        holder.description.setText(description);
 
-        //TODO Need to change backend to include trainer with form reply
-        Glide.with(holder.mContext).load(trainerReply.getTrainer().getProfileUrl()).placeholder(R.drawable.rock_trainer).error(R.drawable.rock_trainer)
-                .into(holder.mImageViewSenderTrainer);
+        Glide.with(holder.mContext).load(trainerReply.getTrainer().getProfileUrl())
+                .placeholder(R.drawable.rock_trainer)
+                .error(R.drawable.rock_trainer)
+                .into(holder.mImageViewTrainerProfileImage);
     }
 
     @Override
     public int getItemCount() {
-        Log.i("CheckMyFormAdapter", Integer.toString(mForms.size()));
-        return mForms.size();
+        Log.i(TAG, Integer.toString(mTrainerReplies.size()));
+        return mTrainerReplies.size();
     }
 }
