@@ -1,5 +1,12 @@
 package com.codepath.apps.learnfitness.fragments;
 
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.activities.LessonListActivity;
+import com.codepath.apps.learnfitness.adapters.LessonsAdapter;
+import com.codepath.apps.learnfitness.models.Lesson;
+import com.codepath.apps.learnfitness.models.Week;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,13 +19,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.activities.LessonListActivity;
-import com.codepath.apps.learnfitness.adapters.LessonsAdapter;
-import com.codepath.apps.learnfitness.models.Lesson;
-import com.codepath.apps.learnfitness.models.Week;
-import com.codepath.apps.learnfitness.rest.MediaStoreService;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -60,50 +60,50 @@ public class WeeksListFragment extends Fragment {
 
         final Observable<Lesson> call = MediaStoreService.contentStore.fetchContent();
         subscription = call
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Lesson>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.i(TAG, "Api call success");
+            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Subscriber<Lesson>() {
+                @Override
+                public void onCompleted() {
+                    Log.i(TAG, "Api call success");
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    // cast to retrofit.HttpException to get the response code
+                    Log.i(TAG, "in error");
+                    Log.i(TAG, e.toString());
+
+                    if (e instanceof HttpException) {
+                        HttpException response = (HttpException) e;
+                        int code = response.code();
                     }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        // cast to retrofit.HttpException to get the response code
-                        Log.i(TAG, "in error");
-                        Log.i(TAG, e.toString());
+                    call.retry();
+                }
 
-                        if (e instanceof HttpException) {
-                            HttpException response = (HttpException) e;
-                            int code = response.code();
-                        }
+                @Override
+                public void onNext(Lesson lesson) {
+                    mWeeks.addAll(lesson.getWeeks());
+                    Log.i(TAG, lesson.getTitle());
 
-                        call.retry();
+                    SharedPreferences sharedPreferences =
+                            getActivity().getSharedPreferences(LessonListActivity.MY_SHARED_PREFS,
+                                    Context.MODE_PRIVATE);
+
+                    int currentWeekNumber =
+                            Integer.parseInt(sharedPreferences.getString(
+                                    LessonListActivity.CURRENT_WEEK_NUMBER, "1")) - 1;
+                    if (currentWeekNumber >= 0 && currentWeekNumber < mWeeks.size()) {
+                        Week currentWeek = mWeeks.get(currentWeekNumber);
+                        currentWeek.setIsCurrent(true);
+                    } else {
+                        Week currentWeek = mWeeks.get(0);
+                        currentWeek.setIsCurrent(true);
                     }
 
-                    @Override
-                    public void onNext(Lesson lesson) {
-                        mWeeks.addAll(lesson.getWeeks());
-                        Log.i(TAG, lesson.getTitle());
-
-                        SharedPreferences sharedPreferences =
-                                getActivity().getSharedPreferences(LessonListActivity.MY_SHARED_PREFS,
-                                        Context.MODE_PRIVATE);
-
-                        int currentWeekNumber =
-                                Integer.parseInt(sharedPreferences.getString(
-                                        LessonListActivity.CURRENT_WEEK_NUMBER, "1")) - 1;
-                        if (currentWeekNumber >= 0 && currentWeekNumber < mWeeks.size()) {
-                            Week currentWeek = mWeeks.get(currentWeekNumber);
-                            currentWeek.setIsCurrent(true);
-                        } else {
-                            Week currentWeek = mWeeks.get(0);
-                            currentWeek.setIsCurrent(true);
-                        }
-
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
 
         //setUpViews(v);
         return v;

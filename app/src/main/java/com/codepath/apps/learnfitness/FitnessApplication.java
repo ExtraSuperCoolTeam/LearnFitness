@@ -16,4 +16,8 @@ public class FitnessApplication extends com.activeandroid.app.Application {
 		super.onCreate();
 		FitnessApplication.context = this;
 	}
+
+	public static Context getAppContext() {
+		return context;
+	}
 }
