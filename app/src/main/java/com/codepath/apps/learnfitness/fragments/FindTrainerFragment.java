@@ -136,11 +136,8 @@ public class FindTrainerFragment extends Fragment implements
                     public void onNext(List<Trainer> trainers) {
                         Log.i("FindTrainerFragment", "Found " + trainers.size() + " trainers");
                         mTrainers = Trainer.mapTrainerIdToTrainer(trainers);
-//                        CustomWindowAdapter adapter = new CustomWindowAdapter(
-//                                getActivity().getLayoutInflater(), mTrainers, getActivity());
-//
+
                         if (mMap != null) {
-//                            mMap.setInfoWindowAdapter(adapter);
                             for (String key : mTrainers.keySet()) {
                                 Trainer trainer = mTrainers.get(key);
                                 addMarkerforTrainer(trainer);
@@ -249,7 +246,7 @@ public class FindTrainerFragment extends Fragment implements
         if (location != null) {
             Toast.makeText(getActivity(), "GPS location was found!", Toast.LENGTH_SHORT).show();
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
             mMap.animateCamera(cameraUpdate);
         } else {
             Toast.makeText(getActivity(), "Current location was null, enable GPS on emulator!", Toast.LENGTH_SHORT).show();
