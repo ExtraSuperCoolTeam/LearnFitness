@@ -74,8 +74,6 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-//import com.codepath.apps.learnfitness.R;
-
 public class LessonListActivity extends AppCompatActivity
         implements WeeksListFragment.OnItemSelectedListener,
         MyFormMessageListFragment.OnMyFormMessagesListener,
@@ -578,7 +576,7 @@ public class LessonListActivity extends AppCompatActivity
 
         //fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
         fragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
-        mFab.setVisibility(View.VISIBLE);
+        showFab(true);
     }
 
     @Override
@@ -600,15 +598,12 @@ public class LessonListActivity extends AppCompatActivity
                     Log.i(TAG, "in error");
                     Log.i(TAG, e.toString());
 
-        //fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
-        //showFab(true);
-
-                        if (e instanceof HttpException) {
-                            HttpException response = (HttpException) e;
-                            int code = response.code();
-                            Log.i(TAG, "Http error code: " + code);
-                        }
+                    if (e instanceof HttpException) {
+                        HttpException response = (HttpException) e;
+                        int code = response.code();
+                        Log.i(TAG, "Http error code: " + code);
                     }
+                }
 
                 @Override
                 public void onNext(MyFormMessage myFormMessage) {
@@ -619,8 +614,7 @@ public class LessonListActivity extends AppCompatActivity
         fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
         //fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
         fragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
-        mFab.setVisibility(View.VISIBLE);
-        composeMessageCancel();
+        //composeMessageCancel();
         showFab(true);
     }
 
@@ -629,8 +623,8 @@ public class LessonListActivity extends AppCompatActivity
         fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
         //fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
         fragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
-        mFab.setVisibility(View.VISIBLE);
-        fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
+//        mFab.setVisibility(View.VISIBLE);
+//        fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
         showFab(true);
     }
 
