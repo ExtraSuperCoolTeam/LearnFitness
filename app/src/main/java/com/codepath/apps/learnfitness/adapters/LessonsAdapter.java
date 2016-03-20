@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.codepath.apps.learnfitness.R;
 import com.codepath.apps.learnfitness.models.Week;
+import com.codepath.apps.learnfitness.util.LessonUtility;
 
 import java.util.List;
 
@@ -138,17 +139,14 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
             collapsedWeekViewHolder.week.setText("Week " + week.getWeekNumber());
             collapsedWeekViewHolder.lessonTitle.setText(week.getWeekTitle());
-
-            //Todo make this so that it's part of lesson model
-//            int currentWeekInt = Integer.valueOf(currentWeek.getWeekNumber());
-//            int weekInt = Integer.valueOf(week.getWeekNumber());
-            int currentWeekInt = 3;
+            
+            int currentWeekInt = LessonUtility.getCurrentWeek();
             int weekInt = Integer.valueOf(week.getWeekNumber());
 
             if (weekInt < currentWeekInt) {
                 collapsedWeekViewHolder.mLesson
                         .setBackgroundColor(ContextCompat.getColor(context, R.color.primary_dark));
-            } else if (weekInt > currentWeekInt) {
+            } else if (weekInt >= currentWeekInt) {
                 collapsedWeekViewHolder.mLesson
                         .setBackgroundColor(ContextCompat.getColor(context, R.color.to_complete));
             }
