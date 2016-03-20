@@ -34,7 +34,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -121,10 +120,13 @@ public class LessonListActivity extends AppCompatActivity
     RelativeLayout rlTrainerCall;
 
     @Bind(R.id.llTrainerPeakInfo)
-    LinearLayout mTrainerPeakInfo;
+    RelativeLayout mTrainerPeakInfo;
 
     @Bind(R.id.plSlidingPanel)
     SlidingUpPanelLayout plSlidingPanel;
+
+    @Bind(R.id.ivSpecialtyIcon)
+    ImageView mSpecialtyIcon;
 
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
@@ -227,8 +229,6 @@ public class LessonListActivity extends AppCompatActivity
         plSlidingPanel.addPanelSlideListener(new PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
-
-
                 int color;
                 int textColor;
                 if (slideOffset <= 0) {
@@ -237,8 +237,12 @@ public class LessonListActivity extends AppCompatActivity
                 } else {
                     color = R.color.primary;
                     textColor = R.color.white;
-                    RelativeLayout.LayoutParams boxMargins = new RelativeLayout.LayoutParams(mTrainerPeakInfo.getLayoutParams());
-                    boxMargins.topMargin = (int) (400 * slideOffset);
+                }
+
+                if (slideOffset >= 0) {
+                    RelativeLayout.LayoutParams boxMargins = new RelativeLayout
+                            .LayoutParams(mTrainerPeakInfo.getLayoutParams());
+                    boxMargins.topMargin = (int) (455 * slideOffset);
                     mTrainerPeakInfo.setLayoutParams(boxMargins);
                 }
 
@@ -251,7 +255,9 @@ public class LessonListActivity extends AppCompatActivity
             }
 
             @Override
-            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+            public void onPanelStateChanged(View panel,
+                                            SlidingUpPanelLayout.PanelState previousState,
+                                            SlidingUpPanelLayout.PanelState newState) {
                 Log.d(TAG, "State changing");
                 int color;
                 int textColor;
@@ -303,13 +309,30 @@ public class LessonListActivity extends AppCompatActivity
                 trainer.getTrainerParams().getWeight();
         String height = "Height: " +
                 trainer.getTrainerParams().getHeight();
-        String name = "Name: " + trainer.getName();
+        String name = trainer.getName();
 
         mTextViewTrainerSpeciality.setText(speciality);
         mTextViewTrainerExperience.setText(experience);
         mTextViewTrainerWeight.setText(weight);
         mTextViewTrainerHeight.setText(height);
         mTrainerName.setText(name);
+
+        String src = "";
+        switch (trainer.getTrainerParams().getSpeciality()) {
+            case "Cardio":
+                mSpecialtyIcon.setImageResource(R.drawable.cardio_icon);
+                break;
+            case "Cross Fit":
+                mSpecialtyIcon.setImageResource(R.drawable.yoga_icon);
+                break;
+            case "Lifting":
+                mSpecialtyIcon.setImageResource(R.drawable.lifting_icon);
+                break;
+            default:
+                mSpecialtyIcon.setImageResource(R.drawable.cardio_icon);
+                break;
+
+        }
 
 
         //Todo: Fix this with real image
