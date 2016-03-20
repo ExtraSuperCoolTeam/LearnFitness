@@ -139,7 +139,7 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
             collapsedWeekViewHolder.week.setText("Week " + week.getWeekNumber());
             collapsedWeekViewHolder.lessonTitle.setText(week.getWeekTitle());
-            
+
             int currentWeekInt = LessonUtility.getCurrentWeek();
             int weekInt = Integer.valueOf(week.getWeekNumber());
 

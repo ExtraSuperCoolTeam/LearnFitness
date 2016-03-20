@@ -2,32 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="4dp"
-    android:paddingLeft="4dp"
-    android:paddingRight="4dp"
-    android:paddingTop="4dp">
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/cvMessages">
+    android:background="@color/primary_dark">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:background="@color/textWhite"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
 
             <include layout="@layout/form_my_message_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/lform_my_message_header"
-                android:paddingBottom="2dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvMyMessage"
-                android:layout_below="@id/lform_my_message_header"
-                android:paddingBottom="4dp"/>
+                android:layout_margin="10dp"
+                android:layout_centerHorizontal="true"/>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -36,9 +26,17 @@
                 android:scaleType="fitXY"
                 android:adjustViewBounds="true"
                 android:visibility="gone"
-                android:layout_below="@id/tvMyMessage"
-                android:paddingBottom="4dp"/>
+                android:layout_below="@id/lform_my_message_header"
+                android:layout_margin="15dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvMyMessage"
+                android:layout_below="@id/ivMyMessageImage"
+                android:layout_margin="10dp"/>
+
+
 
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
 </LinearLayout>
