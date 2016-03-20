@@ -161,7 +161,9 @@ public class FindTrainerFragment extends Fragment implements
 
         Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(trainerPosition)
-                .title(trainer.getId()).icon(defaultMarker));
+                .title(trainer.getId())
+                .icon(BitmapDescriptorFactory
+                        .fromResource(R.drawable.blue_map_marker)));
     }
 
     public void setUpMapIfNeeded() {

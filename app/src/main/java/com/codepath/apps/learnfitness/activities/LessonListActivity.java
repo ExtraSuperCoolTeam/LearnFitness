@@ -9,7 +9,6 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 
-import com.bumptech.glide.Glide;
 import com.codepath.apps.learnfitness.R;
 import com.codepath.apps.learnfitness.fragments.CheckMyFormFragment;
 import com.codepath.apps.learnfitness.fragments.ComposeFormMessageFragment;
@@ -23,7 +22,6 @@ import com.codepath.apps.learnfitness.models.Week;
 import com.codepath.apps.learnfitness.rest.MediaStoreService;
 import com.codepath.apps.learnfitness.util.VideoUtility;
 import com.codepath.apps.learnfitness.youtubeupload.Auth;
-import com.facebook.appevents.AppEventsLogger;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
@@ -61,7 +59,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -76,6 +73,8 @@ import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
+//import com.codepath.apps.learnfitness.R;
 
 public class LessonListActivity extends AppCompatActivity
         implements WeeksListFragment.OnItemSelectedListener,
@@ -127,10 +126,15 @@ public class LessonListActivity extends AppCompatActivity
     RelativeLayout rlTrainerCall;
 
     @Bind(R.id.llTrainerPeakInfo)
-    LinearLayout mTrainerPeakInfo;
+    RelativeLayout mTrainerPeakInfo;
 
     @Bind(R.id.plSlidingPanel)
     SlidingUpPanelLayout plSlidingPanel;
+
+    @Bind(R.id.ivSpecialtyIcon)
+    ImageView mSpecialtyIcon;
+
+    Subscription subscription;
 
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
@@ -165,10 +169,7 @@ public class LessonListActivity extends AppCompatActivity
     GoogleAccountCredential credential;
     private UploadBroadcastReceiver broadcastReceiver;
     private String mChosenAccountName;
-    private Uri mFileURI = null;
     LessonListActivityReceiver mLessonListActivityReceiver;
-    private Subscription subscription;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -240,30 +241,60 @@ public class LessonListActivity extends AppCompatActivity
         plSlidingPanel.addPanelSlideListener(new PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
-                RelativeLayout.LayoutParams boxMargins = new RelativeLayout.LayoutParams(mTrainerPeakInfo.getLayoutParams());
-                boxMargins.topMargin = (int) (500 * slideOffset);
-                mTrainerPeakInfo.setLayoutParams(boxMargins);
-            }
-
-            @Override
-            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
-                Log.d(TAG, "State changing");
                 int color;
                 int textColor;
-                if (newState == PanelState.DRAGGING || newState == PanelState.EXPANDED) {
-                    color = R.color.primary_dark;
-                    textColor = R.color.white;
-                } else {
+                if (slideOffset <= 0) {
                     color = R.color.white;
                     textColor = R.color.text_dark;
-
+                } else {
+                    color = R.color.primary;
+                    textColor = R.color.white;
                 }
+
+                if (slideOffset >= 0) {
+                    RelativeLayout.LayoutParams boxMargins = new RelativeLayout
+                            .LayoutParams(mTrainerPeakInfo.getLayoutParams());
+                    boxMargins.topMargin = (int) (455 * slideOffset);
+                    mTrainerPeakInfo.setLayoutParams(boxMargins);
+                }
+
                 mTrainerPeakInfo.setBackgroundColor(ContextCompat.
                         getColor(LessonListActivity.this, color));
                 int parsedTextColor = ContextCompat.
                         getColor(LessonListActivity.this, textColor);
                 mTrainerName.setTextColor(parsedTextColor);
                 mTextViewTrainerSpeciality.setTextColor(parsedTextColor);
+            }
+
+            @Override
+            public void onPanelStateChanged(View panel,
+                                            SlidingUpPanelLayout.PanelState previousState,
+                                            SlidingUpPanelLayout.PanelState newState) {
+                Log.d(TAG, "State changing");
+                int color;
+                int textColor;
+
+                if (newState == PanelState.COLLAPSED) {
+                    color = R.color.white;
+                    textColor = R.color.text_dark;
+                    mTrainerPeakInfo.setBackgroundColor(ContextCompat.
+                            getColor(LessonListActivity.this, color));
+                    int parsedTextColor = ContextCompat.
+                            getColor(LessonListActivity.this, textColor);
+                    mTrainerName.setTextColor(parsedTextColor);
+                    mTextViewTrainerSpeciality.setTextColor(parsedTextColor);
+                }
+
+//                if (newState == PanelState.DRAGGING || newState == PanelState.EXPANDED) {
+//                    color = R.color.primary;
+//                    textColor = R.color.white;
+//                } else {
+//                    color = R.color.white;
+//                    textColor = R.color.text_dark;
+//
+//                }
+
+
 
                 //Put into styles the different text color
             }
@@ -290,7 +321,7 @@ public class LessonListActivity extends AppCompatActivity
                 trainer.getTrainerParams().getWeight();
         String height = "Height: " +
                 trainer.getTrainerParams().getHeight();
-        String name = "Name: " + trainer.getName();
+        String name = trainer.getName();
 
         mTextViewTrainerSpeciality.setText(speciality);
         mTextViewTrainerExperience.setText(experience);
@@ -298,10 +329,29 @@ public class LessonListActivity extends AppCompatActivity
         mTextViewTrainerHeight.setText(height);
         mTrainerName.setText(name);
 
+        String src = "";
+        switch (trainer.getTrainerParams().getSpeciality()) {
+            case "Cardio":
+                mSpecialtyIcon.setImageResource(R.drawable.cardio_icon);
+                break;
+            case "Cross Fit":
+                mSpecialtyIcon.setImageResource(R.drawable.yoga_icon);
+                break;
+            case "Lifting":
+                mSpecialtyIcon.setImageResource(R.drawable.lifting_icon);
+                break;
+            default:
+                mSpecialtyIcon.setImageResource(R.drawable.cardio_icon);
+                break;
 
-        Glide.with(LessonListActivity.this)
-                .load(trainer.getProfileUrl()).placeholder(R.mipmap.ic_wifi)
-                .into(mImageViewTrainerPhoto);
+        }
+
+
+        //Todo: Fix this with real image
+//        Glide.with(LessonListActivity.this)
+//                .load(trainer.getProfileUrl()).placeholder(R.mipmap.ic_wifi)
+//                .into(mImageViewTrainerPhoto);
+
 
         mTextViewTrainerAddress.setText(trainer.getAddress());
         mTextViewTrainerCall.setText(trainer.getPhone());
@@ -469,9 +519,9 @@ public class LessonListActivity extends AppCompatActivity
         fragmentManager.beginTransaction().add(R.id.flContent, WeekFragment.newInstance(week)).addToBackStack("week").commit();
     }
 
+    @Override
     protected void onResume() {
         super.onResume();
-        AppEventsLogger.activateApp(this);
 
         if (broadcastReceiver == null)
             broadcastReceiver = new UploadBroadcastReceiver();
@@ -481,15 +531,10 @@ public class LessonListActivity extends AppCompatActivity
                 broadcastReceiver, intentFilter);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        AppEventsLogger.deactivateApp(this);
-    }
 
     @Override
     public void onCheckMyFormDialog() {
-        mFab.setVisibility(View.GONE);
+        showFab(false);
         mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance();
         //mComposeFormMessageFragment.show(getSupportFragmentManager(), ComposeFormMessageFragment.TAG);
         fragmentManager.beginTransaction().replace(R.id.flContent, mComposeFormMessageFragment).commit();
@@ -501,6 +546,7 @@ public class LessonListActivity extends AppCompatActivity
 
         CheckMyFormFragment mCheckMyFormFragment = CheckMyFormFragment.newInstance(myFormMessage);
         fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
+        //fragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).addToBackStack("compose").commit();
     }
 
     @Override
@@ -529,6 +575,7 @@ public class LessonListActivity extends AppCompatActivity
         }
 
         fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
+
         //fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
         fragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
         mFab.setVisibility(View.VISIBLE);
@@ -553,23 +600,28 @@ public class LessonListActivity extends AppCompatActivity
                     Log.i(TAG, "in error");
                     Log.i(TAG, e.toString());
 
-                    if (e instanceof HttpException) {
-                        HttpException response = (HttpException) e;
-                        int code = response.code();
-                        Log.i(TAG, "Http error code: " + code);
+        //fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
+        //showFab(true);
+
+                        if (e instanceof HttpException) {
+                            HttpException response = (HttpException) e;
+                            int code = response.code();
+                            Log.i(TAG, "Http error code: " + code);
+                        }
                     }
-                }
 
                 @Override
                 public void onNext(MyFormMessage myFormMessage) {
                     Log.i(TAG, myFormMessage.getId());
                 }
-            });
+                });
 
         fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
         //fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
         fragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
         mFab.setVisibility(View.VISIBLE);
+        composeMessageCancel();
+        showFab(true);
     }
 
     @Override
@@ -578,6 +630,8 @@ public class LessonListActivity extends AppCompatActivity
         //fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
         fragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
         mFab.setVisibility(View.VISIBLE);
+        fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
+        showFab(true);
     }
 
     @Override
@@ -659,17 +713,32 @@ public class LessonListActivity extends AppCompatActivity
         SharedPreferences sp = PreferenceManager
                 .getDefaultSharedPreferences(this);
         mChosenAccountName = sp.getString(ACCOUNT_KEY, null);
-//        if (mChosenAccountName == null) {
-//            chooseAccount();
-//        }
         invalidateOptionsMenu();
     }
 
+    /**
+     * Check if an account has been chosen, and launch the account picker if not.
+     */
+    public void checkLogin() {
+        if (mChosenAccountName == null) {
+            chooseAccount();
+        } else {
+            Log.d(TAG, "Don't need to choose an account");
+        }
+    }
+
+    /**
+     * Store the account name that was chosen as a login.
+     */
     private void saveAccount() {
         SharedPreferences sp = PreferenceManager
                 .getDefaultSharedPreferences(this);
         sp.edit().putString(ACCOUNT_KEY, mChosenAccountName).commit();
     }
+
+    /**
+     * Launch the google account picker.
+     */
     private void chooseAccount() {
         startActivityForResult(credential.newChooseAccountIntent(),
                 REQUEST_ACCOUNT_PICKER);

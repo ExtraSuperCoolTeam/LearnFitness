@@ -1,13 +1,14 @@
 package com.codepath.apps.learnfitness.adapters;
 
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.models.Week;
-
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.models.Week;
 
 import java.util.List;
 
@@ -27,6 +28,8 @@ public class CollapsedWeekViewHolder extends RecyclerView.ViewHolder
     @Bind(R.id.tvWeek) TextView week;
     @Bind(R.id.tvLessonTitle) TextView lessonTitle;
     @Bind(R.id.ivThumbnail) ImageView thumbnail;
+    @Bind(R.id.rlLesson)
+    RelativeLayout mLesson;
 
     public CollapsedWeekViewHolder(Context context, LessonsAdapter.OnItemClickListener listener,
                                    View itemView, List<Week> weeks) {

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,6 +9,7 @@
     android:fitsSystemWindows="true"
     android:gravity="bottom"
     android:id="@+id/plSlidingPanel"
+    sothree:umanoPanelHeight = "100dp"
     tools:context=".activities.LessonListActivity">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,6 +19,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".activities.LessonListActivity"
+        android:background="@color/primary_dark"
         tools:showIn="@layout/activity_lesson_list">
 
 
@@ -63,6 +67,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:background="@android:color/white"
+                android:theme="@style/NavigationTheme"
                 app:menu="@menu/drawer_view"
                 app:headerLayout="@layout/nav_header"/>
 
@@ -73,17 +78,31 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/rlBottomSheet"
         android:visibility="gone"
-        android:background="@color/material_grey">
+        android:background="@color/textWhite">
 
         <ImageView
             android:id="@+id/ivTrainerPhoto"
-            android:layout_width="150dp"
-            android:layout_height="150dp" />
+            android:layout_centerHorizontal="true"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/the_rock"/>
 
-        <LinearLayout
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="30dp"
+            android:id="@+id/ivBottomSheetBackButton"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/down_arrow"
+            />
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:orientation="vertical"
@@ -95,7 +114,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvTrainerName"
-                android:layout_marginLeft="10dp"
+                android:layout_margin="15dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:textSize="20sp"
                 android:textColor="#000"
                 android:text="Name"/>
 
@@ -103,17 +125,28 @@
                 android:id="@+id/tvTrainerSpeciality"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_below="@+id/tvTrainerName"
+                android:layout_marginLeft="15dp"
+                android:textSize="16sp"
                 android:text="@string/speciality"/>
 
-        </LinearLayout>
+            <ImageView
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                android:id="@+id/ivSpecialtyIcon"
+                android:scaleType="fitXY"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"/>
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tvTrainerExperience"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/llTrainerPeakInfo"
-            android:layout_marginLeft="20dp"
+            android:layout_margin="15dp"
             android:text="@string/experience"/>
 
         <TextView
@@ -121,7 +154,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvTrainerExperience"
-            android:layout_marginLeft="20dp"
+            android:layout_margin="15dp"
             android:text="@string/weight"/>
 
         <TextView
@@ -129,7 +162,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvTrainerWeight"
-            android:layout_marginLeft="20dp"
+            android:layout_margin="15dp"
             android:text="@string/height"/>
 
 
@@ -142,6 +175,7 @@
                 android:id="@+id/ivTrainerDirectionsIcon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:layout_margin="15dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:src="@drawable/ic_trainer_direction"/>
@@ -174,6 +208,7 @@
                 android:id="@+id/ivTrainerCallIcon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:layout_margin="15dp"
                 android:src="@drawable/ic_trainer_call"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"/>

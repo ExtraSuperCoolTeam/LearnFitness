@@ -6,7 +6,72 @@
     android:paddingLeft="4dp"
     android:paddingRight="4dp"
     android:paddingTop="4dp"
-    android:id="@+id/rlMessageMainLayout">
+    android:id="@+id/rlMessageMainLayout"
+    android:background="@color/white">
+
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/label_week"-->
+        <!--android:id="@+id/tvMessageComposeWeekTitle"-->
+        <!--android:layout_marginRight="5dp"/>-->
+
+    <!--<Spinner-->
+        <!--android:id="@+id/spWeeksTitleList"-->
+        <!--android:spinnerMode="dropdown"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_toRightOf="@id/tvMessageComposeWeekTitle"/>-->
+
+    <!--<View-->
+        <!--android:id="@+id/vMessageItemsSeperator"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0.5dp"-->
+        <!--android:background="@android:color/darker_gray"-->
+        <!--android:layout_below="@id/tvMessageComposeWeekTitle"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_marginBottom="10dp"/>-->
+
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Enter New Message"-->
+        <!--android:id="@+id/tvComposeMessageEnterMessage"-->
+        <!--android:layout_below="@id/vMessageItemsSeperator"/>-->
+
+    <!--<EditText-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:inputType="textMultiLine"-->
+        <!--android:id="@+id/etComposeMessageText"-->
+        <!--android:ems="10"-->
+        <!--android:gravity="top"-->
+        <!--android:layout_below="@id/tvComposeMessageEnterMessage"/>-->
+
+    <!--<View-->
+        <!--android:id="@+id/vMessageVideoPlaceHolder"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="200dp"-->
+        <!--android:layout_below="@id/etComposeMessageText"/>-->
+
+    <!--<VideoView-->
+        <!--android:id="@+id/vvComposeFormVideo"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="200dp"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_below="@id/etComposeMessageText"/>-->
+
+    <!--<View-->
+        <!--android:id="@+id/vMessageItemsSeperator2"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0.5dp"-->
+        <!--android:background="@android:color/darker_gray"-->
+        <!--android:layout_below="@id/vvComposeFormVideo"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:visibility="gone"/>-->
+
 
     <RelativeLayout
         android:id="@+id/rlActionSection"

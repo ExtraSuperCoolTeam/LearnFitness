@@ -1,6 +1,7 @@
 package com.codepath.apps.learnfitness.fragments;
 
 import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.activities.LessonListActivity;
 import com.codepath.apps.learnfitness.models.Lesson;
 import com.codepath.apps.learnfitness.models.MyFormMessage;
 import com.codepath.apps.learnfitness.models.Week;
@@ -70,6 +71,12 @@ public class ComposeFormMessageFragment extends Fragment {
     @Bind(R.id.etComposeMessageText)
     EditText mEditTextMessageText;
 
+//    @Bind(R.id.vMessageVideoPlaceHolder)
+//    View mViewVideoPlaceHolder;
+//
+//    @Bind(R.id.vMessageItemsSeperator2)
+//    View mViewSeapratorBelowVideo;
+
     public static ComposeFormMessageFragment newInstance() {
         ComposeFormMessageFragment composeFormMessageFragment = new ComposeFormMessageFragment();
 
@@ -128,11 +135,6 @@ public class ComposeFormMessageFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-
-    }
-
     @OnClick(R.id.btnComposeFormMessageRecord)
     public void recordVideo(View view) {
         Log.i(TAG, "In record video");
@@ -170,6 +172,13 @@ public class ComposeFormMessageFragment extends Fragment {
             Log.i(TAG, "Didn't get video path :(");
             mOnFormMessageListener.startPostWithoutVideo(myFormMessage);
         }
+    }
+
+    // Whenever we leave this fragment, show the fab again.
+    @Override
+    public void onPause() {
+        super.onPause();
+        ((LessonListActivity)getActivity()).showFab(true);
     }
 
     @OnClick(R.id.btnComposeFormMessageCancel)

@@ -1,16 +1,16 @@
 package com.codepath.apps.learnfitness.adapters;
 
-import com.bumptech.glide.Glide;
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.models.Week;
-
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.models.Week;
 
 import java.util.List;
 
@@ -24,6 +24,7 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private List<Week> mWeeks;
     private Context context;
     private final int CURRENT_LESSON = 0, LESSON = 1;
+    private Week currentWeek;
 
     public LessonsAdapter(List<Week> weeks) {
         mWeeks = weeks;
@@ -33,6 +34,7 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemViewType(int position) {
         Week week = mWeeks.get(position);
         if (week.isCurrent()) {
+            currentWeek = week;
             return CURRENT_LESSON;
         }
         return LESSON;
@@ -103,13 +105,13 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         //ImageView iv = expandedWeekViewHolder.image;
 
         if (expandedWeekViewHolder != null) {
-            expandedWeekViewHolder.image.setImageResource(0);
+           // expandedWeekViewHolder.image.setImageResource(0);
 
             if (!TextUtils.isEmpty(imageURL)) {
-                Glide.with(context).load(imageURL)
-                        .fitCenter()
-                        .placeholder(R.mipmap.ic_wifi)
-                        .into(expandedWeekViewHolder.image);
+//                Glide.with(context).load(imageURL)
+//                        .fitCenter()
+//                        .placeholder(R.mipmap.ic_wifi)
+//                        .into(expandedWeekViewHolder.image);
             }
             String title = week.getWeekTitle();
             String number = week.getWeekNumber();
@@ -124,17 +126,31 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         if (collapsedWeekViewHolder != null) {
             //ImageView i = collapsedWeekViewHolder.thumbnail;
-            collapsedWeekViewHolder.thumbnail.setImageResource(0);
+            //collapsedWeekViewHolder.thumbnail.setImageResource(0);
 
             if (!TextUtils.isEmpty(imageURL)) {
-                Glide.with(context).load(imageURL)
-                        .fitCenter()
-                        .placeholder(R.mipmap.ic_wifi)
-                        .into(collapsedWeekViewHolder.thumbnail);
+//                Glide.with(context).load(imageURL)
+//                        .fitCenter()
+//                        .placeholder(R.mipmap.ic_wifi)
+//                        .into(collapsedWeekViewHolder.thumbnail);
             }
-
             collapsedWeekViewHolder.week.setText("Week " + week.getWeekNumber());
             collapsedWeekViewHolder.lessonTitle.setText(week.getWeekTitle());
+
+            //Todo make this so that it's part of lesson model
+//            int currentWeekInt = Integer.valueOf(currentWeek.getWeekNumber());
+//            int weekInt = Integer.valueOf(week.getWeekNumber());
+            int currentWeekInt = 3;
+            int weekInt = Integer.valueOf(week.getWeekNumber());
+
+            if (weekInt < currentWeekInt) {
+                collapsedWeekViewHolder.mLesson
+                        .setBackgroundColor(ContextCompat.getColor(context, R.color.primary_dark));
+            } else if (weekInt > currentWeekInt) {
+                collapsedWeekViewHolder.mLesson
+                        .setBackgroundColor(ContextCompat.getColor(context, R.color.to_complete));
+            }
+
         }
     }
 
