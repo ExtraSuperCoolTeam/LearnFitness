@@ -73,7 +73,7 @@
 
     <style name="NavigationTheme" parent="AppTheme">
         <item name="android:textSize">18sp</item>
-        <item name="android:layout_marginBottom">18dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
     </style>
 
 </resources>

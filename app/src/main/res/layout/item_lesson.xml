@@ -10,8 +10,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_margin="15dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/hiit_lower_body"/>
+        android:scaleType="fitXY" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -19,7 +18,7 @@
         android:id="@+id/tvWeek"
         android:layout_toRightOf="@id/ivThumbnail"
         android:layout_margin="12dp"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textColor="@color/textWhite"
         android:text="Week 1"/>
 
@@ -39,7 +38,5 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/ivThumbnail"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
         android:background="#fff"/>
 </RelativeLayout>

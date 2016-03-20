@@ -8,7 +8,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.apps.learnfitness.R;
 import com.codepath.apps.learnfitness.models.Week;
 
@@ -105,13 +107,13 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         //ImageView iv = expandedWeekViewHolder.image;
 
         if (expandedWeekViewHolder != null) {
-           // expandedWeekViewHolder.image.setImageResource(0);
+            expandedWeekViewHolder.image.setImageResource(0);
 
             if (!TextUtils.isEmpty(imageURL)) {
-//                Glide.with(context).load(imageURL)
-//                        .fitCenter()
-//                        .placeholder(R.mipmap.ic_wifi)
-//                        .into(expandedWeekViewHolder.image);
+                Glide.with(context).load(imageURL)
+                        .fitCenter()
+                        .placeholder(R.drawable.fitness_placeholder)
+                        .into(expandedWeekViewHolder.image);
             }
             String title = week.getWeekTitle();
             String number = week.getWeekNumber();
@@ -125,14 +127,14 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         String imageURL = week.getPhotoUrl();
 
         if (collapsedWeekViewHolder != null) {
-            //ImageView i = collapsedWeekViewHolder.thumbnail;
-            //collapsedWeekViewHolder.thumbnail.setImageResource(0);
+            ImageView i = collapsedWeekViewHolder.thumbnail;
+            collapsedWeekViewHolder.thumbnail.setImageResource(0);
 
             if (!TextUtils.isEmpty(imageURL)) {
-//                Glide.with(context).load(imageURL)
-//                        .fitCenter()
-//                        .placeholder(R.mipmap.ic_wifi)
-//                        .into(collapsedWeekViewHolder.thumbnail);
+                Glide.with(context).load(imageURL)
+                        .fitCenter()
+                        .placeholder(R.drawable.small_placeholder)
+                        .into(collapsedWeekViewHolder.thumbnail);
             }
             collapsedWeekViewHolder.week.setText("Week " + week.getWeekNumber());
             collapsedWeekViewHolder.lessonTitle.setText(week.getWeekTitle());
