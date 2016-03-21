@@ -14,6 +14,7 @@ public class MyFormMessage implements Parcelable {
     String message = "";
     String videoId;
     String timeStamp;
+    String numberOfReplies;
 
     public String getId() {
         return id;
@@ -63,6 +64,13 @@ public class MyFormMessage implements Parcelable {
         this.timeStamp = timeStamp;
     }
 
+    public String getNumberOfReplies() {
+        return numberOfReplies;
+    }
+
+    public void setNumberOfReplies(String numberOfReplies) {
+        this.numberOfReplies = numberOfReplies;
+    }
 
     @Override
     public int describeContents() {
@@ -77,6 +85,7 @@ public class MyFormMessage implements Parcelable {
         dest.writeString(this.message);
         dest.writeString(this.videoId);
         dest.writeString(this.timeStamp);
+        dest.writeString(this.numberOfReplies);
     }
 
     public MyFormMessage() {
@@ -89,6 +98,7 @@ public class MyFormMessage implements Parcelable {
         this.message = in.readString();
         this.videoId = in.readString();
         this.timeStamp = in.readString();
+        this.numberOfReplies = in.readString();
     }
 
     public static final Parcelable.Creator<MyFormMessage> CREATOR = new Parcelable.Creator<MyFormMessage>() {

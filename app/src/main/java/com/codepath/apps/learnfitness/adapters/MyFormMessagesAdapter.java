@@ -62,6 +62,7 @@ public class MyFormMessagesAdapter extends RecyclerView.Adapter<MyFormMessagesAd
             super(itemView);
             mContext = context;
             ButterKnife.bind(this, itemView);
+
             mMyFormMessages = messages;
             mOnItemClickListener = listener;
 
@@ -95,15 +96,18 @@ public class MyFormMessagesAdapter extends RecyclerView.Adapter<MyFormMessagesAd
         MyFormMessage myFormMessage = mMyFormMessages.get(position);
 
         String weekTitle = myFormMessage.getWeekTitle();
-        String myFormMessageMessage = myFormMessage.getMessage();
+        String myFormMessageText = myFormMessage.getMessage();
         String myFormVideoId = myFormMessage.getVideoId();
         String myFormTimeSend = myFormMessage.getTimeStamp();
+        String myFormMessageReplies = myFormMessage.getNumberOfReplies();
 
-        Log.i(TAG, myFormMessageMessage);
+        Log.i(TAG, myFormMessageText);
 
         holder.mTextViewAboutWeekInfo.setText(weekTitle);
-        holder.mTextViewMyMessageText.setText(myFormMessageMessage);
+        holder.mTextViewMyMessageText.setText(myFormMessageText);
         holder.mTextViewTimeSend.setText(TimeFormatUtility.getRelativeTimeFromTimesMillis(myFormTimeSend));
+
+        holder.mTextViewMessageReplies.setText(myFormMessageReplies);
 
         if (!TextUtils.isEmpty(myFormVideoId)) {
             String url = YOUTUBE_VIDEO_THUMBNAIL_URL + myFormVideoId + "/0.jpg";

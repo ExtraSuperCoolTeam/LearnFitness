@@ -4,8 +4,8 @@
 
     <ImageView
         android:id="@+id/ivMessageTimeStamp"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
+        android:layout_width="23dp"
+        android:layout_height="23dp"
         android:src="@drawable/time_stamp_icon"/>
 
     <TextView
@@ -17,8 +17,8 @@
 
     <ImageView
         android:id="@+id/ivMessageReplies"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
+        android:layout_width="23dp"
+        android:layout_height="23dp"
         android:layout_toRightOf="@id/tvTimeSend"
         android:src="@drawable/comment_icon"
         android:layout_marginLeft="80dp"/>

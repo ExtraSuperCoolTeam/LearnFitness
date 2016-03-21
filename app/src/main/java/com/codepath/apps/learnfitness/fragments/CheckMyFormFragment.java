@@ -5,7 +5,6 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.activities.LessonListActivity;
 import com.codepath.apps.learnfitness.adapters.CheckMyFormAdapter;
 import com.codepath.apps.learnfitness.models.MyFormMessage;
 import com.codepath.apps.learnfitness.models.TrainerReply;
@@ -33,7 +32,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit2.adapter.rxjava.HttpException;
-import retrofit2.http.HEAD;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -76,7 +74,7 @@ public class CheckMyFormFragment extends Fragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_check_my_form_replies, container, false);
+        View v = inflater.inflate(R.layout.fragment_check_my_form_details, container, false);
         ButterKnife.bind(this, v);
         setUpViews();
         return v;

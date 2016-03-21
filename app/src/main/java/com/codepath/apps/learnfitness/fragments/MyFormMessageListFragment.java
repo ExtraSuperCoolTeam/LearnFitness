@@ -52,8 +52,8 @@ public class MyFormMessageListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ((LessonListActivity)getActivity()).showFab(false);
-        ((LessonListActivity)getActivity()).checkLogin();
+//        ((LessonListActivity)getActivity()).showFab(false);
+//        ((LessonListActivity)getActivity()).checkLogin();
 
         mMyFormMessages = new ArrayList<>();
         mAdapter = new MyFormMessagesAdapter(mMyFormMessages);
@@ -71,6 +71,10 @@ public class MyFormMessageListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_my_form_message_list, container, false);
         ButterKnife.bind(this, v);
+
+        ((LessonListActivity)getActivity()).showFab(false);
+        ((LessonListActivity)getActivity()).checkLogin();
+
         setUpViews();
         return v;
     }

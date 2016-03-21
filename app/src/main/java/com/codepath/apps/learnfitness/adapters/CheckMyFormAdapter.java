@@ -62,7 +62,7 @@ public class CheckMyFormAdapter extends RecyclerView.Adapter<CheckMyFormAdapter.
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View formView = inflater.inflate(R.layout.item_forms, parent, false);
+        View formView = inflater.inflate(R.layout.item_check_my_form_details, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(formView, context);
         return viewHolder;

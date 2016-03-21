@@ -8,25 +8,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/textWhite"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvAboutWeekInfo"
                 android:textStyle="bold"
-                android:layout_marginRight="5dp"
                 android:maxLines="1"
-                android:ellipsize="end"/>
-
-            <!--<include layout="@layout/form_my_message_header"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/lform_my_message_header"-->
-                <!--android:layout_margin="10dp"-->
-                <!--android:layout_centerHorizontal="true"/>-->
+                android:ellipsize="end"
+                android:layout_margin="5dp"/>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -36,16 +29,24 @@
                 android:adjustViewBounds="true"
                 android:visibility="gone"
                 android:layout_below="@id/tvAboutWeekInfo"
-                android:layout_margin="15dp"/>
+                android:layout_margin="5dp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvMyMessage"
                 android:layout_below="@id/ivMyMessageImage"
-                android:layout_margin="10dp" />
+                android:layout_margin="5dp" />
+
+            <include layout="@layout/view_message_list_footer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lform_my_message_footer"
+                android:layout_margin="5dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/tvMyMessage"/>
+
+    </RelativeLayout>
 
 
-
-        </RelativeLayout>
 </LinearLayout>
