@@ -29,12 +29,9 @@ apply plugin: 'android-apt'
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    // Picasso for remote image loading
     // Android Async Http for sending async network requests
     // ActiveAndroid for simple persistence with an ORM
     compile 'com.android.support:appcompat-v7:22.2.1'
-//    compile 'com.squareup.picasso:picasso:2.5.2'
-    //compile 'com.loopj.android:android-async-http:1.4.8'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile 'com.android.support:design:22.2.1'
     compile 'com.jakewharton:butterknife:7.0.1'
@@ -49,9 +46,6 @@ dependencies {
     //Butterknife
     compile 'com.jakewharton:butterknife:7.0.1'
 
-    //Async http client
-    //compile 'com.loopj.android:android-async-http:1.4.9'
-
     //gson
     compile 'com.google.code.gson:gson:2.4'
 
@@ -65,9 +59,6 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta4'
 
-    //cardview
-    //compile 'com.android.support:cardview-v7:21.0.+'
-
     //circular image
     compile 'de.hdodenhof:circleimageview:2.0.0'
 
@@ -78,10 +69,12 @@ dependencies {
     compile 'com.google.api-client:google-api-client-android:+'
     compile 'com.google.api-client:google-api-client-gson:+'
     compile 'com.mcxiaoke.volley:library:1.0.18'
-    //compile 'com.google.apis:google-api-services-youtube:v3-rev163-1.21.0'
 
     // Sliding up panel.
     compile 'com.sothree.slidinguppanel:library:3.3.0'
+
+    // PercentRelativeLayout
+    compile "com.android.support:percent:22.2.0"
 
     //apache common lang
     compile 'org.apache.commons:commons-lang3:3.4'

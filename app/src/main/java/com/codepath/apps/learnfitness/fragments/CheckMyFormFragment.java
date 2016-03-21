@@ -88,9 +88,6 @@ public class CheckMyFormFragment extends Fragment
 
         mTrainerReplies = new ArrayList<>();
         mAdapter = new CheckMyFormAdapter(mTrainerReplies);
-
-        ((LessonListActivity)getActivity()).checkLogin();
-
     }
 
     public void setUpViews() {

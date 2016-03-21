@@ -38,6 +38,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.bumptech.glide.Glide;
 import com.codepath.apps.learnfitness.R;
 import com.codepath.apps.learnfitness.fragments.CheckMyFormFragment;
 import com.codepath.apps.learnfitness.fragments.ComposeFormMessageFragment;
@@ -69,7 +71,6 @@ import butterknife.ButterKnife;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
 import rx.Subscriber;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -82,6 +83,7 @@ public class LessonListActivity extends AppCompatActivity
 
     public static final String MY_SHARED_PREFS = "MY_SHARED_PREFS4";
     public static final String CURRENT_WEEK_NUMBER = "CURRENT_WEEK_NUMBER";
+    public static final int BOTTOM_SHEET_IMAGE_MARGIN = 700;
 
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawer;
@@ -104,14 +106,11 @@ public class LessonListActivity extends AppCompatActivity
     @Bind(R.id.tvTrainerExperience)
     TextView mTextViewTrainerExperience;
 
-    @Bind(R.id.tvTrainerWeight)
-    TextView mTextViewTrainerWeight;
+    @Bind(R.id.tvTrainerAddressLine1)
+    TextView mTextViewTrainerAddressLine1;
 
-    @Bind(R.id.tvTrainerHeight)
-    TextView mTextViewTrainerHeight;
-
-    @Bind(R.id.tvTrainerAddress)
-    TextView mTextViewTrainerAddress;
+    @Bind(R.id.tvTrainerAddressLine2)
+    TextView mTextViewTrainerAddressLine2;
 
     @Bind(R.id.tvTrainerCall)
     TextView mTextViewTrainerCall;
@@ -131,16 +130,15 @@ public class LessonListActivity extends AppCompatActivity
     @Bind(R.id.ivSpecialtyIcon)
     ImageView mSpecialtyIcon;
 
-    Subscription subscription;
+    public static FragmentManager fragmentManager;
 
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
-    public static FragmentManager fragmentManager;
     private Menu mMenu;
     private FindTrainerFragment mFindTrainerFragment;
     private CheckMyFormFragment mCheckMyFormFragment;
     private MyFormMessageListFragment mMyFormMessageListFragment;
-    ComposeFormMessageFragment mComposeFormMessageFragment;
+    private ComposeFormMessageFragment mComposeFormMessageFragment;
     private Trainer mTrainer;
     private WeeksListFragment mWeeksListFragment;
 
@@ -240,7 +238,7 @@ public class LessonListActivity extends AppCompatActivity
             public void onPanelSlide(View panel, float slideOffset) {
                 int color;
                 int textColor;
-                if (slideOffset <= 0) {
+                if (slideOffset <= 0.005) {
                     color = R.color.white;
                     textColor = R.color.text_dark;
                 } else {
@@ -251,7 +249,7 @@ public class LessonListActivity extends AppCompatActivity
                 if (slideOffset >= 0) {
                     RelativeLayout.LayoutParams boxMargins = new RelativeLayout
                             .LayoutParams(mTrainerPeakInfo.getLayoutParams());
-                    boxMargins.topMargin = (int) (455 * slideOffset);
+                    boxMargins.topMargin = (int) (BOTTOM_SHEET_IMAGE_MARGIN * slideOffset);
                     mTrainerPeakInfo.setLayoutParams(boxMargins);
                 }
 
@@ -261,13 +259,14 @@ public class LessonListActivity extends AppCompatActivity
                         getColor(LessonListActivity.this, textColor);
                 mTrainerName.setTextColor(parsedTextColor);
                 mTextViewTrainerSpeciality.setTextColor(parsedTextColor);
+                mTextViewTrainerExperience.setTextColor(parsedTextColor);
             }
 
             @Override
             public void onPanelStateChanged(View panel,
                                             SlidingUpPanelLayout.PanelState previousState,
                                             SlidingUpPanelLayout.PanelState newState) {
-                Log.d(TAG, "State changing");
+                Log.d(TAG, "Bottom panel state changing");
                 int color;
                 int textColor;
 
@@ -281,19 +280,6 @@ public class LessonListActivity extends AppCompatActivity
                     mTrainerName.setTextColor(parsedTextColor);
                     mTextViewTrainerSpeciality.setTextColor(parsedTextColor);
                 }
-
-//                if (newState == PanelState.DRAGGING || newState == PanelState.EXPANDED) {
-//                    color = R.color.primary;
-//                    textColor = R.color.white;
-//                } else {
-//                    color = R.color.white;
-//                    textColor = R.color.text_dark;
-//
-//                }
-
-
-
-                //Put into styles the different text color
             }
         });
         rlTrainerCall.setOnClickListener(new View.OnClickListener() {
@@ -312,18 +298,13 @@ public class LessonListActivity extends AppCompatActivity
 
         String speciality =  "Specialty: " +
                 trainer.getTrainerParams().getSpeciality();
-        String experience = "Years of Experience: " +
+        String experience = "Years Experience: " +
                 trainer.getTrainerParams().getYrsOfTraining();
-        String weight = "Weight: " +
-                trainer.getTrainerParams().getWeight();
-        String height = "Height: " +
-                trainer.getTrainerParams().getHeight();
+
         String name = trainer.getName();
 
         mTextViewTrainerSpeciality.setText(speciality);
         mTextViewTrainerExperience.setText(experience);
-        mTextViewTrainerWeight.setText(weight);
-        mTextViewTrainerHeight.setText(height);
         mTrainerName.setText(name);
 
         String src = "";
@@ -337,20 +318,22 @@ public class LessonListActivity extends AppCompatActivity
             case "Lifting":
                 mSpecialtyIcon.setImageResource(R.drawable.lifting_icon);
                 break;
+            case "Yoga":
+                mSpecialtyIcon.setImageResource(R.drawable.yoga_icon);
+                break;
             default:
                 mSpecialtyIcon.setImageResource(R.drawable.cardio_icon);
                 break;
 
         }
 
-
-        //Todo: Fix this with real image
-//        Glide.with(LessonListActivity.this)
-//                .load(trainer.getProfileUrl()).placeholder(R.mipmap.ic_wifi)
-//                .into(mImageViewTrainerPhoto);
+        Glide.with(LessonListActivity.this)
+                .load(trainer.getProfileUrl()).placeholder(R.mipmap.ic_wifi)
+                .into(mImageViewTrainerPhoto);
 
 
-        mTextViewTrainerAddress.setText(trainer.getAddress());
+        mTextViewTrainerAddressLine1.setText(trainer.getAddress().getFirstAddressLine());
+        mTextViewTrainerAddressLine2.setText(trainer.getAddress().getSecondAddressLine());
         mTextViewTrainerCall.setText(trainer.getPhone());
     }
 
@@ -583,7 +566,8 @@ public class LessonListActivity extends AppCompatActivity
         Observable<MyFormMessage> call =
             MediaStoreService.formsMessagesStore.postMyFormMessage(HEADER_CONTENT_TYPE_JSON,
                     myFormMessage);
-            subscription = call
+
+            call
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Subscriber<MyFormMessage>() {
                 @Override
@@ -608,7 +592,7 @@ public class LessonListActivity extends AppCompatActivity
                 public void onNext(MyFormMessage myFormMessage) {
                     Log.i(TAG, myFormMessage.getId());
                 }
-                });
+            });
 
         fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
         //fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
@@ -682,6 +666,7 @@ public class LessonListActivity extends AppCompatActivity
                         credential.setSelectedAccountName(accountName);
                         saveAccount();
                     }
+                    mMyFormMessageListFragment.showData();
                 }
                 break;
 
@@ -717,6 +702,7 @@ public class LessonListActivity extends AppCompatActivity
             chooseAccount();
         } else {
             Log.d(TAG, "Don't need to choose an account");
+            mMyFormMessageListFragment.showData();
         }
     }
 

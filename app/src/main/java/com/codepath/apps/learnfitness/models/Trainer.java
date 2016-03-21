@@ -14,18 +14,23 @@ public class Trainer implements Parcelable {
     @SerializedName("id")
     @Expose
     private String id;
+
     @SerializedName("name")
     @Expose
     private String name;
+
     @SerializedName("address")
     @Expose
-    private String address;
+    private Address address;
+
     @SerializedName("phone")
     @Expose
     private String phone;
+
     @SerializedName("profileUrl")
     @Expose
     private String profileUrl;
+
     @SerializedName("handle")
     @Expose
     private String handle;
@@ -33,6 +38,7 @@ public class Trainer implements Parcelable {
     @SerializedName("trainerParams")
     @Expose
     private TrainerParams trainerParams;
+
     @SerializedName("location")
     @Expose
     private Location location;
@@ -83,7 +89,7 @@ public class Trainer implements Parcelable {
      * @return
      *     The address
      */
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
@@ -92,7 +98,7 @@ public class Trainer implements Parcelable {
      * @param address
      *     The address
      */
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
@@ -175,7 +181,7 @@ public class Trainer implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
         dest.writeString(this.name);
-        dest.writeString(this.address);
+        dest.writeParcelable(this.address, flags);
         dest.writeString(this.phone);
         dest.writeString(this.profileUrl);
         dest.writeString(this.handle);
@@ -189,7 +195,7 @@ public class Trainer implements Parcelable {
     protected Trainer(Parcel in) {
         this.id = in.readString();
         this.name = in.readString();
-        this.address = in.readString();
+        this.address = in.readParcelable(Address.class.getClassLoader());
         this.phone = in.readString();
         this.profileUrl = in.readString();
         this.handle = in.readString();
