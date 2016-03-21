@@ -52,6 +52,7 @@ public class MyFormMessageListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ((LessonListActivity)getActivity()).showFab(false);
         ((LessonListActivity)getActivity()).checkLogin();
 
         mMyFormMessages = new ArrayList<>();
@@ -76,6 +77,7 @@ public class MyFormMessageListFragment extends Fragment {
 
     public void showData() {
         mRecyclerViewMessages.setVisibility(View.VISIBLE);
+        ((LessonListActivity)getActivity()).showFab(true);
     }
 
     public void setUpViews() {
