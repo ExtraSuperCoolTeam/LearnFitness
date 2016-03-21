@@ -193,7 +193,8 @@ public class LessonListActivity extends AppCompatActivity
 
         drawerToggle = setUpDrawerToggle();
 
-        mDrawer.setDrawerListener(drawerToggle);
+//        mDrawer.setDrawerListener(drawerToggle);
+        mDrawer.addDrawerListener(drawerToggle);
 
         setUpDrawerContent(mNavigation);
 
@@ -210,7 +211,6 @@ public class LessonListActivity extends AppCompatActivity
 
 
         mNavigation.getMenu().getItem(0).setChecked(true);
-
         setTitle(R.string.title_activity_lesson_list);
 
         mFab.setOnClickListener(new View.OnClickListener() {
@@ -433,17 +433,19 @@ public class LessonListActivity extends AppCompatActivity
         // Insert the fragment by replacing any existing fragment
         fragmentManager = getSupportFragmentManager();
         if (fragmentClass == WeekFragment.class) {
-            fragmentManager.beginTransaction().add(R.id.flContent, fragment).addToBackStack("week").commit();
+            fragmentManager.beginTransaction()
+                    .add(R.id.flContent, fragment).addToBackStack("week").commit();
         } else {
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }
 
         // Highlight the selected item, update the title, and close the drawer
-        Menu menu = mNavigation.getMenu();
-        for (int i = 0; i < menu.size(); i++) {
-            menu.getItem(i).setChecked(false);
-        }
+//        Menu menu = mNavigation.getMenu();
+//        for (int i = 0; i < menu.size(); i++) {
+//            menu.getItem(i).setChecked(false);
+//        }
         currentMenuItem.setChecked(true);
+
 
         setTitle(currentMenuItem.getTitle());
         mDrawer.closeDrawers();
@@ -496,7 +498,8 @@ public class LessonListActivity extends AppCompatActivity
     @Override
     public void onWeekSelected(View itemView, Week week) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.flContent, WeekFragment.newInstance(week)).addToBackStack("week").commit();
+        fragmentManager.beginTransaction()
+                .add(R.id.flContent, WeekFragment.newInstance(week)).addToBackStack("week").commit();
     }
 
     @Override
