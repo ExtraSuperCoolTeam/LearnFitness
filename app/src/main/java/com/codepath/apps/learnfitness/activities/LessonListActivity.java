@@ -378,6 +378,7 @@ public class LessonListActivity extends AppCompatActivity
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        menuItem.setChecked(true);
                         selectDrawerItem(menuItem);
                         return true;
                     }
@@ -448,7 +449,7 @@ public class LessonListActivity extends AppCompatActivity
 //        for (int i = 0; i < menu.size(); i++) {
 //            menu.getItem(i).setChecked(false);
 //        }
-        currentMenuItem.setChecked(true);
+       // currentMenuItem.setChecked(true);
 
 
         setTitle(currentMenuItem.getTitle());
