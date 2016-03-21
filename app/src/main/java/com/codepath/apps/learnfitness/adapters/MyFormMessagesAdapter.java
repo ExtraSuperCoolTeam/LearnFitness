@@ -47,6 +47,9 @@ public class MyFormMessagesAdapter extends RecyclerView.Adapter<MyFormMessagesAd
         @Bind(R.id.ivMyMessageImage)
         ImageView mImageViewMyMessageImage;
 
+        @Bind(R.id.tvMessageReplies)
+        TextView mTextViewMessageReplies;
+
         Context mContext;
         List<MyFormMessage> mMyFormMessages;
 

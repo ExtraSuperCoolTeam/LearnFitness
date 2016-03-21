@@ -12,12 +12,21 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp">
 
-            <include layout="@layout/form_my_message_header"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/lform_my_message_header"
-                android:layout_margin="10dp"
-                android:layout_centerHorizontal="true"/>
+                android:id="@+id/tvAboutWeekInfo"
+                android:textStyle="bold"
+                android:layout_marginRight="5dp"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+            <!--<include layout="@layout/form_my_message_header"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/lform_my_message_header"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:layout_centerHorizontal="true"/>-->
 
             <ImageView
                 android:layout_width="match_parent"
@@ -26,7 +35,7 @@
                 android:scaleType="fitXY"
                 android:adjustViewBounds="true"
                 android:visibility="gone"
-                android:layout_below="@id/lform_my_message_header"
+                android:layout_below="@id/tvAboutWeekInfo"
                 android:layout_margin="15dp"/>
 
             <TextView
@@ -34,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tvMyMessage"
                 android:layout_below="@id/ivMyMessageImage"
-                android:layout_margin="10dp"/>
+                android:layout_margin="10dp" />
 
 
 

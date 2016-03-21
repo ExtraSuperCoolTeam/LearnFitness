@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content" android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivMessageTimeStamp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:src="@drawable/time_stamp_icon"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvTimeSend"
+        android:layout_toRightOf="@id/ivMessageTimeStamp"
+        android:layout_marginRight="5dp"/>
+
+    <ImageView
+        android:id="@+id/ivMessageReplies"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_toRightOf="@id/tvTimeSend"
+        android:src="@drawable/comment_icon"
+        android:layout_marginLeft="80dp"/>
+
+    <TextView
+        android:id="@+id/tvMessageReplies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/ivMessageReplies"
+        android:text="15" />
+
+</RelativeLayout>
