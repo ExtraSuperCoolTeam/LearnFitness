@@ -77,7 +77,6 @@
         android:id="@+id/rlActionSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/material_grey"
         android:layout_alignParentBottom="true">
 
         <View
@@ -86,11 +85,11 @@
             android:layout_height="0.5dp"
             android:background="@android:color/darker_gray"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="2dp"/>
 
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="@string/message_send"
             android:id="@+id/btnComposeMessageSend"
             android:layout_gravity="end"
@@ -114,7 +113,7 @@
 
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="@string/message_record_cancel"
             android:id="@+id/btnComposeFormMessageCancel"
             android:layout_toLeftOf="@id/vMessageItemsHorizontalSeperator"
@@ -151,14 +150,29 @@
         android:layout_alignParentTop="true"
         android:layout_above="@id/rlActionSection">
 
+        <!--<LinearLayout-->
+            <!--android:id="@+id/llmessage_dismiss"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:paddingBottom="10dp"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<ImageView-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:id="@+id/ibDismiss"-->
+                <!--android:src="@drawable/ic_dismiss_compose"-->
+                <!--android:layout_marginLeft="5dp"/>-->
+        <!--android:layout_below="@id/llmessage_dismiss"-->
+        <!--</LinearLayout>-->
+
         <Spinner
             android:id="@+id/spWeeksTitleList"
             android:spinnerMode="dropdown"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginLeft="2dp"
-            />
+            android:layout_marginLeft="2dp" />
 
 <!--
         <TextView

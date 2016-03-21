@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -90,7 +91,7 @@ public class ComposeFormMessageFragment extends Fragment {
 
         mWeeks = new ArrayList<>();
         mWeekArrayAdapter = new ArrayAdapter<>(getActivity(),
-                R.layout.spinnertext, mWeeks);
+                android.R.layout.simple_spinner_item, mWeeks);
     }
 
     @Nullable
@@ -98,6 +99,17 @@ public class ComposeFormMessageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.compose_message, container, false);
         ButterKnife.bind(this, rootView);
+
+        //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        mEditTextMessageText.requestFocus();
+        mEditTextMessageText.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager keyboard = (InputMethodManager)
+                        getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                keyboard.showSoftInput(mEditTextMessageText, 0);
+            }
+        }, 200);
 
         final Observable<Lesson> call = MediaStoreService.contentStore.fetchContent();
         subscription = call
