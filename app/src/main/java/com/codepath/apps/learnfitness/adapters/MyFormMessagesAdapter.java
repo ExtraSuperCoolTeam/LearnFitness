@@ -1,10 +1,5 @@
 package com.codepath.apps.learnfitness.adapters;
 
-import com.bumptech.glide.Glide;
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.models.MyFormMessage;
-import com.codepath.apps.learnfitness.util.TimeFormatUtility;
-
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -14,6 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.models.MyFormMessage;
+import com.codepath.apps.learnfitness.util.TimeFormatUtility;
 
 import java.util.List;
 
@@ -113,7 +113,9 @@ public class MyFormMessagesAdapter extends RecyclerView.Adapter<MyFormMessagesAd
             String url = YOUTUBE_VIDEO_THUMBNAIL_URL + myFormVideoId + "/0.jpg";
             holder.mImageViewMyMessageImage.setVisibility(View.VISIBLE);
 
-            Glide.with(holder.mContext).load(url).placeholder(R.mipmap.ic_wifi).error(R.mipmap.ic_wifi)
+            Glide.with(holder.mContext).load(url)
+                    .placeholder(R.drawable.fitness_placeholder)
+                    .error(R.mipmap.ic_wifi)
                     .fitCenter()
                     .into(holder.mImageViewMyMessageImage);
         }

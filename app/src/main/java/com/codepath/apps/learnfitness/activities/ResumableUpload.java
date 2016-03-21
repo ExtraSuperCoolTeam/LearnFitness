@@ -89,7 +89,9 @@ public class ResumableUpload {
                 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         builder.setContentTitle(context.getString(R.string.youtube_upload))
                 .setContentText(context.getString(R.string.youtube_upload_started))
-                .setSmallIcon(R.mipmap.ic_wifi).setContentIntent(contentIntent).setStyle(new NotificationCompat.BigPictureStyle().bigPicture(thumbnail));
+                .setSmallIcon(R.drawable.small_placeholder)
+                .setContentIntent(contentIntent)
+                .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(thumbnail));
         notifyManager.notify(UPLOAD_NOTIFICATION_ID, builder.build());
 
         String videoId = null;
