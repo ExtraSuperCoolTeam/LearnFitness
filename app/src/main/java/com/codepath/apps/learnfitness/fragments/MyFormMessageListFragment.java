@@ -1,6 +1,7 @@
 package com.codepath.apps.learnfitness.fragments;
 
 import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.activities.LessonListActivity;
 import com.codepath.apps.learnfitness.adapters.MyFormMessagesAdapter;
 import com.codepath.apps.learnfitness.models.MyFormMessage;
 import com.codepath.apps.learnfitness.rest.MediaStoreService;
@@ -51,6 +52,8 @@ public class MyFormMessageListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ((LessonListActivity)getActivity()).checkLogin();
+
         mMyFormMessages = new ArrayList<>();
         mAdapter = new MyFormMessagesAdapter(mMyFormMessages);
 
@@ -69,6 +72,10 @@ public class MyFormMessageListFragment extends Fragment {
         ButterKnife.bind(this, v);
         setUpViews();
         return v;
+    }
+
+    public void showData() {
+        mRecyclerViewMessages.setVisibility(View.VISIBLE);
     }
 
     public void setUpViews() {

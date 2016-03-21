@@ -666,6 +666,7 @@ public class LessonListActivity extends AppCompatActivity
                         credential.setSelectedAccountName(accountName);
                         saveAccount();
                     }
+                    mMyFormMessageListFragment.showData();
                 }
                 break;
 
@@ -701,6 +702,7 @@ public class LessonListActivity extends AppCompatActivity
             chooseAccount();
         } else {
             Log.d(TAG, "Don't need to choose an account");
+            mMyFormMessageListFragment.showData();
         }
     }
 
