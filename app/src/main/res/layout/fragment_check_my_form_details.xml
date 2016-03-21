@@ -17,23 +17,21 @@
         android:id="@+id/tvMyFormMessageDetail"
         android:maxLines="3"
         android:ellipsize="end"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@color/white"
+        android:layout_margin="10dp"
+        android:textColor="@color/textWhite"
         />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/primary"/>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/rvCheckMyForms"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@color/white">
+        android:layout_margin="5dp"
+        android:background="@color/primary_dark">
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>
