@@ -34,6 +34,20 @@
         android:textColor="@color/textWhite"
         android:text="Jumping Jacks"/>
 
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:scaleType="fitXY"
+        android:id="@+id/ivCheckMark"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/checkmark"
+        android:visibility="gone"/>
+
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

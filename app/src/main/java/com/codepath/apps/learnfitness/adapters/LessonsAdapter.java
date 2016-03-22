@@ -108,7 +108,7 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         //ImageView iv = expandedWeekViewHolder.image;
 
         if (expandedWeekViewHolder != null) {
-            expandedWeekViewHolder.image.setImageResource(0);
+            expandedWeekViewHolder.image.setImageResource(android.R.color.transparent);
 
             if (!TextUtils.isEmpty(imageURL)) {
                 Glide.with(context).load(imageURL)
@@ -129,7 +129,7 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         if (collapsedWeekViewHolder != null) {
             ImageView i = collapsedWeekViewHolder.thumbnail;
-            collapsedWeekViewHolder.thumbnail.setImageResource(0);
+            collapsedWeekViewHolder.thumbnail.setImageResource(android.R.color.transparent);
 
             if (!TextUtils.isEmpty(imageURL)) {
                 Glide.with(context).load(imageURL)
@@ -144,9 +144,11 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             int weekInt = Integer.valueOf(week.getWeekNumber());
 
             if (weekInt < currentWeekInt) {
+                collapsedWeekViewHolder.mCheckMark.setVisibility(View.VISIBLE);
                 collapsedWeekViewHolder.mLesson
                         .setBackgroundColor(ContextCompat.getColor(context, R.color.primary_dark));
             } else if (weekInt >= currentWeekInt) {
+                collapsedWeekViewHolder.mCheckMark.setVisibility(View.GONE);
                 collapsedWeekViewHolder.mLesson
                         .setBackgroundColor(ContextCompat.getColor(context, R.color.to_complete));
             }

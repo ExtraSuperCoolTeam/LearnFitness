@@ -28,6 +28,8 @@ public class CollapsedWeekViewHolder extends RecyclerView.ViewHolder
     @Bind(R.id.tvWeek) TextView week;
     @Bind(R.id.tvLessonTitle) TextView lessonTitle;
     @Bind(R.id.ivThumbnail) ImageView thumbnail;
+    @Bind(R.id.ivCheckMark)
+    ImageView mCheckMark;
     @Bind(R.id.rlLesson)
     RelativeLayout mLesson;
 

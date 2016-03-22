@@ -196,7 +196,6 @@ public class LessonListActivity extends AppCompatActivity
 
         drawerToggle = setUpDrawerToggle();
 
-//        mDrawer.setDrawerListener(drawerToggle);
         mDrawer.addDrawerListener(drawerToggle);
 
         setUpDrawerContent(mNavigation);
@@ -382,9 +381,8 @@ public class LessonListActivity extends AppCompatActivity
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
                         selectDrawerItem(menuItem);
-                        return true;
+                        return false;
                     }
                 });
     }
@@ -449,11 +447,13 @@ public class LessonListActivity extends AppCompatActivity
         }
 
         // Highlight the selected item, update the title, and close the drawer
-//        Menu menu = mNavigation.getMenu();
-//        for (int i = 0; i < menu.size(); i++) {
-//            menu.getItem(i).setChecked(false);
-//        }
-       // currentMenuItem.setChecked(true);
+        Menu menu = mNavigation.getMenu();
+        for (int i = 0; i < menu.size(); i++) {
+            menu.getItem(i).setChecked(false);
+        }
+        currentMenuItem.setChecked(true);
+
+
 
 
         setTitle(currentMenuItem.getTitle());
