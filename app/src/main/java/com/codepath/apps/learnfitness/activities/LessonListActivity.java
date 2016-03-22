@@ -677,6 +677,7 @@ public class LessonListActivity extends AppCompatActivity
                 break;
 
             case REQUEST_TAKE_GALLERY_VIDEO:
+                showFab(false);
                 if (resultCode == RESULT_OK) {
                     mVideoRecordFileURI = data.getData();
                     // OI FILE Manager

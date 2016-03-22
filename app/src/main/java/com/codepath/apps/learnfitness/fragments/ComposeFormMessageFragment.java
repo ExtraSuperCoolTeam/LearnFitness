@@ -149,6 +149,7 @@ public class ComposeFormMessageFragment extends Fragment {
 
     @OnClick(R.id.btnComposeFormMessageRecord)
     public void recordVideo(View view) {
+        dismissSoftKeyboard();
         Log.i(TAG, "In record video");
 
         if (mOnFormMessageListener == null) {
@@ -160,6 +161,7 @@ public class ComposeFormMessageFragment extends Fragment {
     @OnClick(R.id.btnComposeMessageSend)
     public void sendMessage(View view) {
 
+        dismissSoftKeyboard();
         //TODO check if empty fields and ignore post
         Week selectedWeek = (Week) mSpinnerWeeksTitleList.getSelectedItem();
 //        Form form = new Form();
@@ -195,6 +197,7 @@ public class ComposeFormMessageFragment extends Fragment {
 
     @OnClick(R.id.btnComposeFormMessageCancel)
     public void cancelMessage() {
+        dismissSoftKeyboard();
         if (mOnFormMessageListener == null) {
             mOnFormMessageListener = (OnFormMessageListener) getActivity();
         }
@@ -203,6 +206,7 @@ public class ComposeFormMessageFragment extends Fragment {
 
     @OnClick(R.id.btnComposeFormMessageGallery)
     public void lookupVideoGallery() {
+        dismissSoftKeyboard();
         if (mOnFormMessageListener == null) {
             mOnFormMessageListener = (OnFormMessageListener) getActivity();
         }
@@ -249,5 +253,14 @@ public class ComposeFormMessageFragment extends Fragment {
         mVideoViewComposeFormVideo.setMediaController(new MediaController(getActivity()));
         mVideoViewComposeFormVideo.requestFocus();
         mVideoViewComposeFormVideo.start();
+    }
+
+    private void dismissSoftKeyboard() {
+        // Check if no view has focus:
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

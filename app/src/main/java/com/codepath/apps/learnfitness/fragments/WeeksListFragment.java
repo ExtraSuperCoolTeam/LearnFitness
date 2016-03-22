@@ -55,6 +55,9 @@ public class WeeksListFragment extends Fragment {
 
         rvLessons.setLayoutManager(layoutManager);
 
+        mWeeks.clear();
+        mAdapter.notifyDataSetChanged();
+
        // RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST);
         //rvLessons.addItemDecoration(itemDecoration);
 
