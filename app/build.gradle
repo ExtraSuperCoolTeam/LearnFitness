@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+//apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 22
@@ -78,6 +79,9 @@ dependencies {
 
     //apache common lang
     compile 'org.apache.commons:commons-lang3:3.4'
+
+    compile "com.google.android.gms:play-services-gcm:8.4.0"
+
 
 
 }

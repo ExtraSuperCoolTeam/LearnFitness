@@ -77,4 +77,8 @@
     <string name="message_record_cancel">Cancel</string>
     <string name="message_hint">How can we help you?</string>
 
+    <string name="clientId">9999</string>
+
+    <string name="gcm_defaultSenderId" translatable="false">823310351743</string>
+
 </resources>

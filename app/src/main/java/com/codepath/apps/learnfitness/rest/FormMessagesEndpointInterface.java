@@ -1,5 +1,7 @@
 package com.codepath.apps.learnfitness.rest;
 
+import com.codepath.apps.learnfitness.models.ClientRegistration;
+import com.codepath.apps.learnfitness.models.ClientToken;
 import com.codepath.apps.learnfitness.models.MyFormMessage;
 import com.codepath.apps.learnfitness.models.TrainerReply;
 
@@ -28,4 +30,7 @@ public interface FormMessagesEndpointInterface {
     @GET("messages/{messageId}/replies")
     Observable<List<TrainerReply>>
             fetchFormMessageRepliesByMessageId(@Path("messageId") String messageId);
+
+    @POST("tokens")
+    Observable<ClientRegistration> postToken(@Body ClientToken clientToken);
 }
