@@ -799,4 +799,15 @@ public class LessonListActivity extends AppCompatActivity
         Intent gcmRegIntent = new Intent(this, RegistrationIntentService.class);
         startService(gcmRegIntent);
     }
+
+    public static class MapViewHolder {
+        static View mView;
+        public static void StoreMapView(View view) {
+            mView = view;
+        }
+
+        public static View getView() {
+            return mView;
+        }
+    }
 }
