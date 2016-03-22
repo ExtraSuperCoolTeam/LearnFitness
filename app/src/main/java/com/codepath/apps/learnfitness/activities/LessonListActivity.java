@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -92,8 +91,8 @@ public class LessonListActivity extends AppCompatActivity
     @Bind(R.id.nvView)
     NavigationView mNavigation;
 
-    @Bind(R.id.fab)
-    FloatingActionButton mFab;
+//    @Bind(R.id.fab)
+//    FloatingActionButton mFab;
 
     @Bind(R.id.rlBottomSheet)
     RelativeLayout rlBottomSheet;
@@ -215,14 +214,14 @@ public class LessonListActivity extends AppCompatActivity
         mNavigation.getMenu().getItem(0).setChecked(true);
         setTitle(R.string.title_activity_lesson_list);
 
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //mCheckMyFormFragment.showCreationDialog();
-                mMyFormMessageListFragment.showCreationDialog();
-
-            }
-        });
+//        mFab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //mCheckMyFormFragment.showCreationDialog();
+//                mMyFormMessageListFragment.showCreationDialog();
+//
+//            }
+//        });
 
         setUpBottomSheet();
     }
@@ -436,7 +435,7 @@ public class LessonListActivity extends AppCompatActivity
         }
 
         showMapSpecificElements(currentMenuItem.getItemId() == R.id.nav_second_fragment);
-        showFab(currentMenuItem.getItemId() == R.id.nav_third_fragment);
+        //showFab(currentMenuItem.getItemId() == R.id.nav_third_fragment);
 
         // Insert the fragment by replacing any existing fragment
         fragmentManager = getSupportFragmentManager();
@@ -453,9 +452,6 @@ public class LessonListActivity extends AppCompatActivity
             menu.getItem(i).setChecked(false);
         }
         currentMenuItem.setChecked(true);
-
-
-
 
         setTitle(currentMenuItem.getTitle());
         mDrawer.closeDrawers();
@@ -496,14 +492,14 @@ public class LessonListActivity extends AppCompatActivity
         }
     }
 
-    public void showFab(Boolean show) {
-        if (show) {
-            mFab.setVisibility(View.VISIBLE);
-        } else {
-            mFab.setVisibility(View.GONE);
-        }
-
-    }
+//    public void showFab(Boolean show) {
+//        if (show) {
+//            mFab.setVisibility(View.VISIBLE);
+//        } else {
+//            mFab.setVisibility(View.GONE);
+//        }
+//
+//    }
 
     @Override
     public void onWeekSelected(View itemView, Week week) {
@@ -527,9 +523,10 @@ public class LessonListActivity extends AppCompatActivity
 
     @Override
     public void onCheckMyFormDialog() {
-        showFab(false);
+        //showFab(false);
         mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance();
-        fragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).addToBackStack("CheckMyFormFragment").commit();
+        //fragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).addToBackStack("CheckMyFormFragment").commit();
+        fragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).commit();
     }
 
     @Override
@@ -568,7 +565,7 @@ public class LessonListActivity extends AppCompatActivity
 
         //fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
         fragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
-        showFab(true);
+        //showFab(true);
     }
 
     @Override
@@ -608,7 +605,7 @@ public class LessonListActivity extends AppCompatActivity
         //fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
         fragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
         //composeMessageCancel();
-        showFab(true);
+        //showFab(true);
     }
 
     @Override
@@ -618,7 +615,7 @@ public class LessonListActivity extends AppCompatActivity
         fragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
 //        mFab.setVisibility(View.VISIBLE);
 //        fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
-        showFab(true);
+        //showFab(true);
     }
 
     @Override
@@ -628,7 +625,7 @@ public class LessonListActivity extends AppCompatActivity
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Video"), REQUEST_TAKE_GALLERY_VIDEO);
 
-        showFab(false);
+        //showFab(false);
     }
 
     @Override
@@ -683,7 +680,7 @@ public class LessonListActivity extends AppCompatActivity
                 break;
 
             case REQUEST_TAKE_GALLERY_VIDEO:
-                showFab(false);
+                //showFab(false);
                 if (resultCode == RESULT_OK) {
                     mVideoRecordFileURI = data.getData();
                     // OI FILE Manager

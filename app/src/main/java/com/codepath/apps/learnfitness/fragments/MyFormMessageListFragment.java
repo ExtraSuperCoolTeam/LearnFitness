@@ -9,6 +9,7 @@ import com.codepath.apps.learnfitness.rest.MediaStoreService;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,6 +43,10 @@ public class MyFormMessageListFragment extends Fragment {
 
     @Bind(R.id.rvMessages)
     RecyclerView mRecyclerViewMessages;
+
+    @Bind(R.id.fab)
+    FloatingActionButton mFab;
+
     LinearLayoutManager layoutManager;
 
     public static MyFormMessageListFragment newInstance() {
@@ -72,16 +77,28 @@ public class MyFormMessageListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_my_form_message_list, container, false);
         ButterKnife.bind(this, v);
 
-        ((LessonListActivity)getActivity()).showFab(false);
+        //((LessonListActivity)getActivity()).showFab(false);
         ((LessonListActivity)getActivity()).checkLogin();
 
         setUpViews();
+
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //mCheckMyFormFragment.showCreationDialog();
+                // mMyFormMessageListFragment.showCreationDialog();
+                showCreationDialog();
+                //Toast.makeText(getContext(), "fab clicked", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
         return v;
     }
 
     public void showData() {
         mRecyclerViewMessages.setVisibility(View.VISIBLE);
-        ((LessonListActivity)getActivity()).showFab(true);
+       // ((LessonListActivity)getActivity()).showFab(true);
     }
 
     public void setUpViews() {
@@ -151,5 +168,14 @@ public class MyFormMessageListFragment extends Fragment {
 
     public void showCreationDialog() {
         mOnMyFormMessagesListener.onCheckMyFormDialog();
+    }
+
+    public void showFab(Boolean show) {
+        if (show) {
+            mFab.setVisibility(View.VISIBLE);
+        } else {
+            mFab.setVisibility(View.GONE);
+        }
+
     }
 }

@@ -1,7 +1,6 @@
 package com.codepath.apps.learnfitness.fragments;
 
 import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.activities.LessonListActivity;
 import com.codepath.apps.learnfitness.models.Lesson;
 import com.codepath.apps.learnfitness.models.MyFormMessage;
 import com.codepath.apps.learnfitness.models.Week;
@@ -192,7 +191,7 @@ public class ComposeFormMessageFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        ((LessonListActivity)getActivity()).showFab(true);
+        //((LessonListActivity)getActivity()).showFab(true);
     }
 
     @OnClick(R.id.btnComposeFormMessageCancel)
