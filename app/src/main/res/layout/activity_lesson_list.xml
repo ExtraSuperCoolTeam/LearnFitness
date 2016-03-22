@@ -23,15 +23,15 @@
         tools:showIn="@layout/activity_lesson_list">
 
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@android:drawable/ic_dialog_email"
-            android:visibility="gone"/>
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/fab"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="@dimen/fab_margin"-->
+            <!--android:src="@android:drawable/ic_dialog_email"-->
+            <!--android:visibility="gone"/>-->
 
         <android.support.v4.widget.DrawerLayout
             xmlns:android="http://schemas.android.com/apk/res/android"

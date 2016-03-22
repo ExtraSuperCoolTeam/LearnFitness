@@ -28,7 +28,7 @@ public class GcmMessageHandler extends GcmListenerService {
     private void createNotification(String title, String body) {
         Context context = getBaseContext();
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_launcher).setContentTitle(title)
+                .setSmallIcon(R.mipmap.ic_launcher).setContentTitle(title)
                 .setContentText(body);
         NotificationManager mNotificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
