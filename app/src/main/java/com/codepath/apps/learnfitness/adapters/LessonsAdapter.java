@@ -108,7 +108,7 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         //ImageView iv = expandedWeekViewHolder.image;
 
         if (expandedWeekViewHolder != null) {
-            expandedWeekViewHolder.image.setImageResource(0);
+//            expandedWeekViewHolder.image.setImageResource(0);
 
             if (!TextUtils.isEmpty(imageURL)) {
                 Glide.with(context).load(imageURL)
@@ -129,7 +129,7 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         if (collapsedWeekViewHolder != null) {
             ImageView i = collapsedWeekViewHolder.thumbnail;
-            collapsedWeekViewHolder.thumbnail.setImageResource(0);
+           // collapsedWeekViewHolder.thumbnail.setImageResource(0);
 
             if (!TextUtils.isEmpty(imageURL)) {
                 Glide.with(context).load(imageURL)
