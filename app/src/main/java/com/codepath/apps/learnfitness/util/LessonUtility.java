@@ -1,10 +1,10 @@
 package com.codepath.apps.learnfitness.util;
 
-import com.codepath.apps.learnfitness.FitnessApplication;
-import com.codepath.apps.learnfitness.activities.LessonListActivity;
-
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.codepath.apps.learnfitness.FitnessApplication;
+import com.codepath.apps.learnfitness.activities.LessonListActivity;
 
 /**
  * Created by spandhare on 3/20/16.
@@ -30,4 +30,6 @@ public class LessonUtility {
     public static int fromStringToInt(String input) {
         return Integer.parseInt(input);
     }
+
+
 }

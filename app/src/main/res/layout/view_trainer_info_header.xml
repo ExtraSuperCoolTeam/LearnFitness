@@ -6,13 +6,15 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvTrainerName"
         android:textStyle="bold"
-        android:layout_marginRight="5dp"/>
+        android:layout_marginRight="5dp"
+        android:textColor="@color/textWhite"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvTrainerHandle"
         android:layout_toRightOf="@id/tvTrainerName"
         android:layout_marginRight="5dp"
+        android:textColor="@color/textWhite"
         />
 
     <TextView
@@ -23,5 +25,6 @@
         android:gravity="end"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="5dp"
-        android:textStyle="italic"/>
+        android:textStyle="italic"
+        android:textColor="@color/textWhite"/>
 </RelativeLayout>
