@@ -452,6 +452,8 @@ public class LessonListActivity extends AppCompatActivity
        // currentMenuItem.setChecked(true);
 
 
+
+
         setTitle(currentMenuItem.getTitle());
         mDrawer.closeDrawers();
     }
