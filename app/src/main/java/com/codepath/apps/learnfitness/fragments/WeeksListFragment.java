@@ -149,7 +149,6 @@ public class WeeksListFragment extends Fragment {
                     mAdapter.notifyItemChanged(previousWeekNumber);
                 }
 
-
                 int newlySelectedWeekNumber = Integer.parseInt(week.getWeekNumber()) - 1;
                 Week newlySelectedWeek = mWeeks.get(newlySelectedWeekNumber);
                 newlySelectedWeek.setIsCurrent(true);

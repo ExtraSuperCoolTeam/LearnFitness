@@ -193,11 +193,9 @@ public class FindTrainerFragment extends Fragment implements
         // Map is ready
         mMap = googleMap;
         if (mMap == null) {
-            Toast.makeText(getActivity(), "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Toast.makeText(getActivity(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
         FindTrainerFragmentPermissionsDispatcher.getMyLocationWithCheck(this);
         mMap.setOnMarkerClickListener(this);
 //        populateMapWithSearchQuery("test");
@@ -234,7 +232,6 @@ public class FindTrainerFragment extends Fragment implements
             Log.d(TAG, "getMyLocation reconnecting client");
             mGoogleApiClient.reconnect();
         }
-
     }
 
     protected void connectClient() {
@@ -255,12 +252,10 @@ public class FindTrainerFragment extends Fragment implements
 
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (location != null) {
-            Toast.makeText(getActivity(), "GPS location was found!", Toast.LENGTH_SHORT).show();
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
             mMap.animateCamera(cameraUpdate);
         } else {
-            Toast.makeText(getActivity(), "Current location was null, enable GPS on emulator!", Toast.LENGTH_SHORT).show();
         }
         startLocationUpdates();
 
@@ -300,7 +295,7 @@ public class FindTrainerFragment extends Fragment implements
         String msg = "Updated Location: " +
                 Double.toString(location.getLatitude()) + "," +
                 Double.toString(location.getLongitude());
-        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -329,9 +324,6 @@ public class FindTrainerFragment extends Fragment implements
                 // Log the error
                 e.printStackTrace();
             }
-        } else {
-            Toast.makeText(getActivity(),
-                    "Sorry. Location services not available to you", Toast.LENGTH_LONG).show();
         }
     }
 
