@@ -151,6 +151,10 @@ public class FindTrainerFragment extends Fragment implements
                                 Trainer trainer = mTrainers.get(key);
                                 addMarkerforTrainer(trainer);
                             }
+
+                            LatLng latLng = new LatLng(37.770927, -122.403665);
+                            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+                            mMap.animateCamera(cameraUpdate);
                         }
                     }
                 });

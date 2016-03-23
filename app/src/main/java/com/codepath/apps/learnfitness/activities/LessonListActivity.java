@@ -535,8 +535,8 @@ public class LessonListActivity extends AppCompatActivity
     public void onCheckMyFormDialog() {
         //showFab(false);
         mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance();
-        //fragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).addToBackStack("CheckMyFormFragment").commit();
-        fragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).addToBackStack("CheckMyFormFragment").commit();
+//        fragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).commit();
     }
 
     @Override
