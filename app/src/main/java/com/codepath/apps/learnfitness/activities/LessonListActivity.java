@@ -38,7 +38,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -67,7 +66,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -824,15 +822,57 @@ public class LessonListActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        List<Fragment> frags = getSupportFragmentManager().getFragments();
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        List<Fragment> frags = getSupportFragmentManager().getFragments();
+//
+//        for (Fragment f : frags) {
+//            if ( ! (f instanceof MyFormMessageListFragment)) {
+//                exitReveal();
+//            }
+//        }
+//    }
 
-        for (Fragment f : frags) {
-            if (f instanceof MyFormMessageListFragment) {
-                ((MyFormMessageListFragment) f).exitReveal();
-            }
-        }
-    }
+//    public void exitReveal() {
+//        // previously visible view
+//        final View myView = findViewById(R.id.fab);
+//
+//        if (myView == null)
+//            return;
+//
+//        // get the center for the clipping circle
+//        int cx = myView.getMeasuredWidth() / 2;
+//        int cy = myView.getMeasuredHeight() / 2;
+//
+//        // get the initial radius for the clipping circle
+//        int initialRadius = myView.getWidth() / 2;
+//
+//        // create the animation (the final radius is zero)
+//        Animator anim =
+//                ViewAnimationUtils.createCircularReveal(myView, cx, cy, initialRadius, 0);
+//
+//        // make the view invisible when the animation is done
+//        anim.addListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                super.onAnimationEnd(animation);
+//                myView.setVisibility(View.INVISIBLE);
+//            }
+//        });
+//
+//        anim.addListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                super.onAnimationEnd(animation);
+//                myView.setVisibility(View.INVISIBLE);
+//
+//                // Finish the activity after the exit transition completes.
+//                //supportFinishAfterTransition();
+//            }
+//        });
+//
+//        // start the animation
+//        anim.start();
+//    }
 }
