@@ -799,7 +799,7 @@ public class LessonListActivity extends AppCompatActivity
                     String resultValue = resultData.getString("resultValue");
                     //Toast.makeText(LessonListActivity.this, resultValue, Toast.LENGTH_SHORT).show();
                     Snackbar.make(findViewById(android.R.id.content), R.string.snackbar_form_post_complete,
-                            Snackbar.LENGTH_SHORT)
+                            Snackbar.LENGTH_LONG)
                             .show(); // Don’t forget to show!
                 }
             }
