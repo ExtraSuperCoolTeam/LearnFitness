@@ -1,6 +1,7 @@
 package com.codepath.apps.learnfitness.adapters;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -67,6 +69,14 @@ public class MyFormMessagesAdapter extends RecyclerView.Adapter<MyFormMessagesAd
             mOnItemClickListener = listener;
 
             itemView.setOnClickListener(this);
+
+//            RelativeLayout rlCard = (RelativeLayout) itemView.findViewById(R.id.rlMessageItem);
+//
+//            int[] attrs = new int[]{R.attr.selectableItemBackground, R.color.white};
+//            TypedArray typedArray = context.obtainStyledAttributes(attrs);
+//            int backgroundResource = typedArray.getResourceId(0, 0);
+//
+//            rlCard.setBackgroundResource(backgroundResource);
         }
 
         // Handles the row being being clicked
