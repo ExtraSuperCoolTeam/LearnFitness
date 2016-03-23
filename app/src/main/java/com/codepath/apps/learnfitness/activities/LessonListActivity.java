@@ -61,6 +61,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -130,6 +131,9 @@ public class LessonListActivity extends AppCompatActivity
 
     @Bind(R.id.ivSpecialtyIcon)
     ImageView mSpecialtyIcon;
+
+    MenuItem miActionProgressItem;
+
 
     public static FragmentManager fragmentManager;
 
@@ -225,6 +229,17 @@ public class LessonListActivity extends AppCompatActivity
 //        });
 
         setUpBottomSheet();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        // Store instance of the menu item containing progress
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        // Extract the action-view from the menu item
+        ProgressBar v =  (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
     }
 
     private void setUpBottomSheet() {
@@ -359,6 +374,12 @@ public class LessonListActivity extends AppCompatActivity
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showProgressBar(boolean show) {
+        if (miActionProgressItem != null) {
+            miActionProgressItem.setVisible(show);
+        }
     }
 
 

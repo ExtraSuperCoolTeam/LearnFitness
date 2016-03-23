@@ -139,6 +139,9 @@ public class MyFormMessageListFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerViewMessages.setLayoutManager(layoutManager);
 
+        final LessonListActivity activity = (LessonListActivity)getActivity();
+        activity.showProgressBar(true);
+
         //Get the list of forms here
         Observable<List<MyFormMessage>> call = MediaStoreService.formsMessagesStore.fetchFormMessageList();
         subscription = call
@@ -167,6 +170,9 @@ public class MyFormMessageListFragment extends Fragment {
                         mMyFormMessages.addAll(messages);
                         Log.i(TAG, Integer.toString(mMyFormMessages.size()));
                         mAdapter.notifyDataSetChanged();
+
+                        activity.showProgressBar(false);
+
                     }
                 });
     }
