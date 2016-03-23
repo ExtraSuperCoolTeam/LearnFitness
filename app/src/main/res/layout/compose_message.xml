@@ -225,7 +225,7 @@
 -->
         <VideoView
             android:id="@+id/vvComposeFormVideo"
-            android:layout_width="match_parent"
+            android:layout_width="540dp"
             android:layout_height="300dp"
             android:visibility="gone"
             android:layout_below="@id/etComposeMessageText"/>
