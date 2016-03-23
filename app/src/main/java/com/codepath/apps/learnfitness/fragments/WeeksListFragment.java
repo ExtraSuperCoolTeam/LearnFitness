@@ -61,6 +61,9 @@ public class WeeksListFragment extends Fragment {
        // RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST);
         //rvLessons.addItemDecoration(itemDecoration);
 
+        final LessonListActivity activity = (LessonListActivity)getActivity();
+        activity.showProgressBar(true);
+
         final Observable<Lesson> call = MediaStoreService.contentStore.fetchContent();
         subscription = call
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -105,6 +108,7 @@ public class WeeksListFragment extends Fragment {
                     }
 
                     mAdapter.notifyDataSetChanged();
+                    activity.showProgressBar(false);
                 }
             });
 

@@ -1,5 +1,6 @@
 package com.codepath.apps.learnfitness.fragments;
 
+import com.codepath.apps.learnfitness.activities.LessonListActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
@@ -110,6 +111,10 @@ public class CheckMyFormFragment extends Fragment
         Observable<List<TrainerReply>> call =
                 MediaStoreService.formsMessagesStore.
                         fetchFormMessageRepliesByMessageId(myFormMessage.getId());
+
+//        final LessonListActivity activity = (LessonListActivity)getActivity();
+//        activity.showProgressBar(true);
+
         subscription = call
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Subscriber<List<TrainerReply>>() {
@@ -136,6 +141,7 @@ public class CheckMyFormFragment extends Fragment
                     mTrainerReplies.addAll(trainerReplies);
                     Log.i(TAG, Integer.toString(mTrainerReplies.size()));
                     mAdapter.notifyDataSetChanged();
+//                    activity.showProgressBar(false);
                 }
             });
     }
