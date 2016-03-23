@@ -1,22 +1,26 @@
 package com.codepath.apps.learnfitness.gcm;
 
+import com.google.android.gms.gcm.GcmListenerService;
+
+import com.codepath.apps.learnfitness.R;
+
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-
-import com.codepath.apps.learnfitness.R;
-import com.google.android.gms.gcm.GcmListenerService;
+import android.util.Log;
 
 
 /**
  * Created by spandhare on 3/21/16.
  */
 public class GcmMessageHandler extends GcmListenerService {
+    private static final String TAG = "GcmMessageHandler";
     public static final int MESSAGE_NOTIFICATION_ID = 435345;
 
     @Override
     public void onMessageReceived(String from, Bundle data) {
+        Log.i(TAG, "Message received: " + data.size());
         String message = data.getString("body");
         String title = data.getString("title");
 

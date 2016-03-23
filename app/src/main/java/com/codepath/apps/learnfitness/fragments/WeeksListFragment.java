@@ -133,9 +133,6 @@ public class WeeksListFragment extends Fragment {
 
             @Override
             public void onItemExpand(View itemView, Week week) {
-                Log.i("WeeksListFragment", "asking to expand");
-
-
                 SharedPreferences sharedPreferences =
                         getActivity().getSharedPreferences(LessonListActivity.MY_SHARED_PREFS,
                                 Context.MODE_PRIVATE);
@@ -149,10 +146,7 @@ public class WeeksListFragment extends Fragment {
                     Week previous = mWeeks.get(previousWeekNumber);
                     previous.setIsCurrent(false);
 
-                    Log.i("WeeksListFragment", "calling notify: " + previousWeekNumber);
                     mAdapter.notifyItemChanged(previousWeekNumber);
-
-                    Log.i("WeeksListFragment", "after notify: " + previousWeekNumber);
                 }
 
 
@@ -160,19 +154,14 @@ public class WeeksListFragment extends Fragment {
                 Week newlySelectedWeek = mWeeks.get(newlySelectedWeekNumber);
                 newlySelectedWeek.setIsCurrent(true);
 
-                Log.i("WeeksListFragment", "before newly selected notify: " + newlySelectedWeekNumber);
                 mAdapter.notifyItemChanged(newlySelectedWeekNumber);
-
-                Log.i("WeeksListFragment", "after newly selected notify: " + newlySelectedWeekNumber);
 
                 if (newlySelectedWeekNumber >= 0 && newlySelectedWeekNumber <= mWeeks.size()) {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(LessonListActivity.CURRENT_WEEK_NUMBER,
                             Integer.toString(newlySelectedWeekNumber + 1));
 
-                    Log.i("WeeksListFragment", "before pref editor commit: ");
                     editor.commit();
-                    Log.i("WeeksListFragment", "after  pref editor commit: ");
 
                 }
             }
