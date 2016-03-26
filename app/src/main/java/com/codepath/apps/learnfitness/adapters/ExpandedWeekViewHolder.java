@@ -25,9 +25,17 @@ public class ExpandedWeekViewHolder extends RecyclerView.ViewHolder
     private Context mContext;
     private LessonsAdapter.OnItemClickListener mOnItemClickListener;
 
-    @Bind(R.id.ivImage) ImageView image;
-    @Bind(R.id.tvTitle) TextView title;
-    @Bind(R.id.tvDescription) TextView description;
+    @Bind(R.id.ivImage)
+    ImageView image;
+
+    @Bind(R.id.tvTitle)
+    TextView title;
+
+    @Bind(R.id.tvDescription)
+    TextView description;
+
+    @Bind(R.id.tvDuration)
+    TextView duration;
 
     public ExpandedWeekViewHolder(Context context, LessonsAdapter.OnItemClickListener listener,
                                   View itemView, List<Week> weeks) {

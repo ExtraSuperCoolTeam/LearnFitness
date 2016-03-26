@@ -64,6 +64,8 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.0.0'
 
     compile 'com.google.android.gms:play-services-plus:8.4.0'
+    compile "com.google.android.gms:play-services-gcm:8.4.0"
+
     compile 'com.android.support:support-v13:23.1.0'
     compile 'com.google.apis:google-api-services-youtube:v3-rev120-1.19.0'
     compile 'com.google.http-client:google-http-client-android:+'
@@ -79,9 +81,4 @@ dependencies {
 
     //apache common lang
     compile 'org.apache.commons:commons-lang3:3.4'
-
-    compile "com.google.android.gms:play-services-gcm:8.4.0"
-
-
-
 }
