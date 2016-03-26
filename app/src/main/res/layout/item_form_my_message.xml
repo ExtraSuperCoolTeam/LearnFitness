@@ -34,7 +34,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tvAboutWeekInfo"
                 android:layout_below="@+id/ivMyMessageImage"
-                android:layout_centerHorizontal="true"
                 android:textStyle="bold"
                 android:maxLines="1"
                 android:ellipsize="end"
