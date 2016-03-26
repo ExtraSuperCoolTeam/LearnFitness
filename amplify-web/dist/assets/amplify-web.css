@@ -1,0 +1,43 @@
+html {
+  color: #444444;
+}
+.jumbotron {
+  margin-top: 20px;
+}
+.logo {
+  width: 390px;
+  position: absolute;
+  top: 150px;
+  left: 100px;
+}
+.tagline {
+  position: absolute;
+  top: 290px;
+  left: 150px;
+  color: white;
+  font-size: 20px;
+}
+.create-button {
+  position: absolute;
+  top: 335px;
+  left: 215px;
+  border-radius: 0;
+  background-color: #444444;
+  border: 0px;
+  opacity: 0.8;
+}
+.create-button:hover {
+  background-color: #009086;
+}
+.main-body-img {
+  width: 100%;
+}
+.main-content {
+  margin-top: 30px;
+}
+.submit-btn {
+  background-color: #009086;
+  border-radius: 0;
+  border: 0;
+}
+/*# sourceMappingURL=/assets/amplify-web.css.map */
