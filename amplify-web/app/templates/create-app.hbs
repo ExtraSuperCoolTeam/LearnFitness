@@ -25,42 +25,21 @@
         </div>
         <hr />
         <h3>Lesson Content</h3>
-        <h4>Week 1</h4>
-        <div class="form-group">
-          <label for="week1Title" class='col-lg-2'>Title</label>
-          <div class='col-lg-10'>
-            <input type="text" class="form-control" id="week1Title" placeholder="Abs and Core">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="week1Video" class='col-lg-2'>Video</label>
-          <div class='col-lg-10'>
-            <input type="text" class="form-control" id="week1Video" placeholder="https://youtube.com/...">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="exampleInputFile" class='col-lg-2'>Lesson Content</label>
-          <div class='col-lg-10'>
-            Add photos and text content to explain the video.
-          </div>
-        </div>
-        <div class="form-group">
-          <div class='col-lg-10 col-lg-offset-2'>
-            <button type="button">Add an Image</button>
-            <button type="button">Add Text Content</button>
-
-          </div>
-        </div>
+        {{#each allWeeks as |week|}}
+          {{week-content content=week}}
+        {{else}}
+          <div class="alert alert-info">No content added yet.</div>
+        {{/each}}
         <div class="form-group">
           <div class='col-lg-12'>
-            <button class="btn btn-default"><span class='glyphicon
+            <button class="btn btn-default" {{action 'addWeek'}}><span class='glyphicon
 glyphicon-plus'></span>
             Add a Week
             </button>
           </div>
         </div>
         <div class="form-group">
-          <div class='col-lg-12' style="margin-top: 30px">
+          <div class='col-lg-12 submit-btn-div'>
             <button type="submit" class="submit-btn btn btn-danger">Create My App</button>
           </div>
         </div>
