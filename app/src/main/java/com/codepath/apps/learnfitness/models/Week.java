@@ -36,6 +36,9 @@ public class Week implements Parcelable {
     @SerializedName("steps")
     @Expose
     private List<Step> steps;
+    @SerializedName("duration")
+    @Expose
+    private String videoDuration;
 
     @SerializedName("isCurrent")
     @Expose
@@ -47,6 +50,13 @@ public class Week implements Parcelable {
 
     public void setIsCurrent(boolean isCurrent) {
         this.isCurrent = isCurrent;
+    }
+
+    public String getVideoDuration() {
+        if (videoDuration == null) {
+            return "1:54";
+        }
+        return videoDuration;
     }
 
     /**

@@ -202,10 +202,7 @@ public class FindTrainerFragment extends Fragment implements
 
         FindTrainerFragmentPermissionsDispatcher.getMyLocationWithCheck(this);
         mMap.setOnMarkerClickListener(this);
-//        populateMapWithSearchQuery("test");
-
-//        mMap.setOnMapLongClickListener(this);
-//        mMap.setOnMarkerDragListener(this);
+        populateMapWithSearchQuery("test");
     }
 
     @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})

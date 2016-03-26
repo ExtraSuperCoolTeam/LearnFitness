@@ -120,6 +120,7 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             String number = week.getWeekNumber();
             expandedWeekViewHolder.title.setText("Week " + number + ": " + title);
             expandedWeekViewHolder.description.setText(week.getShortDescription());
+            expandedWeekViewHolder.duration.setText("Duration: " + week.getVideoDuration());
         }
     }
 
