@@ -39,6 +39,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -75,8 +76,7 @@ import rx.schedulers.Schedulers;
 public class LessonListActivity extends AppCompatActivity
         implements WeeksListFragment.OnItemSelectedListener,
         MyFormMessageListFragment.OnMyFormMessagesListener,
-        ComposeFormMessageFragment.OnFormMessageListener,
-        CheckMyFormFragment.OnCheckMyFormListener {
+        ComposeFormMessageFragment.OnFormMessageListener {
 
     private static final String TAG = "LessonListActivity";
 
@@ -424,7 +424,7 @@ public class LessonListActivity extends AppCompatActivity
                 fragmentTag = "FindTrainerFragment";
                 break;
             case R.id.nav_third_fragment:
-                fragmentClass = CheckMyFormFragment.class;
+                fragmentClass = MyFormMessageListFragment.class;
                 //fragment = mCheckMyFormFragment;
                 fragment = mMyFormMessageListFragment;
                 fragmentTag = "MyFormMessageListFragment";
@@ -515,8 +515,8 @@ public class LessonListActivity extends AppCompatActivity
 
 
     @Override
-    public void onCheckMyFormDialog() {
-        mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance();
+    public void onCheckMyFormDialog(FloatingActionButton fab) {
+        mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance(fab);
         fragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).addToBackStack("CheckMyFormFragment").commit();
     }
 
@@ -765,7 +765,7 @@ public class LessonListActivity extends AppCompatActivity
             if (resultCode == RESULT_OK) {
                 String resultValue = resultData.getString("resultValue");
                 //Toast.makeText(LessonListActivity.this, resultValue, Toast.LENGTH_SHORT).show();
-                Snackbar.make(findViewById(R.id.main_content), R.string.snackbar_form_post_complete,
+                Snackbar.make(findViewById(R.id.cl_lessonlist), R.string.snackbar_form_post_complete,
                         Snackbar.LENGTH_LONG)
                         .show(); // Don’t forget to show!
             }
@@ -841,4 +841,25 @@ public class LessonListActivity extends AppCompatActivity
 //        // start the animation
 //        anim.start();
 //    }
+
+    private FragmentManager.OnBackStackChangedListener getListener()
+    {
+        FragmentManager.OnBackStackChangedListener result = new FragmentManager.OnBackStackChangedListener()
+        {
+            public void onBackStackChanged()
+            {
+                FragmentManager manager = getSupportFragmentManager();
+
+                if (manager != null)
+                {
+                    if(manager.getBackStackEntryCount() >= 1){
+                        String topOnStack = manager.getBackStackEntryAt(manager.getBackStackEntryCount()-1).getName();
+                        Log.i("TOP ON BACK STACK",topOnStack);
+                    }
+                }
+            }
+        };
+
+        return result;
+    }
 }

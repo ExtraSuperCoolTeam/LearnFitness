@@ -48,7 +48,7 @@ public class MyFormMessageListFragment extends Fragment {
     @Bind(R.id.rvMessages)
     RecyclerView mRecyclerViewMessages;
 
-    @Bind(R.id.fab)
+//    @Bind(R.id.fab)
     FloatingActionButton mFab;
 
     LinearLayoutManager layoutManager;
@@ -111,7 +111,8 @@ public class MyFormMessageListFragment extends Fragment {
         ((LessonListActivity)getActivity()).checkLogin();
 
         setUpViews();
-
+        mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        mFab.setVisibility(View.VISIBLE);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -182,7 +183,7 @@ public class MyFormMessageListFragment extends Fragment {
     // Define the events that the fragment will use to communicate
     public interface OnMyFormMessagesListener {
         // This can be any number of events to be sent to the activity
-        void onCheckMyFormDialog();
+        void onCheckMyFormDialog(FloatingActionButton fab);
         void onFormMessageSelected(View itemView, MyFormMessage myFormMessage);
     }
 
@@ -199,7 +200,8 @@ public class MyFormMessageListFragment extends Fragment {
     }
 
     public void showCreationDialog() {
-        mOnMyFormMessagesListener.onCheckMyFormDialog();
+        showFab(false);
+        mOnMyFormMessagesListener.onCheckMyFormDialog(mFab);
     }
 
     public void showFab(Boolean show) {
@@ -208,7 +210,6 @@ public class MyFormMessageListFragment extends Fragment {
         } else {
             mFab.setVisibility(View.GONE);
         }
-
     }
 
     void enterReveal() {
@@ -294,6 +295,7 @@ public class MyFormMessageListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        showFab(true);
         enterReveal();
     }
 

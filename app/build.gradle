@@ -3,12 +3,12 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
         applicationId "com.codepath.apps.learnfitness"
         minSdkVersion 21
-        targetSdkVersion 22
+        targetSdkVersion 23
         multiDexEnabled true
     }
 
@@ -18,6 +18,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+}
+
+ext {
+    supportLibVersion = '23.1.1'  // variable that can be referenced to keep support libs consistent
 }
 
 repositories {
@@ -32,9 +36,14 @@ dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     // Android Async Http for sending async network requests
     // ActiveAndroid for simple persistence with an ORM
-    compile 'com.android.support:appcompat-v7:23.1.0'
+    //compile 'com.android.support:appcompat-v7:23.1.0'
+    compile "com.android.support:appcompat-v7:${supportLibVersion}"
+    // PercentRelativeLayout
+    compile "com.android.support:percent:${supportLibVersion}"
+    compile "com.android.support:support-v13:${supportLibVersion}"
+    compile "com.android.support:design:${supportLibVersion}"
+
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
-    compile 'com.android.support:design:23.1.0'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.github.bumptech.glide:glide:3.5.2'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
@@ -66,7 +75,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-plus:8.4.0'
     compile "com.google.android.gms:play-services-gcm:8.4.0"
 
-    compile 'com.android.support:support-v13:23.1.0'
     compile 'com.google.apis:google-api-services-youtube:v3-rev120-1.19.0'
     compile 'com.google.http-client:google-http-client-android:+'
     compile 'com.google.api-client:google-api-client-android:+'
@@ -75,9 +83,6 @@ dependencies {
 
     // Sliding up panel.
     compile 'com.sothree.slidinguppanel:library:3.3.0'
-
-    // PercentRelativeLayout
-    compile "com.android.support:percent:23.1.0"
 
     //apache common lang
     compile 'org.apache.commons:commons-lang3:3.4'

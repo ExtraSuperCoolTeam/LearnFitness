@@ -10,6 +10,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -68,9 +69,11 @@ public class ComposeFormMessageFragment extends Fragment {
 
     @Bind(R.id.etComposeMessageText)
     EditText mEditTextMessageText;
+    FloatingActionButton mFab;
 
-    public static ComposeFormMessageFragment newInstance() {
+    public static ComposeFormMessageFragment newInstance(FloatingActionButton fab) {
         ComposeFormMessageFragment composeFormMessageFragment = new ComposeFormMessageFragment();
+        composeFormMessageFragment.mFab = fab;
 
         Bundle args = new Bundle();
         return composeFormMessageFragment;
@@ -247,6 +250,23 @@ public class ComposeFormMessageFragment extends Fragment {
         if (view != null) {
             InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        showFab(false);
+    }
+
+    public void showFab(Boolean show) {
+        if (mFab != null) {
+            if (show) {
+
+                mFab.setVisibility(View.VISIBLE);
+            } else {
+                mFab.setVisibility(View.GONE);
+            }
         }
     }
 }
