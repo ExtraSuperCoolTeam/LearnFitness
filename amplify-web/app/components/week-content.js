@@ -18,6 +18,10 @@ export default Ember.Component.extend({
         isImage: true,
         url: 'img/dumbbells.png'
       }));
+    },
+    removeItem(item) {
+      let items = this.get('content.items');
+      items.removeObject(item);
     }
   }
 });
