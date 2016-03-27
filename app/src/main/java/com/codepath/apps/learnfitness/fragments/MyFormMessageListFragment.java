@@ -61,7 +61,6 @@ public class MyFormMessageListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        ((LessonListActivity)getActivity()).showFab(false);
 //        ((LessonListActivity)getActivity()).checkLogin();
 
         mMyFormMessages = new ArrayList<>();
@@ -73,7 +72,6 @@ public class MyFormMessageListFragment extends Fragment {
                 mOnMyFormMessagesListener.onFormMessageSelected(itemView, myFormMessage);
             }
         });
-
 
         mEnterTransitionListener = new Transition.TransitionListener() {
             @Override
@@ -110,7 +108,6 @@ public class MyFormMessageListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_my_form_message_list, container, false);
         ButterKnife.bind(this, v);
 
-        //((LessonListActivity)getActivity()).showFab(false);
         ((LessonListActivity)getActivity()).checkLogin();
 
         setUpViews();
@@ -118,10 +115,7 @@ public class MyFormMessageListFragment extends Fragment {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //mCheckMyFormFragment.showCreationDialog();
-                // mMyFormMessageListFragment.showCreationDialog();
                 showCreationDialog();
-                //Toast.makeText(getContext(), "fab clicked", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -131,7 +125,6 @@ public class MyFormMessageListFragment extends Fragment {
 
     public void showData() {
         mRecyclerViewMessages.setVisibility(View.VISIBLE);
-       // ((LessonListActivity)getActivity()).showFab(true);
     }
 
     public void setUpViews() {

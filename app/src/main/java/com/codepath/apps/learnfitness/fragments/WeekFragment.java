@@ -31,9 +31,6 @@ import butterknife.ButterKnife;
 public class WeekFragment extends Fragment implements YouTubePlayer.OnInitializedListener {
     private static final String TAG = "WeekFragment";
 
-//    @Bind(R.id.tvTextContent)
-//    TextView tvTextContent;
-
     @Bind(R.id.rvWeekStepsList)
     RecyclerView mRecyclerViewWeekSteps;
 
@@ -66,10 +63,6 @@ public class WeekFragment extends Fragment implements YouTubePlayer.OnInitialize
         mRecyclerViewWeekSteps.setAdapter(mAdapterWeekSteps);
         layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerViewWeekSteps.setLayoutManager(layoutManager);
-
-        // Update the text content and image.
-//        tvTextContent.setText(mWeek.getLongDescription());
-        //Glide.with(getActivity()).load(mWeek.getPhotoUrl()).into(ivImage);
 
         // Switch in a new YouTubePlayerSupportFragment
         YouTubePlayerSupportFragment youTubePlayerFragment = YouTubePlayerSupportFragment.newInstance();

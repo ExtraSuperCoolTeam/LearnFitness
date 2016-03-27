@@ -1,5 +1,10 @@
 package com.codepath.apps.learnfitness.adapters;
 
+import com.bumptech.glide.Glide;
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.models.Week;
+import com.codepath.apps.learnfitness.util.LessonUtility;
+
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -9,11 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.models.Week;
-import com.codepath.apps.learnfitness.util.LessonUtility;
 
 import java.util.List;
 
@@ -27,8 +27,6 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private List<Week> mWeeks;
     private Context context;
     private final int CURRENT_LESSON = 0, LESSON = 1;
-    private Week currentWeek;
-
     public LessonsAdapter(List<Week> weeks) {
         mWeeks = weeks;
     }
@@ -37,7 +35,6 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemViewType(int position) {
         Week week = mWeeks.get(position);
         if (week.isCurrent()) {
-            currentWeek = week;
             return CURRENT_LESSON;
         }
         return LESSON;
@@ -105,8 +102,6 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private void configureExpandedWeekViewHolder(ExpandedWeekViewHolder expandedWeekViewHolder,
                                                  Week week) {
         String imageURL = week.getPhotoUrl();
-        //ImageView iv = expandedWeekViewHolder.image;
-
         if (expandedWeekViewHolder != null) {
             expandedWeekViewHolder.image.setImageResource(android.R.color.transparent);
 
