@@ -1,16 +1,5 @@
 package com.codepath.apps.learnfitness.fragments;
 
-import com.codepath.apps.learnfitness.activities.LessonListActivity;
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerSupportFragment;
-
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.adapters.CheckMyFormAdapter;
-import com.codepath.apps.learnfitness.models.MyFormMessage;
-import com.codepath.apps.learnfitness.models.TrainerReply;
-import com.codepath.apps.learnfitness.rest.MediaStoreService;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,6 +15,15 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.adapters.CheckMyFormAdapter;
+import com.codepath.apps.learnfitness.models.MyFormMessage;
+import com.codepath.apps.learnfitness.models.TrainerReply;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +57,9 @@ public class CheckMyFormFragment extends Fragment
 
     @Bind(R.id.tvMyFormMessageDetail)
     TextView mTextViewFormMessageDetail;
+
+    @Bind(R.id.tvNoResponse)
+    TextView mNoResponse;
 
     LinearLayoutManager layoutManager;
     MyFormMessage myFormMessage;
@@ -120,6 +121,7 @@ public class CheckMyFormFragment extends Fragment
             .subscribe(new Subscriber<List<TrainerReply>>() {
                 @Override
                 public void onCompleted() {
+
                     Log.i(TAG, "Trainer reply api call success");
                 }
 
@@ -138,10 +140,16 @@ public class CheckMyFormFragment extends Fragment
 
                 @Override
                 public void onNext(List<TrainerReply> trainerReplies) {
-                    mTrainerReplies.addAll(trainerReplies);
-                    Log.i(TAG, Integer.toString(mTrainerReplies.size()));
-                    mAdapter.notifyDataSetChanged();
-//                    activity.showProgressBar(false);
+
+                    if (trainerReplies.size() > 0) {
+                        mTrainerReplies.addAll(trainerReplies);
+                        Log.i(TAG, Integer.toString(mTrainerReplies.size()));
+                        mAdapter.notifyDataSetChanged();
+                        //                    activity.showProgressBar(false);
+                        mNoResponse.setVisibility(View.GONE);
+                    } else {
+                        mNoResponse.setVisibility(View.VISIBLE);
+                    }
                 }
             });
     }

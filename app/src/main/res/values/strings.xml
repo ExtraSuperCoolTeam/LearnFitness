@@ -80,5 +80,6 @@
     <string name="clientId">9999</string>
 
     <string name="gcm_defaultSenderId" translatable="false">823310351743</string>
+    <string name="empty_check_my_form_response">No Responses Yet</string>
 
 </resources>
