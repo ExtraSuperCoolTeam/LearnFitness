@@ -39,7 +39,6 @@ public class WeeksListFragment extends Fragment {
 
     LinearLayoutManager layoutManager;
     ProgressDialog pd;
-    //@Bind(R.id.rvLessonsList)
     RecyclerView rvLessons;
 
     @Nullable
