@@ -51,4 +51,6 @@ public class CollapsedWeekViewHolder extends RecyclerView.ViewHolder
         if (mOnItemClickListener != null)
             mOnItemClickListener.onItemExpand(v, week);
     }
+
+    //Checking 
 }
