@@ -47,8 +47,6 @@ public class ComposeFormMessageFragment extends Fragment {
     Subscription subscription;
     public static final String TAG = "ComposeFormMessage";
 
-    private static final int RESULT_VIDEO_CAP = 5;
-
     private String recordedVideoUrl;
     private List<Week> mWeeks;
     private ArrayAdapter<Week> mWeekArrayAdapter;
@@ -70,12 +68,6 @@ public class ComposeFormMessageFragment extends Fragment {
 
     @Bind(R.id.etComposeMessageText)
     EditText mEditTextMessageText;
-
-//    @Bind(R.id.vMessageVideoPlaceHolder)
-//    View mViewVideoPlaceHolder;
-//
-//    @Bind(R.id.vMessageItemsSeperator2)
-//    View mViewSeapratorBelowVideo;
 
     public static ComposeFormMessageFragment newInstance() {
         ComposeFormMessageFragment composeFormMessageFragment = new ComposeFormMessageFragment();
@@ -163,10 +155,6 @@ public class ComposeFormMessageFragment extends Fragment {
         dismissSoftKeyboard();
         //TODO check if empty fields and ignore post
         Week selectedWeek = (Week) mSpinnerWeeksTitleList.getSelectedItem();
-//        Form form = new Form();
-//        form.setWeekTitle(selectedWeek.getWeekTitle());
-//        form.setWeekNumber(selectedWeek.getWeekNumber());
-//        form.setMessage(mEditTextMessageText.getText().toString());
 
         MyFormMessage myFormMessage = new MyFormMessage();
         myFormMessage.setWeekTitle(selectedWeek.getWeekTitle());
@@ -191,7 +179,6 @@ public class ComposeFormMessageFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        //((LessonListActivity)getActivity()).showFab(true);
     }
 
     @OnClick(R.id.btnComposeFormMessageCancel)

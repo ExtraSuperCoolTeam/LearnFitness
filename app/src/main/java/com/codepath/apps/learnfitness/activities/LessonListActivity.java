@@ -2,11 +2,7 @@ package com.codepath.apps.learnfitness.activities;
 
 
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 
 import com.bumptech.glide.Glide;
@@ -81,6 +77,7 @@ public class LessonListActivity extends AppCompatActivity
         MyFormMessageListFragment.OnMyFormMessagesListener,
         ComposeFormMessageFragment.OnFormMessageListener,
         CheckMyFormFragment.OnCheckMyFormListener {
+
     private static final String TAG = "LessonListActivity";
 
     public static final String MY_SHARED_PREFS = "MY_SHARED_PREFS4";
@@ -92,9 +89,6 @@ public class LessonListActivity extends AppCompatActivity
 
     @Bind(R.id.nvView)
     NavigationView mNavigation;
-
-//    @Bind(R.id.fab)
-//    FloatingActionButton mFab;
 
     @Bind(R.id.rlBottomSheet)
     RelativeLayout rlBottomSheet;
@@ -133,10 +127,7 @@ public class LessonListActivity extends AppCompatActivity
     ImageView mSpecialtyIcon;
 
     MenuItem miActionProgressItem;
-
-
     public static FragmentManager fragmentManager;
-
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
     private Menu mMenu;
@@ -160,12 +151,8 @@ public class LessonListActivity extends AppCompatActivity
     private static final int REQUEST_GMS_ERROR_DIALOG = 1;
     private static final int REQUEST_ACCOUNT_PICKER = 2;
     private static final int REQUEST_AUTHORIZATION = 3;
-    private static final int RESULT_PICK_IMAGE_CROP = 4;
     private static final int RESULT_VIDEO_CAP = 5;
-    private static final int REQUEST_DIRECT_TAG = 6;
     private static final int REQUEST_TAKE_GALLERY_VIDEO = 7;
-    final HttpTransport transport = AndroidHttp.newCompatibleTransport();
-    final JsonFactory jsonFactory = new GsonFactory();
     GoogleAccountCredential credential;
     private UploadBroadcastReceiver broadcastReceiver;
     private String mChosenAccountName;
@@ -187,7 +174,7 @@ public class LessonListActivity extends AppCompatActivity
         credential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(Auth.SCOPES));
 
-        // set exponential backoff policy
+        //set exponential backoff policy
         credential.setBackOff(new ExponentialBackOff());
 
         if (savedInstanceState != null) {
@@ -205,7 +192,6 @@ public class LessonListActivity extends AppCompatActivity
         setUpDrawerContent(mNavigation);
 
         mFindTrainerFragment = new FindTrainerFragment();
-        //mCheckMyFormFragment = new CheckMyFormFragment();
         mMyFormMessageListFragment = new MyFormMessageListFragment();
         mWeeksListFragment = new WeeksListFragment();
 
@@ -215,18 +201,8 @@ public class LessonListActivity extends AppCompatActivity
                 .commit();
         Log.d(TAG, "Should have just instantiated the WeeksListFragment");
 
-
         mNavigation.getMenu().getItem(0).setChecked(true);
         setTitle(R.string.title_activity_lesson_list);
-
-//        mFab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //mCheckMyFormFragment.showCreationDialog();
-//                mMyFormMessageListFragment.showCreationDialog();
-//
-//            }
-//        });
 
         setUpBottomSheet();
     }
@@ -324,7 +300,6 @@ public class LessonListActivity extends AppCompatActivity
         mTextViewTrainerExperience.setText(experience);
         mTrainerName.setText(name);
 
-        String src = "";
         switch (trainer.getTrainerParams().getSpeciality()) {
             case "Cardio":
                 mSpecialtyIcon.setImageResource(R.drawable.cardio_icon);
@@ -349,12 +324,10 @@ public class LessonListActivity extends AppCompatActivity
                 .placeholder(R.drawable.fitness_placeholder)
                 .into(mImageViewTrainerPhoto);
 
-
         mTextViewTrainerAddressLine1.setText(trainer.getAddress().getFirstAddressLine());
         mTextViewTrainerAddressLine2.setText(trainer.getAddress().getSecondAddressLine());
         mTextViewTrainerCall.setText(trainer.getPhone());
     }
-
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -381,7 +354,6 @@ public class LessonListActivity extends AppCompatActivity
             miActionProgressItem.setVisible(show);
         }
     }
-
 
     private ActionBarDrawerToggle setUpDrawerToggle() {
         return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open,
@@ -466,7 +438,6 @@ public class LessonListActivity extends AppCompatActivity
         }
 
         showMapSpecificElements(currentMenuItem.getItemId() == R.id.nav_second_fragment);
-        //showFab(currentMenuItem.getItemId() == R.id.nav_third_fragment);
 
         // Insert the fragment by replacing any existing fragment
         fragmentManager = getSupportFragmentManager();
@@ -523,15 +494,6 @@ public class LessonListActivity extends AppCompatActivity
         }
     }
 
-//    public void showFab(Boolean show) {
-//        if (show) {
-//            mFab.setVisibility(View.VISIBLE);
-//        } else {
-//            mFab.setVisibility(View.GONE);
-//        }
-//
-//    }
-
     @Override
     public void onWeekSelected(View itemView, Week week) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -554,15 +516,12 @@ public class LessonListActivity extends AppCompatActivity
 
     @Override
     public void onCheckMyFormDialog() {
-        //showFab(false);
         mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance();
         fragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).addToBackStack("CheckMyFormFragment").commit();
-//        fragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).commit();
     }
 
     @Override
     public void onFormMessageSelected(View itemView, MyFormMessage myFormMessage) {
-
         CheckMyFormFragment mCheckMyFormFragment = CheckMyFormFragment.newInstance(myFormMessage);
         fragmentManager.beginTransaction().add(R.id.flContent, mCheckMyFormFragment).addToBackStack("FormMessageDetailsFragment").commit();
     }
@@ -593,10 +552,7 @@ public class LessonListActivity extends AppCompatActivity
         }
 
         fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-
-        //fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
         fragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
-        //showFab(true);
     }
 
     @Override
@@ -633,20 +589,13 @@ public class LessonListActivity extends AppCompatActivity
             });
 
         fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        //fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
         fragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
-        //composeMessageCancel();
-        //showFab(true);
     }
 
     @Override
     public void composeMessageCancel() {
         fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        //fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
         fragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
-//        mFab.setVisibility(View.VISIBLE);
-//        fragmentManager.beginTransaction().replace(R.id.flContent, mCheckMyFormFragment).commit();
-        //showFab(true);
     }
 
     @Override
@@ -655,8 +604,6 @@ public class LessonListActivity extends AppCompatActivity
         intent.setType("video/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Video"), REQUEST_TAKE_GALLERY_VIDEO);
-
-        //showFab(false);
     }
 
     @Override
@@ -711,7 +658,6 @@ public class LessonListActivity extends AppCompatActivity
                 break;
 
             case REQUEST_TAKE_GALLERY_VIDEO:
-                //showFab(false);
                 if (resultCode == RESULT_OK) {
                     mVideoRecordFileURI = data.getData();
                     // OI FILE Manager
@@ -816,13 +762,13 @@ public class LessonListActivity extends AppCompatActivity
         mLessonListActivityReceiver.setReceiver(new LessonListActivityReceiver.Receiver() {
             @Override
             public void onReceiveResult(int resultCode, Bundle resultData) {
-                if (resultCode == RESULT_OK) {
-                    String resultValue = resultData.getString("resultValue");
-                    //Toast.makeText(LessonListActivity.this, resultValue, Toast.LENGTH_SHORT).show();
-                    Snackbar.make(findViewById(android.R.id.content), R.string.snackbar_form_post_complete,
-                            Snackbar.LENGTH_LONG)
-                            .show(); // Don’t forget to show!
-                }
+            if (resultCode == RESULT_OK) {
+                String resultValue = resultData.getString("resultValue");
+                //Toast.makeText(LessonListActivity.this, resultValue, Toast.LENGTH_SHORT).show();
+                Snackbar.make(findViewById(R.id.main_content), R.string.snackbar_form_post_complete,
+                        Snackbar.LENGTH_LONG)
+                        .show(); // Don’t forget to show!
+            }
             }
         });
     }
@@ -837,7 +783,6 @@ public class LessonListActivity extends AppCompatActivity
         public static void StoreMapView(View view) {
             mView = view;
         }
-
         public static View getView() {
             return mView;
         }

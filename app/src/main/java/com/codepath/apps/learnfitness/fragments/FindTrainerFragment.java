@@ -121,43 +121,43 @@ public class FindTrainerFragment extends Fragment implements
         }
         Observable<List<Trainer>> call = MediaStoreService.trainersStore.fetchTrainers();
         subscription = call
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Trainer>>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.i("FindTrainerFragment", "Api call success");
+            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Subscriber<List<Trainer>>() {
+                @Override
+                public void onCompleted() {
+                    Log.i("FindTrainerFragment", "Api call success");
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Log.i("FindTrainerFragment", e.toString());
+
+                    // cast to retrofit.HttpException to get the response code
+                    if (e instanceof HttpException) {
+                        HttpException response = (HttpException) e;
+                        int code = response.code();
+                        Log.i("FindTrainerFragment", "Http error code: " + code);
                     }
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.i("FindTrainerFragment", e.toString());
+                @Override
+                public void onNext(List<Trainer> trainers) {
+                    Log.i("FindTrainerFragment", "Found " + trainers.size() + " trainers");
+                    mTrainers = Trainer.mapTrainerIdToTrainer(trainers);
 
-                        // cast to retrofit.HttpException to get the response code
-                        if (e instanceof HttpException) {
-                            HttpException response = (HttpException) e;
-                            int code = response.code();
-                            Log.i("FindTrainerFragment", "Http error code: " + code);
+                    if (mMap != null) {
+                        mMarkers.clear();
+                        for (String key : mTrainers.keySet()) {
+                            Trainer trainer = mTrainers.get(key);
+                            addMarkerforTrainer(trainer);
                         }
+
+                        LatLng latLng = new LatLng(37.770927, -122.403665);
+                        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+                        mMap.animateCamera(cameraUpdate);
                     }
-
-                    @Override
-                    public void onNext(List<Trainer> trainers) {
-                        Log.i("FindTrainerFragment", "Found " + trainers.size() + " trainers");
-                        mTrainers = Trainer.mapTrainerIdToTrainer(trainers);
-
-                        if (mMap != null) {
-                            mMarkers.clear();
-                            for (String key : mTrainers.keySet()) {
-                                Trainer trainer = mTrainers.get(key);
-                                addMarkerforTrainer(trainer);
-                            }
-
-                            LatLng latLng = new LatLng(37.770927, -122.403665);
-                            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
-                            mMap.animateCamera(cameraUpdate);
-                        }
-                    }
-                });
+                }
+            });
     }
 
     public void addMarkerforTrainer(Trainer trainer) {
