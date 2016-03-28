@@ -933,7 +933,7 @@ public class LessonListActivity extends AppCompatActivity
 
     public void showUploadProgressBar() {
         if (numberProgressBar != null) {
-            numberProgressBar.setProgress(1);
+            numberProgressBar.setProgress(3);
             numberProgressBar.setVisibility(View.VISIBLE);
         }
     }
