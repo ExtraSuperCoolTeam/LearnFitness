@@ -14,21 +14,6 @@
 
 package com.codepath.apps.learnfitness.activities;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
-import android.net.Uri;
-import android.provider.MediaStore.Video.Thumbnails;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
-
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.youtubeupload.Constants;
-import com.codepath.apps.learnfitness.youtubeupload.util.Upload;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.googleapis.media.MediaHttpUploader;
@@ -39,6 +24,24 @@ import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoListResponse;
 import com.google.api.services.youtube.model.VideoSnippet;
 import com.google.api.services.youtube.model.VideoStatus;
+
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.youtubeupload.Constants;
+import com.codepath.apps.learnfitness.youtubeupload.util.Upload;
+
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore.Video.Thumbnails;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.os.ResultReceiver;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -76,7 +79,9 @@ public class ResumableUpload {
      */
 
     public static String upload(YouTube youtube, final InputStream fileInputStream,
-                                final long fileSize, final Uri mFileUri, final String path, final Context context) {
+                                final long fileSize, final Uri mFileUri, final String path,
+                                final Context context,
+                                final ResultReceiver mLessonListActivityReceiver) {
         final NotificationManager notifyManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
@@ -105,7 +110,8 @@ public class ResumableUpload {
        * it to "unlisted" or "private" via API.
        */
             VideoStatus status = new VideoStatus();
-            status.setPrivacyStatus("public");
+//            status.setPrivacyStatus("public");
+            status.setPrivacyStatus("unlisted");
             videoObjectDefiningMetadata.setStatus(status);
 
             // We set a majority of the metadata with the VideoSnippet object.
@@ -117,8 +123,8 @@ public class ResumableUpload {
        * and use your own standard names.
        */
             Calendar cal = Calendar.getInstance();
-            snippet.setTitle("Test Upload via Java on " + cal.getTime());
-            snippet.setDescription("Video uploaded via YouTube Data API V3 using the Java library "
+            snippet.setTitle("Xfit Upload on " + cal.getTime());
+            snippet.setDescription("Xfit uploaded for check my form feature "
                     + "on " + cal.getTime());
 
             // Set your keywords.
@@ -163,20 +169,27 @@ public class ResumableUpload {
                             notifyManager.notify(UPLOAD_NOTIFICATION_ID, builder.build());
                             break;
                         case MEDIA_IN_PROGRESS:
+                            int currentProgress =  (int) (uploader.getProgress() * 100);
+                            if (mLessonListActivityReceiver!= null) {
+                                Bundle bundle = new Bundle();
+                                bundle.putString("resultValue", Integer.toString(currentProgress));
+                                mLessonListActivityReceiver.send(99, bundle);
+                            }
                             builder
                                     .setContentTitle(context.getString(R.string.youtube_upload) +
                                             (int) (uploader.getProgress() * 100) + "%")
                                     .setContentText(context.getString(R.string.upload_in_progress))
                                     .setProgress((int) fileSize, (int) uploader.getNumBytesUploaded(), false);
                             notifyManager.notify(UPLOAD_NOTIFICATION_ID, builder.build());
+
                             break;
                         case MEDIA_COMPLETE:
-
                             builder.setContentTitle(context.getString(R.string.yt_upload_completed))
                                     .setContentText(context.getString(R.string.upload_completed))
                                             // Removes the progress bar
                                     .setProgress(0, 0, false);
                             notifyManager.notify(UPLOAD_NOTIFICATION_ID, builder.build());
+
                         case NOT_STARTED:
                             Log.d(this.getClass().getSimpleName(), context.getString(R.string.upload_not_started));
                             break;
@@ -192,13 +205,31 @@ public class ResumableUpload {
             Log.d(TAG, String.format("videoId = [%s]", videoId));
         } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
             Log.e(TAG, "GooglePlayServicesAvailabilityIOException", availabilityException);
+            if (mLessonListActivityReceiver!= null) {
+                Bundle bundle = new Bundle();
+                bundle.putString("resultValue", "100");
+                mLessonListActivityReceiver.send(101, bundle);
+            }
             notifyFailedUpload(context, context.getString(R.string.cant_access_play), notifyManager, builder);
+
         } catch (UserRecoverableAuthIOException userRecoverableException) {
             Log.i(TAG, String.format("UserRecoverableAuthIOException: %s",
                     userRecoverableException.getMessage()));
+            if (mLessonListActivityReceiver!= null) {
+                Bundle bundle = new Bundle();
+                bundle.putString("resultValue", "100");
+                mLessonListActivityReceiver.send(101, bundle);
+            }
             requestAuth(context, userRecoverableException);
+
         } catch (IOException e) {
             Log.e(TAG, "IOException", e);
+            if (mLessonListActivityReceiver!= null) {
+                Bundle bundle = new Bundle();
+                bundle.putString("resultValue", "100");
+                mLessonListActivityReceiver.send(101, bundle);
+            }
+
             notifyFailedUpload(context, context.getString(R.string.please_try_again), notifyManager, builder);
         }
         return videoId;

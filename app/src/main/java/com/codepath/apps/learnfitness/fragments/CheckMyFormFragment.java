@@ -1,6 +1,16 @@
 package com.codepath.apps.learnfitness.fragments;
 
-import android.content.Context;
+
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
+
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.adapters.CheckMyFormAdapter;
+import com.codepath.apps.learnfitness.models.MyFormMessage;
+import com.codepath.apps.learnfitness.models.TrainerReply;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,15 +25,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.adapters.CheckMyFormAdapter;
-import com.codepath.apps.learnfitness.models.MyFormMessage;
-import com.codepath.apps.learnfitness.models.TrainerReply;
-import com.codepath.apps.learnfitness.rest.MediaStoreService;
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -156,29 +157,29 @@ public class CheckMyFormFragment extends Fragment
 
     // Define the listener of the interface type
     // listener will the activity instance containing fragment
-    private OnCheckMyFormListener mOnCheckMyFormListener;
-
-    // Define the events that the fragment will use to communicate
-    public interface OnCheckMyFormListener {
-        // This can be any number of events to be sent to the activity
-        void onCheckMyFormDialog();
-    }
+//    private OnCheckMyFormListener mOnCheckMyFormListener;
+//
+//    // Define the events that the fragment will use to communicate
+//    public interface OnCheckMyFormListener {
+//        // This can be any number of events to be sent to the activity
+//        void onCheckMyFormDialog();
+//    }
 
     // Store the listener (activity) that will have events fired once the fragment is attached
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnCheckMyFormListener) {
-            mOnCheckMyFormListener = (OnCheckMyFormListener) context;
-        } else {
-            throw new ClassCastException(context.toString()
-                    + " must implement CheckMyFormFragment.OnCheckMyFormListener");
-        }
-    }
-
-    public void showCreationDialog() {
-        mOnCheckMyFormListener.onCheckMyFormDialog();
-    }
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        if (context instanceof OnCheckMyFormListener) {
+//            mOnCheckMyFormListener = (OnCheckMyFormListener) context;
+//        } else {
+//            throw new ClassCastException(context.toString()
+//                    + " must implement CheckMyFormFragment.OnCheckMyFormListener");
+//        }
+//    }
+//
+//    public void showCreationDialog() {
+//        mOnCheckMyFormListener.onCheckMyFormDialog();
+//    }
 
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider,
