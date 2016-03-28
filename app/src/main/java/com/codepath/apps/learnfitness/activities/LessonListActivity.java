@@ -21,11 +21,13 @@ import com.codepath.apps.learnfitness.rest.MediaStoreService;
 import com.codepath.apps.learnfitness.util.Utils;
 import com.codepath.apps.learnfitness.util.VideoUtility;
 import com.codepath.apps.learnfitness.youtubeupload.Auth;
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
 import android.accounts.AccountManager;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -64,6 +66,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -158,6 +162,11 @@ public class LessonListActivity extends AppCompatActivity
     private String mChosenAccountName;
     LessonListActivityReceiver mLessonListActivityReceiver;
 
+    NumberProgressBar numberProgressBar;
+    private final int UPDATE_CODE_PROGRESSING = 99;
+    private final int UPDATE_CODE_DONE = 100;
+    private final int JUST_HIDE = 101;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -205,6 +214,12 @@ public class LessonListActivity extends AppCompatActivity
         setTitle(R.string.title_activity_lesson_list);
 
         setUpBottomSheet();
+
+        setUpUploadProgressBar();
+    }
+
+    private void setUpUploadProgressBar() {
+        numberProgressBar = (NumberProgressBar)findViewById(R.id.number_progress_bar);
     }
 
     @Override
@@ -275,6 +290,7 @@ public class LessonListActivity extends AppCompatActivity
                 }
             }
         });
+
         rlTrainerCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -541,6 +557,7 @@ public class LessonListActivity extends AppCompatActivity
         }
 
         if (mVideoRecordFileURI != null) {
+            showUploadProgressBar();
             Intent uploadIntent = new Intent(this, UploadService.class);
             uploadIntent.setData(mVideoRecordFileURI);
             uploadIntent.putExtra(ACCOUNT_KEY, mChosenAccountName);
@@ -563,29 +580,29 @@ public class LessonListActivity extends AppCompatActivity
 
             call
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<MyFormMessage>() {
-                @Override
-                public void onCompleted() {
-                    Log.i(TAG, "POST form call success");
-                }
+                    .subscribe(new Subscriber<MyFormMessage>() {
+                        @Override
+                        public void onCompleted() {
+                            Log.i(TAG, "POST form call success");
+                        }
 
-                @Override
-                public void onError(Throwable e) {
-                    // cast to retrofit.HttpException to get the response code
-                    Log.i(TAG, "in error");
-                    Log.i(TAG, e.toString());
+                        @Override
+                        public void onError(Throwable e) {
+                            // cast to retrofit.HttpException to get the response code
+                            Log.i(TAG, "in error");
+                            Log.i(TAG, e.toString());
 
-                    if (e instanceof HttpException) {
-                        HttpException response = (HttpException) e;
-                        int code = response.code();
-                        Log.i(TAG, "Http error code: " + code);
-                    }
-                }
+                            if (e instanceof HttpException) {
+                                HttpException response = (HttpException) e;
+                                int code = response.code();
+                                Log.i(TAG, "Http error code: " + code);
+                            }
+                        }
 
-                @Override
-                public void onNext(MyFormMessage myFormMessage) {
-                    Log.i(TAG, myFormMessage.getId());
-                }
+                        @Override
+                        public void onNext(MyFormMessage myFormMessage) {
+                            Log.i(TAG, myFormMessage.getId());
+                        }
             });
 
         fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
@@ -762,13 +779,36 @@ public class LessonListActivity extends AppCompatActivity
         mLessonListActivityReceiver.setReceiver(new LessonListActivityReceiver.Receiver() {
             @Override
             public void onReceiveResult(int resultCode, Bundle resultData) {
-            if (resultCode == RESULT_OK) {
-                String resultValue = resultData.getString("resultValue");
-                //Toast.makeText(LessonListActivity.this, resultValue, Toast.LENGTH_SHORT).show();
-                Snackbar.make(findViewById(R.id.cl_lessonlist), R.string.snackbar_form_post_complete,
-                        Snackbar.LENGTH_LONG)
-                        .show(); // Don’t forget to show!
+                if (resultCode == RESULT_OK) {
+                    String resultValue = resultData.getString("resultValue");
+                    //Toast.makeText(LessonListActivity.this, resultValue, Toast.LENGTH_SHORT).show();
+                    if (numberProgressBar != null) {
+                        for(int i = 0; i <= 100; i++) {
+                            if (numberProgressBar.getProgress() >= numberProgressBar.getMax()) {
+                                numberProgressBar.setVisibility(View.INVISIBLE);
+                                Snackbar.make(findViewById(R.id.cl_lessonlist), R.string.snackbar_form_post_complete,
+                                        Snackbar.LENGTH_LONG)
+                                        .show(); // Don’t forget to show!
+                                break;
+                            }
+                            numberProgressBar.incrementProgressBy(1);
+                        }
+                    }
+                }
             }
+
+            @Override
+            public void onProgressUpdate(int resultCode, Bundle resultData) {
+                if (resultCode == UPDATE_CODE_PROGRESSING) {
+                    String resultValue = resultData.getString("resultValue");
+                    Log.i(TAG, "Update progress to " + resultValue);
+                    updateVideoUploadProgress(Integer.parseInt(resultValue));
+
+                } else if (resultCode == UPDATE_CODE_DONE) {
+                    doneUploadProgress();
+                } else if (resultCode == JUST_HIDE) {
+                    hideUploadProgressBar();
+                }
             }
         });
     }
@@ -861,5 +901,46 @@ public class LessonListActivity extends AppCompatActivity
         };
 
         return result;
+    }
+
+    public void updateVideoUploadProgress(int progressUnit) {
+        if (numberProgressBar != null && progressUnit < 100) {
+            Log.i(TAG, "Progress unit: " + progressUnit);
+            numberProgressBar.setProgress(progressUnit);
+        }
+    }
+
+    public void doneUploadProgress() {
+        if (numberProgressBar != null) {
+            //numberProgressBar.setProgress(100);
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (numberProgressBar.getProgress() >= numberProgressBar.getMax()) {
+                                numberProgressBar.setVisibility(View.INVISIBLE);
+                            }
+                            numberProgressBar.incrementProgressBy(1);
+                        }
+                    });
+                }
+            }, 1000, 100);
+        }
+    }
+
+    public void showUploadProgressBar() {
+        if (numberProgressBar != null) {
+            numberProgressBar.setProgress(1);
+            numberProgressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hideUploadProgressBar() {
+        if (numberProgressBar != null) {
+            numberProgressBar.setVisibility(View.INVISIBLE);
+        }
     }
 }

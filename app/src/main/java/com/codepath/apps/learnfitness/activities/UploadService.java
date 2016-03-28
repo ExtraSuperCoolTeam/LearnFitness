@@ -235,7 +235,9 @@ public class UploadService extends IntentService {
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
 
-            videoId = ResumableUpload.upload(youtube, fileInputStream, fileSize, mFileUri, cursor.getString(column_index), getApplicationContext());
+            videoId = ResumableUpload.upload(youtube, fileInputStream, fileSize, mFileUri,
+                    cursor.getString(column_index), getApplicationContext(),
+                    mLessonListActivityReceiver);
 
 
         } catch (FileNotFoundException e) {

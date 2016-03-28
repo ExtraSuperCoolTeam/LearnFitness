@@ -19,6 +19,7 @@
 
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cl_lessonlist"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -39,6 +40,21 @@
                 android:background="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|enterAlways">
             </android.support.v7.widget.Toolbar>
+
+        <com.daimajia.numberprogressbar.NumberProgressBar
+
+            android:id="@+id/number_progress_bar"
+            custom:progress_unreached_color="@color/primary"
+            custom:progress_reached_color="@color/accent"
+            custom:progress_text_size="10sp"
+            custom:progress_text_color="@color/accent"
+            custom:progress_text_offset="1dp"
+            custom:progress_text_visibility="visible"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout

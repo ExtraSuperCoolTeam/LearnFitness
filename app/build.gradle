@@ -86,4 +86,7 @@ dependencies {
 
     //apache common lang
     compile 'org.apache.commons:commons-lang3:3.4'
+
+    //progressbar
+    compile 'com.daimajia.numberprogressbar:library:1.2@aar'
 }
