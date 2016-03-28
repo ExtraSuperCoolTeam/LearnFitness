@@ -22,7 +22,6 @@
         android:background="@color/primary_dark"
         tools:showIn="@layout/activity_lesson_list">
 
-
         <!--<android.support.design.widget.FloatingActionButton-->
             <!--android:id="@+id/fab"-->
             <!--android:layout_alignParentBottom="true"-->
@@ -53,10 +52,10 @@
                     android:layout_height="wrap_content" />
 
                 <!-- The main content view where fragments are loaded -->
-                <FrameLayout
-                    android:id="@+id/flContent"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                <!--<FrameLayout-->
+                    <!--android:id="@+id/flContent"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent" />-->
             </LinearLayout>
 
             <!-- The navigation drawer that comes from the left -->
@@ -74,11 +73,8 @@
                 android:background="@android:color/white"
                 />
 
-
         </android.support.v4.widget.DrawerLayout>
-
     </RelativeLayout>
-
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -198,7 +194,6 @@
 
             </RelativeLayout>
 
-
             <RelativeLayout
                 android:layout_width="0dp"
                 app:layout_widthPercent="50%"
@@ -228,7 +223,5 @@
                     />
             </RelativeLayout>
         </android.support.percent.PercentRelativeLayout>
-
-
     </RelativeLayout>
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

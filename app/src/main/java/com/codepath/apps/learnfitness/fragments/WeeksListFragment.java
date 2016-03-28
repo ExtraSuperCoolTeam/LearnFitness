@@ -45,10 +45,13 @@ public class WeeksListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-        View v = inflater.inflate(R.layout.weeks_list_fragment, container, false);
+        //View v = inflater.inflate(R.layout.weeks_list_fragment, container, false);
         //ButterKnife.bind(this, v);
 
-        rvLessons = (RecyclerView)v.findViewById(R.id.rvLessonsList);
+
+        //rvLessons = (RecyclerView)v.findViewById(R.id.rvLessonsList);
+        rvLessons = (RecyclerView)inflater.inflate(R.layout.weeks_list_fragment, container, false);
+
         rvLessons.setAdapter(mAdapter);
         layoutManager = new LinearLayoutManager(getActivity());
 
@@ -112,7 +115,7 @@ public class WeeksListFragment extends Fragment {
             });
 
         //setUpViews(v);
-        return v;
+        return rvLessons;
     }
 
     @Override
