@@ -53,7 +53,7 @@ public class WeekFragment extends Fragment implements YouTubePlayer.OnInitialize
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.week_fragment, container, false);
+        View v = inflater.inflate(R.layout.fragment_week, container, false);
         ButterKnife.bind(this, v);
 
         mWeek = getArguments().getParcelable("weekInfo");

@@ -1,18 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/nav_first_fragment"
-        android:icon="@drawable/lessons_icon"
-        android:title="@string/drawer_lesson" />
-    <item
-        android:id="@+id/nav_second_fragment"
-        android:icon="@drawable/trainer_icon"
-        android:title="@string/drawer_trainer" />
-
-
-    <item
-        android:id="@+id/nav_third_fragment"
-        android:icon="@drawable/lifting_icon"
-        android:title="@string/drawer_one_on_on" />
 
 </menu>

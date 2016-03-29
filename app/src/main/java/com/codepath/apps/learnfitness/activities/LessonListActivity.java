@@ -1,6 +1,7 @@
 package com.codepath.apps.learnfitness.activities;
 
 
+import com.codepath.apps.learnfitness.models.Lesson;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.ExponentialBackOff;
@@ -26,6 +27,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
+import android.Manifest;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -35,6 +37,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -44,6 +47,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -68,6 +72,8 @@ import android.widget.Toast;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.LinkedList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -131,7 +137,7 @@ public class LessonListActivity extends AppCompatActivity
     ImageView mSpecialtyIcon;
 
     MenuItem miActionProgressItem;
-    public static FragmentManager fragmentManager;
+    public static FragmentManager mFragmentManager;
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
     private Menu mMenu;
@@ -141,6 +147,8 @@ public class LessonListActivity extends AppCompatActivity
     private ComposeFormMessageFragment mComposeFormMessageFragment;
     private Trainer mTrainer;
     private WeeksListFragment mWeeksListFragment;
+    private List<Week> mWeeks;
+
 
     private Uri mVideoRecordFileURI = null;
     public static final String ACCOUNT_KEY = "accountName";
@@ -166,6 +174,17 @@ public class LessonListActivity extends AppCompatActivity
     private final int UPDATE_CODE_PROGRESSING = 99;
     private final int UPDATE_CODE_DONE = 100;
     private final int JUST_HIDE = 101;
+    private static final int LESSON_GROUP = 0;
+    private static final int FIND_TRAINER_GROUP = 1;
+    private static final int CHECK_FORM_GROUP = 2;
+
+    private static final int LESSON_LIST_ID = 5;
+    private static final int FIND_TRAINER_ID = 7;
+    private static final int CHECK_MY_FORM_ID = 8;
+    private static final int FEEDBACK_ID = 9;
+    private static final int REQUEST_FEEDBACK_ID = 10;
+
+    private static final int LESSON_MIN_INDEX = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,6 +202,8 @@ public class LessonListActivity extends AppCompatActivity
         credential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(Auth.SCOPES));
 
+        mFragmentManager = getSupportFragmentManager();
+
         //set exponential backoff policy
         credential.setBackOff(new ExponentialBackOff());
 
@@ -198,7 +219,7 @@ public class LessonListActivity extends AppCompatActivity
 
         mDrawer.addDrawerListener(drawerToggle);
 
-        setUpDrawerContent(mNavigation);
+//        setUpDrawerContent(mNavigation);
 
         mFindTrainerFragment = new FindTrainerFragment();
         mMyFormMessageListFragment = new MyFormMessageListFragment();
@@ -210,16 +231,81 @@ public class LessonListActivity extends AppCompatActivity
                 .commit();
         Log.d(TAG, "Should have just instantiated the WeeksListFragment");
 
-        mNavigation.getMenu().getItem(0).setChecked(true);
         setTitle(R.string.title_activity_lesson_list);
 
         setUpBottomSheet();
 
         setUpUploadProgressBar();
+        fetchWeekContent();
     }
 
     private void setUpUploadProgressBar() {
-        numberProgressBar = (NumberProgressBar)findViewById(R.id.number_progress_bar);
+        numberProgressBar = (NumberProgressBar) findViewById(R.id.number_progress_bar);
+    }
+
+    public List<Week> getWeeks() {
+        return mWeeks;
+    }
+
+    private void fetchWeekContent() {
+        Log.d(TAG, "fetching week content");
+        mWeeks = new LinkedList<>();
+
+        mWeeks.clear();
+        showProgressBar(true);
+
+        final Observable<Lesson> call = MediaStoreService.contentStore.fetchContent();
+
+        call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Subscriber<Lesson>() {
+                @Override
+                public void onCompleted() {
+                    Log.d(TAG, "Api call success");
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    // cast to retrofit.HttpException to get the response code
+                    Log.d(TAG, "in error");
+                    Log.d(TAG, e.toString());
+
+                    if (e instanceof HttpException) {
+                        HttpException response = (HttpException) e;
+                        int code = response.code();
+                    }
+
+                    call.retry();
+                }
+
+                @Override
+                public void onNext(Lesson lesson) {
+                    Log.d(TAG, "adding all the weeks now");
+                    mWeeks.addAll(lesson.getWeeks());
+                    Log.i(TAG, lesson.getTitle());
+
+                    SharedPreferences sharedPreferences =
+                            getSharedPreferences(LessonListActivity.MY_SHARED_PREFS,
+                                    Context.MODE_PRIVATE);
+
+                    int currentWeekNumber =
+                            Integer.parseInt(sharedPreferences.getString(
+                                    LessonListActivity.CURRENT_WEEK_NUMBER, "2")) - 1;
+                    if (currentWeekNumber >= 0 && currentWeekNumber < mWeeks.size()) {
+                        Week currentWeek = mWeeks.get(currentWeekNumber);
+                        currentWeek.setIsCurrent(true);
+                    } else {
+                        Week currentWeek = mWeeks.get(0);
+                        currentWeek.setIsCurrent(true);
+                    }
+
+                    mWeeksListFragment.notifyWeeksChanged();
+                    showProgressBar(false);
+
+                    setUpDrawerContent(mNavigation);
+
+                }
+            });
+
     }
 
     @Override
@@ -228,7 +314,7 @@ public class LessonListActivity extends AppCompatActivity
         // Store instance of the menu item containing progress
         miActionProgressItem = menu.findItem(R.id.miActionProgress);
         // Extract the action-view from the menu item
-        ProgressBar v =  (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
+        ProgressBar v = (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
         // Return to finish
         return super.onPrepareOptionsMenu(menu);
     }
@@ -297,6 +383,16 @@ public class LessonListActivity extends AppCompatActivity
                 if (mTrainer != null) {
                     Intent i = new Intent(Intent.ACTION_CALL);
                     i.setData(Uri.parse("tel:" + mTrainer.getPhone()));
+                    if (ActivityCompat.checkSelfPermission(LessonListActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
                     startActivity(i);
                 }
             }
@@ -396,6 +492,31 @@ public class LessonListActivity extends AppCompatActivity
     }
 
     private void setUpDrawerContent(NavigationView navigationView) {
+        Menu menu = navigationView.getMenu();
+
+
+        // Add the Lesson group and each lesson.
+        MenuItem lessons = menu.add(LESSON_GROUP, LESSON_LIST_ID, 0, "Lessons");
+        lessons.setIcon(R.drawable.lessons_icon);
+        lessons.setChecked(true);
+
+        for (int i = 0; i < mWeeks.size(); i++) {
+            Week week = mWeeks.get(i);
+            menu.add(LESSON_GROUP, i + LESSON_MIN_INDEX, 0, week.getWeekTitle());
+        }
+
+        // Add the Find a Trainer link
+        MenuItem trainerItem = menu.add(FIND_TRAINER_GROUP, FIND_TRAINER_ID, 0, "Find a Trainer");
+        trainerItem.setIcon(R.drawable.trainer_icon);
+
+        // Add the check my form links.
+        MenuItem checkForm = menu.add(CHECK_FORM_GROUP, CHECK_MY_FORM_ID, 0, "Check My Form");
+        checkForm.setIcon(R.drawable.lifting_icon);
+        checkForm.setEnabled(false);
+
+        menu.add(CHECK_FORM_GROUP, FEEDBACK_ID, 1, "See Feedback");
+        menu.add(CHECK_FORM_GROUP, REQUEST_FEEDBACK_ID, 2, "Request Feedback");
+
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -429,50 +550,57 @@ public class LessonListActivity extends AppCompatActivity
         String fragmentTag = "";
         Class fragmentClass;
         switch(currentMenuItem.getItemId()) {
-            case R.id.nav_first_fragment:
-                fragmentClass = WeeksListFragment.class;
+            case LESSON_LIST_ID:
                 fragment = mWeeksListFragment;
                 fragmentTag = "WeeksListFragment";
                 break;
-            case R.id.nav_second_fragment:
-                fragmentClass = FindTrainerFragment.class;
+            case FIND_TRAINER_ID:
                 fragment = mFindTrainerFragment;
                 fragmentTag = "FindTrainerFragment";
                 break;
-            case R.id.nav_third_fragment:
-                fragmentClass = MyFormMessageListFragment.class;
-                //fragment = mCheckMyFormFragment;
+            case FEEDBACK_ID:
                 fragment = mMyFormMessageListFragment;
                 fragmentTag = "MyFormMessageListFragment";
                 break;
 
+            case REQUEST_FEEDBACK_ID:
+                fragment = mComposeFormMessageFragment;
+                fragmentTag = "ComposeFormMessageFragment";
+                onCheckMyFormDialog(null);
+//                onFormMessageSelected(null, new MyFormMessage());
+                checkCorrectMenuItem(currentMenuItem);
+                mDrawer.closeDrawers();
+                return;
+//                break;
             default:
-                fragmentClass = WeeksListFragment.class;
-                fragment = mWeeksListFragment;
-                fragmentTag = "WeeksListFragment";
-                break;
+                int weekIndex = currentMenuItem.getItemId() - LESSON_MIN_INDEX;
+                if (weekIndex >= mWeeks.size()) {
+                    return;
+                }
+                onWeekSelected(null, mWeeks.get(weekIndex));
+                checkCorrectMenuItem(currentMenuItem);
+                mDrawer.closeDrawers();
+                return;
         }
 
-        showMapSpecificElements(currentMenuItem.getItemId() == R.id.nav_second_fragment);
+        showMapSpecificElements(currentMenuItem.getItemId() == FIND_TRAINER_ID);
 
         // Insert the fragment by replacing any existing fragment
-        fragmentManager = getSupportFragmentManager();
-        if (fragmentClass == WeekFragment.class) {
-            fragmentManager.beginTransaction()
-                    .add(R.id.flContent, fragment).addToBackStack("week").commit();
-        } else {
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).addToBackStack(fragmentTag).commit();
-        }
+        mFragmentManager.beginTransaction().replace(R.id.flContent, fragment).addToBackStack(fragmentTag).commit();
 
+        checkCorrectMenuItem(currentMenuItem);
+
+        setTitle(currentMenuItem.getTitle());
+        mDrawer.closeDrawers();
+    }
+
+    private void checkCorrectMenuItem(MenuItem currentMenuItem) {
         // Highlight the selected item, update the title, and close the drawer
         Menu menu = mNavigation.getMenu();
         for (int i = 0; i < menu.size(); i++) {
             menu.getItem(i).setChecked(false);
         }
         currentMenuItem.setChecked(true);
-
-        setTitle(currentMenuItem.getTitle());
-        mDrawer.closeDrawers();
     }
 
     @Override
@@ -533,13 +661,13 @@ public class LessonListActivity extends AppCompatActivity
     @Override
     public void onCheckMyFormDialog(FloatingActionButton fab) {
         mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance(fab);
-        fragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).addToBackStack("CheckMyFormFragment").commit();
+        mFragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).addToBackStack("CheckMyFormFragment").commit();
     }
 
     @Override
     public void onFormMessageSelected(View itemView, MyFormMessage myFormMessage) {
         CheckMyFormFragment mCheckMyFormFragment = CheckMyFormFragment.newInstance(myFormMessage);
-        fragmentManager.beginTransaction().add(R.id.flContent, mCheckMyFormFragment).addToBackStack("FormMessageDetailsFragment").commit();
+        mFragmentManager.beginTransaction().add(R.id.flContent, mCheckMyFormFragment).addToBackStack("FormMessageDetailsFragment").commit();
     }
 
     @Override
@@ -568,8 +696,8 @@ public class LessonListActivity extends AppCompatActivity
                     Toast.LENGTH_LONG).show();
         }
 
-        fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        fragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
+        mFragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
+        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
     }
 
     @Override
@@ -605,14 +733,14 @@ public class LessonListActivity extends AppCompatActivity
                         }
             });
 
-        fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        fragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
+        mFragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
+        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
     }
 
     @Override
     public void composeMessageCancel() {
-        fragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        fragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
+        mFragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
+        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
     }
 
     @Override
