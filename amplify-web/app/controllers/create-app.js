@@ -1,15 +1,5 @@
 import Ember from 'ember';
-
-let WeekContent = Ember.Object.extend({
-  index: null,
-  title: "",
-  videoId: "",
-  items: [],
-
-  videoUrl: Ember.computed('videoId', function() {
-    return "https://www.youtube.com/embed/" + this.get('videoId');
-  })
-});
+import WeekContent from 'amplify-web/utils/week-content';
 
 export default Ember.Controller.extend({
 

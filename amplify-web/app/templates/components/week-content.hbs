@@ -6,7 +6,22 @@
     <div class='form-group'>
       <label for='week1Title' class='col-lg-2'>Title:</label>
       <div class='col-lg-10'>
-        {{input type='text' class='form-control' placeholder="Abs and Core" value=content.title}}
+        {{input type='text' class='form-control' placeholder="Abs and Core"
+               value=content.weekTitle}}
+      </div>
+    </div>
+    <div class='form-group'>
+      <label for='weekShortDescription' class='col-lg-2'>Short Description:</label>
+      <div class='col-lg-10'>
+        {{input type='text' class='form-control'
+         placeholder="Short description of the week" value=content.shortDescription}}
+      </div>
+    </div>
+    <div class='form-group'>
+      <label for='weekLongDescription' class='col-lg-2'>Long Description:</label>
+      <div class='col-lg-10'>
+        {{textarea class='form-control'
+         placeholder="Longer description of the week" value=content.longDescription}}
       </div>
     </div>
     <div class="form-group">
@@ -14,7 +29,18 @@
       <div class='col-lg-10'>
         <div class='row'>
           <div class='col-lg-4'>
-            {{input class='video-id' type="text" placeholder='Place your YouTube video id here' value=content.videoId}}
+            <div class='row'>
+              <div class='col-lg-12'>
+                {{input class='video-id' type="text"
+                  placeholder='Place your YouTube video id here'
+                        value=content.videoId}}
+              </div>
+              <div class='col-lg-12'>
+                Duration:
+                {{input type='text' placeholder="1:32"
+                       value=content.videoDuration}}
+              </div>
+            </div>
           </div>
           <div class='col-lg-8'>
             Preview:

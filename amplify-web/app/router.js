@@ -7,6 +7,7 @@ const Router = Ember.Router.extend({
 
 Router.map(function() {
   this.route('create-app');
+  this.route('manage-app');
 });
 
 export default Router;

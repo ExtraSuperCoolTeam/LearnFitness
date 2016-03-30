@@ -25,6 +25,15 @@ define('amplify-web/tests/controllers/create-app.jshint', ['exports'], function 
     assert.ok(true, 'controllers/create-app.js should pass jshint.');
   });
 });
+define('amplify-web/tests/controllers/manage-app.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint - controllers/manage-app.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(false, 'controllers/manage-app.js should pass jshint.\ncontrollers/manage-app.js: line 13, col 5, \'$\' is not defined.\n\n1 error');
+  });
+});
 define('amplify-web/tests/helpers/destroy-app', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = destroyApp;
 
@@ -306,6 +315,15 @@ define('amplify-web/tests/unit/controllers/create-app-test.jshint', ['exports'],
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'unit/controllers/create-app-test.js should pass jshint.');
+  });
+});
+define('amplify-web/tests/utils/week-content.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint - utils/week-content.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'utils/week-content.js should pass jshint.');
   });
 });
 /* jshint ignore:start */
