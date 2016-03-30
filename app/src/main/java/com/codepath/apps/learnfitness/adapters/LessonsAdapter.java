@@ -1,7 +1,6 @@
 package com.codepath.apps.learnfitness.adapters;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -141,12 +140,12 @@ public class LessonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             if (weekInt < currentWeekInt) {
                 collapsedWeekViewHolder.mCheckMark.setVisibility(View.VISIBLE);
-                collapsedWeekViewHolder.mLesson
-                        .setBackgroundColor(ContextCompat.getColor(context, R.color.primary_dark));
+//                collapsedWeekViewHolder.mLesson
+//                        .setBackgroundColor(ContextCompat.getColor(context, R.color.primary_dark));
             } else if (weekInt >= currentWeekInt) {
                 collapsedWeekViewHolder.mCheckMark.setVisibility(View.GONE);
-                collapsedWeekViewHolder.mLesson
-                        .setBackgroundColor(ContextCompat.getColor(context, R.color.to_complete));
+//                collapsedWeekViewHolder.mLesson
+//                        .setBackgroundColor(ContextCompat.getColor(context, R.color.to_complete));
             }
 
         }

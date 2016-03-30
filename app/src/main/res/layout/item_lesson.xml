@@ -1,64 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:background="@color/primary_dark" android:id="@+id/rlLesson"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lessonCardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="5dp"
+    card_view:cardBackgroundColor="@color/primary_dark"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="@color/primary_dark" android:id="@+id/rlLesson"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_margin="15dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        app:cardCornerRadius="8dp">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_margin="15dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            app:cardCornerRadius="8dp">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/ivThumbnail"
+                android:scaleType="fitXY" />
+
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvWeek"
+            android:layout_toRightOf="@id/cardView"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="23dp"
+            android:layout_marginBottom="5dp"
+            android:textSize="17sp"
+            android:textColor="@color/textWhite"
+            android:text="Week 1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvLessonTitle"
+            android:layout_below="@+id/tvWeek"
+            android:layout_alignLeft="@id/tvWeek"
+            android:layout_marginRight="10dp"
+            android:textSize="14sp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/subTextWhite"
+            android:text="Jumping Jacks"/>
+
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/ivThumbnail"
-            android:scaleType="fitXY" />
-
-    </android.support.v7.widget.CardView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvWeek"
-        android:layout_toRightOf="@id/cardView"
-        android:layout_margin="12dp"
-        android:textSize="18sp"
-        android:textColor="@color/textWhite"
-        android:text="Week 1"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvLessonTitle"
-        android:layout_below="@+id/tvWeek"
-        android:layout_alignLeft="@id/tvWeek"
-        android:layout_marginRight="10dp"
-        android:textSize="15sp"
-        android:layout_marginBottom="10dp"
-        android:textColor="@color/textWhite"
-        android:text="Jumping Jacks"/>
-
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:scaleType="fitXY"
-        android:id="@+id/ivCheckMark"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:src="@drawable/checkmark"
-        android:visibility="gone"/>
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/ivThumbnail"
-        android:background="#fff"/>
-</RelativeLayout>
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="fitXY"
+            android:id="@+id/ivCheckMark"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/checkmark"
+            android:visibility="gone"/>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
