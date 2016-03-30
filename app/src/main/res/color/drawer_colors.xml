@@ -4,5 +4,5 @@
     <item android:color="@color/primary" android:state_pressed="true" />
 
     <item android:color="@color/primary" android:state_selected="true" />
-    <item android:color="#fff" android:state_checked="false" />
+    <item android:color="@color/subTextWhite" android:state_checked="false" />
 </selector>

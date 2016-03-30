@@ -11,6 +11,7 @@
 
     <color name="dark_background">#343130</color>
 
+    <color name="testActionbar">#22201f</color>
 
     <color name="material_grey">#DADFE3</color>
     <color name="white">#FFFFFF</color>
