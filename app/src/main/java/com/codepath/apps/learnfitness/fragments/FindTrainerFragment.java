@@ -172,7 +172,7 @@ public class FindTrainerFragment extends Fragment implements
                 .position(trainerPosition)
                 .title(trainer.getId())
                 .icon(BitmapDescriptorFactory
-                        .fromResource(R.drawable.blue_map_marker)));
+                        .fromResource(R.drawable.untapped_marker)));
 
         mMarkers.add(marker);
 
@@ -387,7 +387,7 @@ public class FindTrainerFragment extends Fragment implements
     private void clearMarkers() {
         for (Marker marker : mMarkers) {
             marker.setIcon(BitmapDescriptorFactory
-                    .fromResource(R.drawable.blue_map_marker));
+                    .fromResource(R.drawable.untapped_marker));
         }
     }
     @Override
@@ -397,7 +397,7 @@ public class FindTrainerFragment extends Fragment implements
 
         clearMarkers();
         marker.setIcon(BitmapDescriptorFactory
-                .fromResource(R.drawable.red_map_marker));
+                .fromResource(R.drawable.blue_map_marker));
         return true;
     }
 
