@@ -11,6 +11,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -111,15 +112,15 @@ public class MyFormMessageListFragment extends Fragment {
         ((LessonListActivity)getActivity()).checkLogin();
 
         setUpViews();
-        mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        mFab.setVisibility(View.VISIBLE);
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showCreationDialog();
-
-            }
-        });
+//        mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+//        mFab.setVisibility(View.VISIBLE);
+//        mFab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showCreationDialog();
+//
+//            }
+//        });
 
         return v;
     }
@@ -183,7 +184,7 @@ public class MyFormMessageListFragment extends Fragment {
     // Define the events that the fragment will use to communicate
     public interface OnMyFormMessagesListener {
         // This can be any number of events to be sent to the activity
-        void onCheckMyFormDialog(FloatingActionButton fab);
+        void onCheckMyFormDialog();
         void onFormMessageSelected(View itemView, MyFormMessage myFormMessage);
     }
 
@@ -200,17 +201,17 @@ public class MyFormMessageListFragment extends Fragment {
     }
 
     public void showCreationDialog() {
-        showFab(false);
-        mOnMyFormMessagesListener.onCheckMyFormDialog(mFab);
+        //showFab(false);
+        mOnMyFormMessagesListener.onCheckMyFormDialog();
     }
 
-    public void showFab(Boolean show) {
-        if (show) {
-            mFab.setVisibility(View.VISIBLE);
-        } else {
-            mFab.setVisibility(View.GONE);
-        }
-    }
+//    public void showFab(Boolean show) {
+//        if (show) {
+//            mFab.setVisibility(View.VISIBLE);
+//        } else {
+//            mFab.setVisibility(View.GONE);
+//        }
+//    }
 
     void enterReveal() {
         // previously invisible view
@@ -295,7 +296,9 @@ public class MyFormMessageListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        showFab(true);
+        Log.i(TAG, "In Resume");
+        //showFab(true);
+        FabSetup();
         enterReveal();
     }
 
@@ -306,5 +309,14 @@ public class MyFormMessageListFragment extends Fragment {
     }
 
     private Transition.TransitionListener mEnterTransitionListener;
+
+    void FabSetup() {
+        FloatingActionButton mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        mFab.setVisibility(View.VISIBLE);
+
+        CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) mFab.getLayoutParams();
+        p.setBehavior(new FABScrollBehavior(getContext(), null));
+        mFab.setLayoutParams(p);
+    }
 
 }

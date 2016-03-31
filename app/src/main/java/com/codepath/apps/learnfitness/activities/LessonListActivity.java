@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.codepath.apps.learnfitness.R;
 import com.codepath.apps.learnfitness.fragments.CheckMyFormFragment;
 import com.codepath.apps.learnfitness.fragments.ComposeFormMessageFragment;
+import com.codepath.apps.learnfitness.fragments.FABHideBehavior;
 import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
 import com.codepath.apps.learnfitness.fragments.MyFormMessageListFragment;
 import com.codepath.apps.learnfitness.fragments.WeekFragment;
@@ -29,7 +30,6 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
 import android.Manifest;
 import android.accounts.AccountManager;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -44,6 +44,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -186,6 +188,9 @@ public class LessonListActivity extends AppCompatActivity
 
     private static final int LESSON_MIN_INDEX = 1000;
 
+    AppBarLayout.LayoutParams mAppBarLayoutParams;
+    FloatingActionButton mFab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -194,6 +199,23 @@ public class LessonListActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
+
+        mAppBarLayoutParams = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
+        getSupportFragmentManager().addOnBackStackChangedListener(getListener());
+
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setVisibility(View.GONE);
+        mFab.setVisibility(View.GONE);
+        CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) mFab.getLayoutParams();
+        p.setBehavior(new FABHideBehavior(getApplicationContext(), null));
+        mFab.setLayoutParams(p);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onCheckMyFormDialog();
+
+            }
+        });
 
         //gcm
         launchClientRegistrationService();
@@ -478,15 +500,6 @@ public class LessonListActivity extends AppCompatActivity
                 // When the drawer is opened, hide the bottom panel.
                 plSlidingPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
                 Utils.hideKeyboard(LessonListActivity.this);
-
-//                //TODO find fragment by tag or id, this is inefficient
-//                List<Fragment> frags = getSupportFragmentManager().getFragments();
-//
-//                for (Fragment f : frags) {
-//                    if (f instanceof MyFormMessageListFragment) {
-//                        ((MyFormMessageListFragment) f).exitReveal();
-//                    }
-//                }
             }
         };
     }
@@ -566,7 +579,7 @@ public class LessonListActivity extends AppCompatActivity
             case REQUEST_FEEDBACK_ID:
                 fragment = mComposeFormMessageFragment;
                 fragmentTag = "ComposeFormMessageFragment";
-                onCheckMyFormDialog(null);
+                onCheckMyFormDialog();
 //                onFormMessageSelected(null, new MyFormMessage());
                 checkCorrectMenuItem(currentMenuItem);
                 mDrawer.closeDrawers();
@@ -659,15 +672,15 @@ public class LessonListActivity extends AppCompatActivity
 
 
     @Override
-    public void onCheckMyFormDialog(FloatingActionButton fab) {
-        mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance(fab);
-        mFragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).addToBackStack("CheckMyFormFragment").commit();
+    public void onCheckMyFormDialog() {
+        mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance();
+        mFragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).addToBackStack("ComposeFormMessageFragment").commit();
     }
 
     @Override
     public void onFormMessageSelected(View itemView, MyFormMessage myFormMessage) {
         CheckMyFormFragment mCheckMyFormFragment = CheckMyFormFragment.newInstance(myFormMessage);
-        mFragmentManager.beginTransaction().add(R.id.flContent, mCheckMyFormFragment).addToBackStack("FormMessageDetailsFragment").commit();
+        mFragmentManager.beginTransaction().add(R.id.flContent, mCheckMyFormFragment).addToBackStack("CheckMyFormFragment").commit();
     }
 
     @Override
@@ -697,7 +710,8 @@ public class LessonListActivity extends AppCompatActivity
         }
 
         mFragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
+        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment)
+                .addToBackStack("MyFormMessageListFragment").commit();
     }
 
     @Override
@@ -731,16 +745,18 @@ public class LessonListActivity extends AppCompatActivity
                         public void onNext(MyFormMessage myFormMessage) {
                             Log.i(TAG, myFormMessage.getId());
                         }
-            });
+                    });
 
         mFragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
+        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment)
+                .addToBackStack("MyFormMessageListFragment").commit();
     }
 
     @Override
     public void composeMessageCancel() {
         mFragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment).commit();
+        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment)
+                .addToBackStack("MyFormMessageListFragment").commit();
     }
 
     @Override
@@ -913,7 +929,7 @@ public class LessonListActivity extends AppCompatActivity
                     if (numberProgressBar != null) {
                         for(int i = 0; i <= 100; i++) {
                             if (numberProgressBar.getProgress() >= numberProgressBar.getMax()) {
-                                numberProgressBar.setVisibility(View.INVISIBLE);
+                                numberProgressBar.setVisibility(View.GONE);
                                 Snackbar.make(findViewById(R.id.cl_lessonlist), R.string.snackbar_form_post_complete,
                                         Snackbar.LENGTH_LONG)
                                         .show(); // Don’t forget to show!
@@ -956,60 +972,6 @@ public class LessonListActivity extends AppCompatActivity
         }
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        List<Fragment> frags = getSupportFragmentManager().getFragments();
-//
-//        for (Fragment f : frags) {
-//            if ( ! (f instanceof MyFormMessageListFragment)) {
-//                exitReveal();
-//            }
-//        }
-//    }
-
-//    public void exitReveal() {
-//        // previously visible view
-//        final View myView = findViewById(R.id.fab);
-//
-//        if (myView == null)
-//            return;
-//
-//        // get the center for the clipping circle
-//        int cx = myView.getMeasuredWidth() / 2;
-//        int cy = myView.getMeasuredHeight() / 2;
-//
-//        // get the initial radius for the clipping circle
-//        int initialRadius = myView.getWidth() / 2;
-//
-//        // create the animation (the final radius is zero)
-//        Animator anim =
-//                ViewAnimationUtils.createCircularReveal(myView, cx, cy, initialRadius, 0);
-//
-//        // make the view invisible when the animation is done
-//        anim.addListener(new AnimatorListenerAdapter() {
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//                super.onAnimationEnd(animation);
-//                myView.setVisibility(View.INVISIBLE);
-//            }
-//        });
-//
-//        anim.addListener(new AnimatorListenerAdapter() {
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//                super.onAnimationEnd(animation);
-//                myView.setVisibility(View.INVISIBLE);
-//
-//                // Finish the activity after the exit transition completes.
-//                //supportFinishAfterTransition();
-//            }
-//        });
-//
-//        // start the animation
-//        anim.start();
-//    }
-
     private FragmentManager.OnBackStackChangedListener getListener()
     {
         FragmentManager.OnBackStackChangedListener result = new FragmentManager.OnBackStackChangedListener()
@@ -1020,10 +982,39 @@ public class LessonListActivity extends AppCompatActivity
 
                 if (manager != null)
                 {
-                    if(manager.getBackStackEntryCount() >= 1){
-                        String topOnStack = manager.getBackStackEntryAt(manager.getBackStackEntryCount()-1).getName();
-                        Log.i("TOP ON BACK STACK",topOnStack);
+                    Fragment f = getSupportFragmentManager().findFragmentById(R.id.flContent);
+                    Log.i(TAG, "Current fragment is: " + f.getClass());
+
+                    if (f.getClass().toString().contains("WeeksListFragment") ||
+                            f.getClass().toString().contains("MyFormMessageListFragment")) {
+                        mAppBarLayoutParams.setScrollFlags(
+                                AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
+                                        AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL |
+                                        AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP);
+                        toolbar.setLayoutParams(mAppBarLayoutParams);
+                        Log.i(TAG, "Toolbar scrolling: " + f.getClass());
+
+                    } else if (f.getClass().toString().contains("CheckMyFormFragment") ||
+                                f.getClass().toString().contains("ComposeFormMessageFragment") ||
+                                f.getClass().toString().contains("WeekFragment") ||
+                            f.getClass().toString().contains("FindTrainerFragment")) {
+                        mAppBarLayoutParams.setScrollFlags(
+                                AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                        toolbar.setLayoutParams(mAppBarLayoutParams);
+
+                        Log.i(TAG, "Toolbar stop scrolling: " + f.getClass());
                     }
+
+                    if (f.getClass().toString().contains("MyFormMessageListFragment")) {
+                        mFab.setVisibility(View.VISIBLE);
+                    } else {
+                        mFab.setVisibility(View.GONE);
+                        CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) mFab.getLayoutParams();
+                        p.setBehavior(new FABHideBehavior(getApplicationContext(), null));
+                        mFab.setLayoutParams(p);
+                    }
+
+                    f.onResume();
                 }
             }
         };
@@ -1049,7 +1040,7 @@ public class LessonListActivity extends AppCompatActivity
                         @Override
                         public void run() {
                             if (numberProgressBar.getProgress() >= numberProgressBar.getMax()) {
-                                numberProgressBar.setVisibility(View.INVISIBLE);
+                                numberProgressBar.setVisibility(View.GONE);
                             }
                             numberProgressBar.incrementProgressBy(1);
                         }
@@ -1068,7 +1059,7 @@ public class LessonListActivity extends AppCompatActivity
 
     public void hideUploadProgressBar() {
         if (numberProgressBar != null) {
-            numberProgressBar.setVisibility(View.INVISIBLE);
+            numberProgressBar.setVisibility(View.GONE);
         }
     }
 }

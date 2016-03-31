@@ -11,10 +11,12 @@ import com.codepath.apps.learnfitness.models.Week;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,5 +99,13 @@ public class WeekFragment extends Fragment implements YouTubePlayer.OnInitialize
             String errorMessage = String.format(getString(R.string.error_player), errorReason.toString());
             Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        FloatingActionButton mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        mFab.setVisibility(View.GONE);
+        Log.i(TAG, "In Resume");
     }
 }
