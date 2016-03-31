@@ -43,7 +43,7 @@
             android:id="@+id/tvDuration"
             android:layout_below="@+id/ivImage"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="-30dp"
             android:layout_marginRight="15dp"
             android:text="1:32"
             android:textColor="@color/textWhite"/>
@@ -53,7 +53,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_clock"
             android:layout_toLeftOf="@id/tvDuration"
-            android:layout_below="@id/ivImage"/>
+            android:layout_below="@+id/ivImage"
+            android:layout_marginTop="-37dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -62,19 +63,16 @@
             android:layout_below="@id/ivImage"
             android:layout_alignParentLeft="true"
             android:layout_alignRight="@id/ivClockIcon"
-            android:textSize="18sp"
+            android:textSize="17sp"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="15dp"
             android:textColor="@color/textWhite"/>
-
-
-
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvDescription"
-            android:textSize="15sp"
+            android:textSize="14sp"
             android:layout_below="@+id/tvTitle"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="15dp"

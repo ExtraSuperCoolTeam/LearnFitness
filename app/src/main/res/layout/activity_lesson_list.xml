@@ -70,7 +70,7 @@
                 app:headerLayout="@layout/nav_header"
                 app:itemIconTint="@color/drawer_colors"
                 android:theme="@style/NavigationTheme"
-                android:background="@color/to_complete"
+                android:background="@color/primary_dark"
                 />
 
         </android.support.v4.widget.DrawerLayout>
