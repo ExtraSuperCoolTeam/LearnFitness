@@ -71,9 +71,8 @@ public class ComposeFormMessageFragment extends Fragment {
     EditText mEditTextMessageText;
     FloatingActionButton mFab;
 
-    public static ComposeFormMessageFragment newInstance(FloatingActionButton fab) {
+    public static ComposeFormMessageFragment newInstance() {
         ComposeFormMessageFragment composeFormMessageFragment = new ComposeFormMessageFragment();
-        composeFormMessageFragment.mFab = fab;
 
         Bundle args = new Bundle();
         return composeFormMessageFragment;
@@ -256,7 +255,10 @@ public class ComposeFormMessageFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        showFab(false);
+        Log.i(TAG, "In Resume");
+        FloatingActionButton mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        mFab.setVisibility(View.GONE);
+        //showFab(false);
     }
 
     public void showFab(Boolean show) {

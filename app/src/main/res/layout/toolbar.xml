@@ -38,7 +38,7 @@
                 android:minHeight="?attr/actionBarSize"
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 android:background="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|enterAlways">
+                app:layout_scrollFlags="scroll|enterAlways|snap">
             </android.support.v7.widget.Toolbar>
 
         <com.daimajia.numberprogressbar.NumberProgressBar

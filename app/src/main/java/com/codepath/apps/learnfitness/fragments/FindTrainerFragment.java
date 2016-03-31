@@ -111,7 +111,7 @@ public class FindTrainerFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-
+        Log.i(TAG, "In Resume");
         loadMap(mMap);
     }
 
@@ -424,5 +424,4 @@ public class FindTrainerFragment extends Fragment implements
             return mDialog;
         }
     }
-
 }
