@@ -112,6 +112,12 @@ define('amplify-web/components/week-content', ['exports', 'ember'], function (ex
     }
   });
 });
+define('amplify-web/components/x-option', ['exports', 'emberx-select/components/x-option'], function (exports, _emberxSelectComponentsXOption) {
+  exports['default'] = _emberxSelectComponentsXOption['default'];
+});
+define('amplify-web/components/x-select', ['exports', 'emberx-select/components/x-select'], function (exports, _emberxSelectComponentsXSelect) {
+  exports['default'] = _emberxSelectComponentsXSelect['default'];
+});
 define('amplify-web/controllers/array', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Controller;
 });
@@ -141,6 +147,12 @@ define('amplify-web/controllers/manage-app', ['exports', 'ember', 'amplify-web/u
 
     allWeeks: [],
 
+    selectedColor: 'Blue',
+
+    isBlueSelected: _ember['default'].computed.equal('selectedColor', 'Blue'),
+    isNeutralSelected: _ember['default'].computed.equal('selectedColor', 'Neutral'),
+    isRedSelected: _ember['default'].computed.equal('selectedColor', 'Red'),
+
     fetchInitial: _ember['default'].on('init', function () {
       var self = this;
 
@@ -156,7 +168,14 @@ define('amplify-web/controllers/manage-app', ['exports', 'ember', 'amplify-web/u
           }));
         });
       });
-    })
+    }),
+
+    actions: {
+
+      selectColorTheme: function selectColorTheme(theme) {
+        this.set('selectedColor', theme);
+      }
+    }
   });
 });
 define('amplify-web/controllers/object', ['exports', 'ember'], function (exports, _ember) {
@@ -1485,6 +1504,14 @@ define("amplify-web/templates/components/week-content", ["exports"], function (e
     };
   })());
 });
+define('amplify-web/templates/components/x-select', ['exports', 'emberx-select/templates/components/x-select'], function (exports, _emberxSelectTemplatesComponentsXSelect) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberxSelectTemplatesComponentsXSelect['default'];
+    }
+  });
+});
 define("amplify-web/templates/create-app", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     var child0 = (function () {
@@ -1495,11 +1522,93 @@ define("amplify-web/templates/create-app", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 28,
+              "line": 10,
+              "column": 12
+            },
+            "end": {
+              "line": 12,
+              "column": 12
+            }
+          },
+          "moduleName": "amplify-web/templates/create-app.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("              ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("span");
+          dom.setAttribute(el1, "class", "glyphicon glyphicon-plus");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode(" Create a New App\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child1 = (function () {
+      return {
+        meta: {
+          "topLevel": null,
+          "revision": "Ember@2.1.0",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 15,
+              "column": 12
+            },
+            "end": {
+              "line": 17,
+              "column": 12
+            }
+          },
+          "moduleName": "amplify-web/templates/create-app.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("              ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("span");
+          dom.setAttribute(el1, "class", "glyphicon glyphicon-pencil");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode(" Manage Your App\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child2 = (function () {
+      return {
+        meta: {
+          "topLevel": null,
+          "revision": "Ember@2.1.0",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 46,
               "column": 8
             },
             "end": {
-              "line": 30,
+              "line": 48,
               "column": 8
             }
           },
@@ -1524,12 +1633,12 @@ define("amplify-web/templates/create-app", ["exports"], function (exports) {
           morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
           return morphs;
         },
-        statements: [["inline", "week-content", [], ["content", ["subexpr", "@mut", [["get", "week", ["loc", [null, [29, 33], [29, 37]]]]], [], []]], ["loc", [null, [29, 10], [29, 39]]]]],
+        statements: [["inline", "week-content", [], ["content", ["subexpr", "@mut", [["get", "week", ["loc", [null, [47, 33], [47, 37]]]]], [], []]], ["loc", [null, [47, 10], [47, 39]]]]],
         locals: ["week"],
         templates: []
       };
     })();
-    var child1 = (function () {
+    var child3 = (function () {
       return {
         meta: {
           "topLevel": null,
@@ -1537,11 +1646,11 @@ define("amplify-web/templates/create-app", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 30,
+              "line": 48,
               "column": 8
             },
             "end": {
-              "line": 32,
+              "line": 50,
               "column": 8
             }
           },
@@ -1583,7 +1692,7 @@ define("amplify-web/templates/create-app", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 50,
+            "line": 68,
             "column": 0
           }
         },
@@ -1609,6 +1718,54 @@ define("amplify-web/templates/create-app", ["exports"], function (exports) {
         var el4 = dom.createElement("small");
         var el5 = dom.createTextNode("Create Your Custom Android App");
         dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("nav");
+        dom.setAttribute(el2, "class", "navbar navbar-default");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3, "class", "container-fluid");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "collapse navbar-collapse");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("ul");
+        dom.setAttribute(el5, "class", "nav navbar-nav navbar-right");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("li");
+        var el7 = dom.createTextNode("\n");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createComment("");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("li");
+        var el7 = dom.createTextNode("\n");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createComment("");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
         dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n  ");
@@ -1793,16 +1950,20 @@ define("amplify-web/templates/create-app", ["exports"], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [0, 3, 1, 1]);
-        var element1 = dom.childAt(element0, [13, 1, 1]);
-        var morphs = new Array(2);
-        morphs[0] = dom.createMorphAt(element0, 11, 11);
-        morphs[1] = dom.createElementMorph(element1);
+        var element0 = dom.childAt(fragment, [0]);
+        var element1 = dom.childAt(element0, [3, 1, 1, 1]);
+        var element2 = dom.childAt(element0, [5, 1, 1]);
+        var element3 = dom.childAt(element2, [13, 1, 1]);
+        var morphs = new Array(4);
+        morphs[0] = dom.createMorphAt(dom.childAt(element1, [1]), 1, 1);
+        morphs[1] = dom.createMorphAt(dom.childAt(element1, [3]), 1, 1);
+        morphs[2] = dom.createMorphAt(element2, 11, 11);
+        morphs[3] = dom.createElementMorph(element3);
         return morphs;
       },
-      statements: [["block", "each", [["get", "allWeeks", ["loc", [null, [28, 16], [28, 24]]]]], [], 0, 1, ["loc", [null, [28, 8], [32, 17]]]], ["element", "action", ["addWeek"], [], ["loc", [null, [35, 44], [35, 64]]]]],
+      statements: [["block", "link-to", ["create-app"], [], 0, null, ["loc", [null, [10, 12], [12, 24]]]], ["block", "link-to", ["manage-app"], [], 1, null, ["loc", [null, [15, 12], [17, 24]]]], ["block", "each", [["get", "allWeeks", ["loc", [null, [46, 16], [46, 24]]]]], [], 2, 3, ["loc", [null, [46, 8], [50, 17]]]], ["element", "action", ["addWeek"], [], ["loc", [null, [53, 44], [53, 64]]]]],
       locals: [],
-      templates: [child0, child1]
+      templates: [child0, child1, child2, child3]
     };
   })());
 });
@@ -2052,11 +2213,409 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 28,
+              "line": 15,
+              "column": 12
+            },
+            "end": {
+              "line": 17,
+              "column": 12
+            }
+          },
+          "moduleName": "amplify-web/templates/manage-app.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("              ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("span");
+          dom.setAttribute(el1, "class", "glyphicon glyphicon-plus");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode(" Create a New App\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child1 = (function () {
+      return {
+        meta: {
+          "topLevel": null,
+          "revision": "Ember@2.1.0",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 20,
+              "column": 12
+            },
+            "end": {
+              "line": 22,
+              "column": 12
+            }
+          },
+          "moduleName": "amplify-web/templates/manage-app.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("              ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("span");
+          dom.setAttribute(el1, "class", "glyphicon glyphicon-pencil");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode(" Manage Your App\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child2 = (function () {
+      var child0 = (function () {
+        return {
+          meta: {
+            "topLevel": null,
+            "revision": "Ember@2.1.0",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 42,
+                "column": 14
+              },
+              "end": {
+                "line": 42,
+                "column": 50
+              }
+            },
+            "moduleName": "amplify-web/templates/manage-app.hbs"
+          },
+          isEmpty: false,
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode("Neutral");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes() {
+            return [];
+          },
+          statements: [],
+          locals: [],
+          templates: []
+        };
+      })();
+      var child1 = (function () {
+        return {
+          meta: {
+            "topLevel": null,
+            "revision": "Ember@2.1.0",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 43,
+                "column": 14
+              },
+              "end": {
+                "line": 43,
+                "column": 44
+              }
+            },
+            "moduleName": "amplify-web/templates/manage-app.hbs"
+          },
+          isEmpty: false,
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode("Blue");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes() {
+            return [];
+          },
+          statements: [],
+          locals: [],
+          templates: []
+        };
+      })();
+      var child2 = (function () {
+        return {
+          meta: {
+            "topLevel": null,
+            "revision": "Ember@2.1.0",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 44,
+                "column": 14
+              },
+              "end": {
+                "line": 44,
+                "column": 42
+              }
+            },
+            "moduleName": "amplify-web/templates/manage-app.hbs"
+          },
+          isEmpty: false,
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode("Red");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes() {
+            return [];
+          },
+          statements: [],
+          locals: [],
+          templates: []
+        };
+      })();
+      return {
+        meta: {
+          "topLevel": null,
+          "revision": "Ember@2.1.0",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 41,
+              "column": 12
+            },
+            "end": {
+              "line": 45,
+              "column": 12
+            }
+          },
+          "moduleName": "amplify-web/templates/manage-app.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("              ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n              ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n              ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(3);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          morphs[1] = dom.createMorphAt(fragment, 3, 3, contextualElement);
+          morphs[2] = dom.createMorphAt(fragment, 5, 5, contextualElement);
+          return morphs;
+        },
+        statements: [["block", "x-option", [], ["value", "Neutral"], 0, null, ["loc", [null, [42, 14], [42, 63]]]], ["block", "x-option", [], ["value", "Blue"], 1, null, ["loc", [null, [43, 14], [43, 57]]]], ["block", "x-option", [], ["value", "Red"], 2, null, ["loc", [null, [44, 14], [44, 55]]]]],
+        locals: [],
+        templates: [child0, child1, child2]
+      };
+    })();
+    var child3 = (function () {
+      return {
+        meta: {
+          "topLevel": null,
+          "revision": "Ember@2.1.0",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 47,
+              "column": 12
+            },
+            "end": {
+              "line": 50,
+              "column": 12
+            }
+          },
+          "moduleName": "amplify-web/templates/manage-app.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("              ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("button");
+          dom.setAttribute(el1, "class", "btn dark-blue");
+          dom.setAttribute(el1, "disabled", "");
+          var el2 = dom.createTextNode("#303F9F");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n              ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("button");
+          dom.setAttribute(el1, "class", "btn light-blue");
+          dom.setAttribute(el1, "disabled", "");
+          var el2 = dom.createTextNode("#C5CAE9");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child4 = (function () {
+      return {
+        meta: {
+          "topLevel": null,
+          "revision": "Ember@2.1.0",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 51,
+              "column": 12
+            },
+            "end": {
+              "line": 55,
+              "column": 12
+            }
+          },
+          "moduleName": "amplify-web/templates/manage-app.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("              ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("button");
+          dom.setAttribute(el1, "class", "btn dark-neutral");
+          dom.setAttribute(el1, "disabled", "");
+          var el2 = dom.createTextNode("#616161");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n              ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("button");
+          dom.setAttribute(el1, "class", "btn light-neutral");
+          dom.setAttribute(el1, "disabled", "");
+          var el2 = dom.createTextNode("#F5F5F5");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child5 = (function () {
+      return {
+        meta: {
+          "topLevel": null,
+          "revision": "Ember@2.1.0",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 56,
+              "column": 12
+            },
+            "end": {
+              "line": 60,
+              "column": 12
+            }
+          },
+          "moduleName": "amplify-web/templates/manage-app.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("              ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("button");
+          dom.setAttribute(el1, "class", "btn dark-red");
+          dom.setAttribute(el1, "disabled", "");
+          var el2 = dom.createTextNode("#D32F2F");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n              ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("button");
+          dom.setAttribute(el1, "class", "btn light-red");
+          dom.setAttribute(el1, "disabled", "");
+          var el2 = dom.createTextNode("#FFCDD2");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child6 = (function () {
+      return {
+        meta: {
+          "topLevel": null,
+          "revision": "Ember@2.1.0",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 65,
               "column": 8
             },
             "end": {
-              "line": 30,
+              "line": 67,
               "column": 8
             }
           },
@@ -2081,12 +2640,12 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
           return morphs;
         },
-        statements: [["inline", "week-content", [], ["content", ["subexpr", "@mut", [["get", "week", ["loc", [null, [29, 33], [29, 37]]]]], [], []]], ["loc", [null, [29, 10], [29, 39]]]]],
+        statements: [["inline", "week-content", [], ["content", ["subexpr", "@mut", [["get", "week", ["loc", [null, [66, 33], [66, 37]]]]], [], []]], ["loc", [null, [66, 10], [66, 39]]]]],
         locals: ["week"],
         templates: []
       };
     })();
-    var child1 = (function () {
+    var child7 = (function () {
       return {
         meta: {
           "topLevel": null,
@@ -2094,11 +2653,11 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 30,
+              "line": 67,
               "column": 8
             },
             "end": {
-              "line": 32,
+              "line": 69,
               "column": 8
             }
           },
@@ -2140,7 +2699,7 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 50,
+            "line": 87,
             "column": 0
           }
         },
@@ -2173,6 +2732,77 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
         dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n  ");
         dom.appendChild(el1, el2);
+        var el2 = dom.createElement("nav");
+        dom.setAttribute(el2, "class", "navbar navbar-default");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3, "class", "container-fluid");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "navbar-header");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("a");
+        dom.setAttribute(el5, "class", "navbar-brand");
+        dom.setAttribute(el5, "href", "#");
+        var el6 = dom.createTextNode("Amplify");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("a");
+        dom.setAttribute(el5, "class", "navbar-brand smaller");
+        dom.setAttribute(el5, "href", "#");
+        var el6 = dom.createTextNode("Create Your Custom Android App");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "collapse navbar-collapse");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("ul");
+        dom.setAttribute(el5, "class", "nav navbar-nav navbar-right");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("li");
+        var el7 = dom.createTextNode("\n");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createComment("");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("li");
+        var el7 = dom.createTextNode("\n");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createComment("");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
         var el2 = dom.createElement("div");
         dom.setAttribute(el2, "class", "row");
         var el3 = dom.createTextNode("\n    ");
@@ -2185,6 +2815,12 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
         dom.setAttribute(el4, "class", "form-horizontal");
         var el5 = dom.createTextNode("\n        ");
         dom.appendChild(el4, el5);
+        var el5 = dom.createElement("h3");
+        var el6 = dom.createTextNode("Application Info");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
         var el5 = dom.createElement("div");
         dom.setAttribute(el5, "class", "form-group");
         var el6 = dom.createTextNode("\n          ");
@@ -2192,7 +2828,7 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
         var el6 = dom.createElement("label");
         dom.setAttribute(el6, "for", "appName");
         dom.setAttribute(el6, "class", "col-lg-2");
-        var el7 = dom.createTextNode("Application Name");
+        var el7 = dom.createTextNode("Application Name:");
         dom.appendChild(el6, el7);
         dom.appendChild(el5, el6);
         var el6 = dom.createTextNode("\n          ");
@@ -2220,54 +2856,28 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
         var el6 = dom.createTextNode("\n          ");
         dom.appendChild(el5, el6);
         var el6 = dom.createElement("label");
-        dom.setAttribute(el6, "for", "email");
+        dom.setAttribute(el6, "for", "appName");
         dom.setAttribute(el6, "class", "col-lg-2");
-        var el7 = dom.createTextNode("Contact Email");
+        var el7 = dom.createTextNode("Color Theme:");
         dom.appendChild(el6, el7);
         dom.appendChild(el5, el6);
         var el6 = dom.createTextNode("\n          ");
         dom.appendChild(el5, el6);
         var el6 = dom.createElement("div");
         dom.setAttribute(el6, "class", "col-lg-10");
-        var el7 = dom.createTextNode("\n            ");
+        var el7 = dom.createTextNode("\n");
         dom.appendChild(el6, el7);
-        var el7 = dom.createElement("input");
-        dom.setAttribute(el7, "type", "email");
-        dom.setAttribute(el7, "class", "form-control");
-        dom.setAttribute(el7, "id", "email");
-        dom.setAttribute(el7, "placeholder", "contact@email.com");
+        var el7 = dom.createComment("");
         dom.appendChild(el6, el7);
-        var el7 = dom.createTextNode("\n          ");
+        var el7 = dom.createTextNode("\n");
         dom.appendChild(el6, el7);
-        dom.appendChild(el5, el6);
-        var el6 = dom.createTextNode("\n        ");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("div");
-        dom.setAttribute(el5, "class", "form-group");
-        var el6 = dom.createTextNode("\n          ");
-        dom.appendChild(el5, el6);
-        var el6 = dom.createElement("label");
-        dom.setAttribute(el6, "for", "exampleInputPassword1");
-        dom.setAttribute(el6, "class", "col-lg-2");
-        var el7 = dom.createTextNode("Password");
+        var el7 = dom.createComment("");
         dom.appendChild(el6, el7);
-        dom.appendChild(el5, el6);
-        var el6 = dom.createTextNode("\n          ");
-        dom.appendChild(el5, el6);
-        var el6 = dom.createElement("div");
-        dom.setAttribute(el6, "class", "col-lg-10");
-        var el7 = dom.createTextNode("\n            ");
+        var el7 = dom.createComment("");
         dom.appendChild(el6, el7);
-        var el7 = dom.createElement("input");
-        dom.setAttribute(el7, "type", "password");
-        dom.setAttribute(el7, "class", "form-control");
-        dom.setAttribute(el7, "id", "exampleInputPassword1");
-        dom.setAttribute(el7, "placeholder", "Password");
+        var el7 = dom.createComment("");
         dom.appendChild(el6, el7);
-        var el7 = dom.createTextNode("\n          ");
+        var el7 = dom.createTextNode("          ");
         dom.appendChild(el6, el7);
         dom.appendChild(el5, el6);
         var el6 = dom.createTextNode("\n        ");
@@ -2350,16 +2960,25 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [0, 3, 1, 1]);
-        var element1 = dom.childAt(element0, [13, 1, 1]);
-        var morphs = new Array(2);
-        morphs[0] = dom.createMorphAt(element0, 11, 11);
-        morphs[1] = dom.createElementMorph(element1);
+        var element0 = dom.childAt(fragment, [0]);
+        var element1 = dom.childAt(element0, [3, 1, 3, 1]);
+        var element2 = dom.childAt(element0, [5, 1, 1]);
+        var element3 = dom.childAt(element2, [5, 3]);
+        var element4 = dom.childAt(element2, [13, 1, 1]);
+        var morphs = new Array(8);
+        morphs[0] = dom.createMorphAt(dom.childAt(element1, [1]), 1, 1);
+        morphs[1] = dom.createMorphAt(dom.childAt(element1, [3]), 1, 1);
+        morphs[2] = dom.createMorphAt(element3, 1, 1);
+        morphs[3] = dom.createMorphAt(element3, 3, 3);
+        morphs[4] = dom.createMorphAt(element3, 4, 4);
+        morphs[5] = dom.createMorphAt(element3, 5, 5);
+        morphs[6] = dom.createMorphAt(element2, 11, 11);
+        morphs[7] = dom.createElementMorph(element4);
         return morphs;
       },
-      statements: [["block", "each", [["get", "allWeeks", ["loc", [null, [28, 16], [28, 24]]]]], [], 0, 1, ["loc", [null, [28, 8], [32, 17]]]], ["element", "action", ["addWeek"], [], ["loc", [null, [35, 44], [35, 64]]]]],
+      statements: [["block", "link-to", ["create-app"], [], 0, null, ["loc", [null, [15, 12], [17, 24]]]], ["block", "link-to", ["manage-app"], [], 1, null, ["loc", [null, [20, 12], [22, 24]]]], ["block", "x-select", [], ["value", ["subexpr", "@mut", [["get", "selectedColor", ["loc", [null, [41, 30], [41, 43]]]]], [], []], "action", "selectColorTheme"], 2, null, ["loc", [null, [41, 12], [45, 25]]]], ["block", "if", [["get", "isBlueSelected", ["loc", [null, [47, 18], [47, 32]]]]], [], 3, null, ["loc", [null, [47, 12], [50, 19]]]], ["block", "if", [["get", "isNeutralSelected", ["loc", [null, [51, 18], [51, 35]]]]], [], 4, null, ["loc", [null, [51, 12], [55, 19]]]], ["block", "if", [["get", "isRedSelected", ["loc", [null, [56, 18], [56, 31]]]]], [], 5, null, ["loc", [null, [56, 12], [60, 19]]]], ["block", "each", [["get", "allWeeks", ["loc", [null, [65, 16], [65, 24]]]]], [], 6, 7, ["loc", [null, [65, 8], [69, 17]]]], ["element", "action", ["addWeek"], [], ["loc", [null, [72, 44], [72, 64]]]]],
       locals: [],
-      templates: [child0, child1]
+      templates: [child0, child1, child2, child3, child4, child5, child6, child7]
     };
   })());
 });
@@ -2401,7 +3020,7 @@ catch(err) {
 });
 
 if (!runningTests) {
-  require("amplify-web/app")["default"].create({"name":"amplify-web","version":"0.0.0+20475d80"});
+  require("amplify-web/app")["default"].create({"name":"amplify-web","version":"0.0.0+752b7e5c"});
 }
 
 /* jshint ignore:end */

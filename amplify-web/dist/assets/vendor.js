@@ -82032,6 +82032,365 @@ define('ember-radio-button', ['ember-radio-button/index', 'ember', 'exports'], f
   }));
 });
 
+define('emberx-select/components/x-option', ['exports', 'ember', 'emberx-select/components/x-select'], function (exports, _ember, _emberxSelectComponentsXSelect) {
+  'use strict';
+
+  var isArray = _ember['default'].isArray;
+
+  /**
+   * Used to wrap a native `<option>` tag and associate an object with
+   * it that can be bound. It can only be used in conjuction with a
+   * containing `x-select` component
+   *
+   * @class Ember.XOptionComponent
+   * @extends Ember.Component
+   */
+  exports['default'] = _ember['default'].Component.extend({
+    tagName: 'option',
+    attributeBindings: ['selected', 'name', 'disabled', 'value', 'title'],
+    classNameBindings: [':x-option'],
+
+    /**
+     * The value associated with this option. When this option is
+     * selected, the `x-select` will fire its action with this
+     * value.
+     *
+     * @property value
+     * @type Object
+     * @default null
+     */
+    value: null,
+
+    /**
+     * Property bound to the `selected` attribute of the native
+     * `<option>` element. It is aware of the containing `x-select`'s
+     * value and will mark itself if it is the same.
+     *
+     * @private
+     * @property selected
+     * @type Boolean
+     */
+    selected: _ember['default'].computed('value', 'select.value', 'select.multiple', function () {
+      if (this.get('select.multiple') && isArray(this.get('select.value'))) {
+        var selectValue = _ember['default'].A(this.get('select.value'));
+
+        return selectValue.contains(this.get('value'));
+      } else {
+        return this.get('value') === this.get('select.value');
+      }
+    }),
+
+    /**
+     * Register this x-option with the containing `x-select`
+     *
+     * @override
+     */
+    didInsertElement: function didInsertElement() {
+      this._super.apply(this, arguments);
+      _ember['default'].run.scheduleOnce('afterRender', this, 'registerWithXSelect');
+    },
+
+    select: _ember['default'].computed(function () {
+      return this.nearestOfType(_emberxSelectComponentsXSelect['default']);
+    }),
+
+    registerWithXSelect: function registerWithXSelect() {
+      var select = this.get('select');
+      _ember['default'].assert("x-option component declared without enclosing x-select", !!select);
+      select.registerOption(this);
+    },
+
+    /**
+     * Unregister this x-option with its containing x-select.
+     *
+     * @override
+     */
+    willDestroyElement: function willDestroyElement() {
+      this._super.apply(this, arguments);
+      var select = this.get('select');
+      if (select) {
+        select.unregisterOption(this);
+      }
+    }
+  });
+});
+define("emberx-select/components/x-select", ["exports", "ember"], function (exports, _ember) {
+  "use strict";
+
+  var isArray = _ember["default"].isArray;
+
+  /**
+   * Wraps a native <select> element so that it can be object and
+   * binding aware. It is used in conjuction with the
+   * `x-option` component to construct select boxes. E.g.
+   *
+   *   {{#x-select value="bob" action="selectPerson"}}
+   *     {{x-option value="fred"}}Fred Flintstone{{/x-option}}
+   *     {{x-option value="bob"}}Bob Newhart{{/x-option}}
+   *   {{/x-select}}
+   *
+   * the options are always up to date, so that when the object bound to
+   * `value` changes, the corresponding option becomes selected.
+   *
+   * Whenever the select tag receives a change event, it will fire
+   * `action`
+   *
+   * @class Ember.XSelectComponent
+   * @extends Ember.Component
+   */
+  exports["default"] = _ember["default"].Component.extend({
+    tagName: "select",
+    classNameBindings: [":x-select"],
+    attributeBindings: ['disabled', 'tabindex', 'multiple', 'form', 'name', 'autofocus', 'required', 'size', 'title'],
+
+    /**
+     * Bound to the `disabled` attribute on the native <select> tag.
+     *
+     * @property disabled
+     * @type Boolean
+     * @default false
+     */
+    disabled: null,
+
+    /**
+     * Bound to the `multiple` attribute on the native <select> tag.
+     *
+     * @property multiple
+     * @type Boolean
+     * @default false
+     */
+    multiple: null,
+
+    /**
+     * Bound to the `tabindex` attribute on the native <select> tag.
+     *
+     * @property tabindex
+     * @type Integer
+     * @ default 0
+     */
+    tabindex: 0,
+
+    /**
+     * The collection of options for this select box. When options are
+     * inserted into the dom, they will register themselves with their
+     * containing `x-select`. This is for internal book-keeping only and should
+     * not be changed from outside.
+     *
+     * @private
+     * @property options
+     */
+    options: _ember["default"].computed(function () {
+      return _ember["default"].A();
+    }),
+
+    /**
+     * When the select DOM event fires on the element, trigger the
+     * component's action with the current value.
+     */
+    change: function change(event) {
+      this._updateValue();
+
+      this.sendAction('action', this.get('value'), this);
+      this.sendAction('onchange', this, this.get('value'), event);
+    },
+
+    /**
+     * When the click DOM event fires on the element, trigger the
+     * component's action with the component, x-select value, and the jQuery event.
+     */
+    click: function click(event) {
+      this.sendAction('onclick', this, this.get('value'), event);
+    },
+
+    /**
+     * When the blur DOM event fires on the element, trigger the
+     * component's action with the component, x-select value, and the jQuery event.
+     */
+    blur: function blur(event) {
+      this.sendAction('onblur', this, this.get('value'), event);
+    },
+
+    /**
+     * When the focusOut DOM event fires on the element, trigger the
+     * component's action with the component, x-select value, and the jQuery event.
+     */
+    focusOut: function focusOut(event) {
+      this.sendAction('onfocusout', this, this.get('value'), event);
+    },
+
+    /**
+     * Updates `value` with the object associated with the selected option tag
+     *
+     * @private
+     */
+    _updateValueSingle: function _updateValueSingle() {
+      var option = this.get('options').find(function (option) {
+        return option.$().is(':selected');
+      });
+
+      if (option) {
+        this.set('value', option.get('value'));
+      } else {
+        this.set('value', null);
+      }
+    },
+
+    /**
+     * Updates `value` with an array of objects associated with the selected option tags
+     *
+     * @private
+     */
+    _updateValueMultiple: function _updateValueMultiple() {
+      var options = this.get('options').filter(function (option) {
+        return option.$().is(':selected');
+      });
+
+      this.set('value', _ember["default"].A(options).mapBy('value'));
+    },
+
+    /**
+     * A utility method to determine if the select is multiple or single and call
+     * its respective method to update the value.
+     *
+     * @private
+     * @utility
+     */
+    _updateValue: function _updateValue() {
+      if (this.get('multiple')) {
+        this._updateValueMultiple();
+      } else {
+        this._updateValueSingle();
+      }
+    },
+
+    /**
+     * If no explicit value is set, apply default values based on selected=true in
+     * the template.
+     *
+     * @private
+     */
+    _setDefaultValues: function _setDefaultValues() {
+      if (!this.get('value')) {
+        this._updateValue();
+      }
+    },
+
+    /**
+     * @override
+     */
+    didInsertElement: function didInsertElement() {
+      var _this = this;
+
+      this._super.apply(this, arguments);
+
+      this.$().on('blur', function (event) {
+        _this.blur(event);
+      });
+    },
+
+    /**
+     * @override
+     */
+    willDestroyElement: function willDestroyElement() {
+      this._super.apply(this, arguments);
+
+      // might be overkill, but make sure options can get gc'd
+      this.get('options').clear();
+      this.$().off('blur');
+    },
+
+    /**
+     * If this is a multi-select, and the value is not an array, that
+     * probably indicates a misconfiguration somewhere, so we error out.
+     *
+     * @private
+     */
+    ensureProperType: _ember["default"].on('init', _ember["default"].observer('value', function () {
+      var value = this.get('value');
+
+      if (value != null && this.get('multiple') && !isArray(value)) {
+        throw new Error("x-select multiple=true was set, but value " + value + " is not enumerable.");
+      }
+    })),
+
+    /**
+     * @private
+     */
+    registerOption: function registerOption(option) {
+      this.get('options').addObject(option);
+      this._setDefaultValues();
+    },
+
+    /**
+     * @private
+     */
+    unregisterOption: function unregisterOption(option) {
+      this.get('options').removeObject(option);
+
+      // We don't want to update the value if we're tearing the component down.
+      if (!this.get('isDestroying')) {
+        this._updateValue();
+      }
+    }
+  });
+});
+define("emberx-select/templates/components/x-select", ["exports"], function (exports) {
+  "use strict";
+
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "topLevel": null,
+        "revision": "Ember@2.1.0",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 0
+          }
+        },
+        "moduleName": "modules/emberx-select/templates/components/x-select.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        dom.insertBoundary(fragment, 0);
+        return morphs;
+      },
+      statements: [["content", "yield", ["loc", [null, [1, 0], [1, 9]]]]],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define('emberx-select', ['emberx-select/index', 'ember', 'exports'], function(__index__, __Ember__, __exports__) {
+  'use strict';
+  var keys = Object.keys || __Ember__['default'].keys;
+  var forEach = Array.prototype.forEach && function(array, cb) {
+    array.forEach(cb);
+  } || __Ember__['default'].EnumerableUtils.forEach;
+
+  forEach(keys(__index__), (function(key) {
+    __exports__[key] = __index__[key];
+  }));
+});
+
 ;/* jshint ignore:start */
 
 

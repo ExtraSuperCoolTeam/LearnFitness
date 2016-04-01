@@ -7,6 +7,12 @@ export default CreateAppController.extend({
 
   allWeeks: [],
 
+  selectedColor: 'Blue',
+
+  isBlueSelected: Ember.computed.equal('selectedColor', 'Blue'),
+  isNeutralSelected: Ember.computed.equal('selectedColor', 'Neutral'),
+  isRedSelected: Ember.computed.equal('selectedColor', 'Red'),
+
   fetchInitial: Ember.on('init', function() {
     var self = this;
 
@@ -23,4 +29,11 @@ export default CreateAppController.extend({
       });
     });
   }),
+
+  actions: {
+
+    selectColorTheme: function(theme) {
+      this.set('selectedColor', theme);
+    }
+  }
 });

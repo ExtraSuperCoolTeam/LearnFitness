@@ -31,7 +31,7 @@ define('amplify-web/tests/controllers/manage-app.jshint', ['exports'], function 
   QUnit.module('JSHint - controllers/manage-app.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/manage-app.js should pass jshint.\ncontrollers/manage-app.js: line 13, col 5, \'$\' is not defined.\n\n1 error');
+    assert.ok(false, 'controllers/manage-app.js should pass jshint.\ncontrollers/manage-app.js: line 19, col 5, \'$\' is not defined.\n\n1 error');
   });
 });
 define('amplify-web/tests/helpers/destroy-app', ['exports', 'ember'], function (exports, _ember) {
@@ -81,6 +81,32 @@ define('amplify-web/tests/helpers/module-for-acceptance.jshint', ['exports'], fu
     assert.expect(1);
     assert.ok(true, 'helpers/module-for-acceptance.js should pass jshint.');
   });
+});
+define('amplify-web/tests/helpers/register-select-helper', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = function () {
+    _ember['default'].Test.registerAsyncHelper('select', function (app, selector) {
+      for (var _len = arguments.length, texts = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+        texts[_key - 2] = arguments[_key];
+      }
+
+      var $options = app.testHelpers.findWithAssert(selector + ' option');
+
+      $options.each(function () {
+        var _this = this;
+
+        var $option = _ember['default'].$(this);
+
+        _ember['default'].run(function () {
+          _this.selected = texts.some(function (text) {
+            return $option.is(':contains(\'' + text + '\')');
+          });
+          $option.trigger('change');
+        });
+      });
+
+      return app.testHelpers.wait();
+    });
+  };
 });
 define('amplify-web/tests/helpers/resolver', ['exports', 'ember/resolver', 'amplify-web/config/environment'], function (exports, _emberResolver, _amplifyWebConfigEnvironment) {
 
@@ -282,7 +308,8 @@ define('amplify-web/tests/router.jshint', ['exports'], function (exports) {
     assert.ok(true, 'router.js should pass jshint.');
   });
 });
-define('amplify-web/tests/test-helper', ['exports', 'amplify-web/tests/helpers/resolver', 'ember-qunit'], function (exports, _amplifyWebTestsHelpersResolver, _emberQunit) {
+define('amplify-web/tests/test-helper', ['exports', 'amplify-web/tests/helpers/resolver', 'amplify-web/tests/helpers/register-select-helper', 'ember-qunit'], function (exports, _amplifyWebTestsHelpersResolver, _amplifyWebTestsHelpersRegisterSelectHelper, _emberQunit) {
+  (0, _amplifyWebTestsHelpersRegisterSelectHelper['default'])();
 
   (0, _emberQunit.setResolver)(_amplifyWebTestsHelpersResolver['default']);
 });
