@@ -30,8 +30,9 @@ export default CreateAppController.extend({
         applicationName: result.applicationName,
         emailId: result.emailId,
       });
-      result.weeks.forEach(week => {
+      result.weeks.forEach((week, weekIndex) => {
         allWeeks.pushObject(WeekContent.create({
+          index: weekIndex + 1,
           weekTitle: week.weekTitle,
           videoId: week.videoId,
           shortDescription: week.shortDescription,
@@ -78,14 +79,10 @@ export default CreateAppController.extend({
         })
       };
 
-      debugger;
-      return;
-      result.applicationName = 'ASDF';
-
       var request = {
         type: 'POST',
         url: CONTENTS_URL,
-        data: JSON.stringify(result),
+        data: JSON.stringify(actualResult),
         contentType: "application/json",
         datatype: 'json',
 

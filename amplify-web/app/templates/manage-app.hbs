@@ -1,80 +1,121 @@
-<div class="container">
-  <div class="page-header">
-    <h1>Amplify <small>Create Your Custom Android App</small></h1>
-  </div>
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="#">Amplify</a>
-        <a class="navbar-brand smaller" href="#">Create Your Custom Android App</a>
+<div class="brand">Amplify</div>
+<div class="address-bar">Create Your Custom Android App</div>
 
-      </div>
-      <div class="collapse navbar-collapse">
-        <ul class="nav navbar-nav navbar-right">
-          <li>
-            {{#link-to 'create-app'}}
-              <span class='glyphicon glyphicon-plus'></span> Create a New App
-            {{/link-to}}
-          </li>
-          <li>
-            {{#link-to 'manage-app'}}
-              <span class='glyphicon glyphicon-pencil'></span> Manage Your App
-            {{/link-to}}
-          </li>
-        </ul>
-      </div>
+<!-- Navigation -->
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <!-- navbar-brand is hidden on larger screens, but visible when the menu is collapsed -->
+            <a class="navbar-brand" href="index.html">Business Casual</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li>
+                    {{#link-to 'index'}}Home{{/link-to}}
+                </li>
+                <li>
+                    {{#link-to 'create-app'}}Create App{{/link-to}}
+                </li>
+                <li>
+                    {{#link-to 'manage-app'}}Manage App{{/link-to}}
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
     </div>
-  </nav>
+    <!-- /.container -->
+</nav>
+
+<div class="container">
+
+    <div class="row">
+        <div class="box">
+            <div class="col-lg-12">
+                <hr>
+                <h2 class="intro-text text-center">Main Application Info</h2>
+                <hr>
+            </div>
+            <div class="col-lg-12 text-center">
+              <div class="form-group">
+                <label for="appName" class='col-lg-offset-3 col-lg-2'>Application Name:</label>
+                <div class='col-lg-4'>
+                  {{input type='text' class='form-control' id='appName' placeholder='MyCoolApp' value=applicationName}}
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="appName" class='col-lg-offset-3 col-lg-2'>Color Theme:</label>
+                <div class='col-lg-4'>
+                  {{#x-select value=selectedColor action="selectColorTheme"}}
+                    {{#x-option value='Neutral'}}Neutral{{/x-option}}
+                    {{#x-option value='Blue'}}Blue{{/x-option}}
+                    {{#x-option value='Red'}}Red{{/x-option}}
+                  {{/x-select}}
+
+                  {{#if isBlueSelected}}
+                    <button class='btn dark-blue' disabled>#303F9F</button>
+                    <button class='btn light-blue' disabled>#C5CAE9</button>
+                  {{/if}}
+                  {{#if isNeutralSelected}}
+                    <button class='btn dark-neutral' disabled>#616161</button>
+                    <button class='btn light-neutral' disabled>#F5F5F5</button>
+
+                  {{/if}}
+                  {{#if isRedSelected}}
+                    <button class='btn dark-red' disabled>#D32F2F</button>
+                    <button class='btn light-red' disabled>#FFCDD2</button>
+
+                  {{/if}}
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div class="col-lg-12">
+                <hr>
+                <h2 class="intro-text text-center">Lesson Content</h2>
+                <hr>
+            </div>
+            <div class="col-lg-12 text-center">
+              {{#each allWeeks as |week|}}
+                {{week-content content=week}}
+              {{else}}
+                <div class="alert alert-info">No content added yet.</div>
+              {{/each}}
+              <div class="form-group">
+                <div class='col-lg-12'>
+                  <button class="btn btn-default" {{action 'addWeek'}}><span class='glyphicon
+      glyphicon-plus'></span>
+                  Add a Week
+                  </button>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container -->
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <p>Copyright &copy; Amplify 2016</p>
+            </div>
+        </div>
+    </div>
+</footer>
+<div class="container">
   <div class="row">
     <div class="col-lg-12">
       <form class='form-horizontal'>
-        <h3>Application Info</h3>
-        <div class="form-group">
-          <label for="appName" class='col-lg-2'>Application Name:</label>
-          <div class='col-lg-10'>
-            {{input type='text' class='form-control' id='appName' placeholder='MyCoolApp' value=applicationName}}
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="appName" class='col-lg-2'>Color Theme:</label>
-          <div class='col-lg-10'>
-            {{#x-select value=selectedColor action="selectColorTheme"}}
-              {{#x-option value='Neutral'}}Neutral{{/x-option}}
-              {{#x-option value='Blue'}}Blue{{/x-option}}
-              {{#x-option value='Red'}}Red{{/x-option}}
-            {{/x-select}}
-
-            {{#if isBlueSelected}}
-              <button class='btn dark-blue' disabled>#303F9F</button>
-              <button class='btn light-blue' disabled>#C5CAE9</button>
-            {{/if}}
-            {{#if isNeutralSelected}}
-              <button class='btn dark-neutral' disabled>#616161</button>
-              <button class='btn light-neutral' disabled>#F5F5F5</button>
-
-            {{/if}}
-            {{#if isRedSelected}}
-              <button class='btn dark-red' disabled>#D32F2F</button>
-              <button class='btn light-red' disabled>#FFCDD2</button>
-
-            {{/if}}
-          </div>
-        </div>
-        <hr />
-        <h3>Lesson Content</h3>
-        {{#each allWeeks as |week|}}
-          {{week-content content=week}}
-        {{else}}
-          <div class="alert alert-info">No content added yet.</div>
-        {{/each}}
-        <div class="form-group">
-          <div class='col-lg-12'>
-            <button class="btn btn-default" {{action 'addWeek'}}><span class='glyphicon
-glyphicon-plus'></span>
-            Add a Week
-            </button>
-          </div>
-        </div>
         <div class="form-group">
           <div class='col-lg-12 submit-btn-div'>
             <button type="submit" class="submit-btn btn btn-danger" {{action 'submitChanges'}}>Create My App</button>

@@ -55,7 +55,7 @@
       <div class='col-lg-10'>
         {{#each content.steps as |step|}}
           <div class="panel panel-default">
-            <div class="panel-heading">
+            <div class="panel-heading step-header">
               <h3 class="panel-title pull-left">Step {{step.index}}</h3>
               <button type="button" class='btn btn-danger pull-right' {{action 'removeItem' step}}>
                 <span class="glyphicon glyphicon-remove"></span>
