@@ -3,20 +3,14 @@ import Ember from 'ember';
 export default Ember.Component.extend({
 
   actions: {
-    addTextContent() {
+    addStep() {
       let items = this.get('content.items');
 
       items.pushObject(Ember.Object.create({
-        isText: true,
-        text: 'asdf'
-      }));
-    },
-    addImageContent() {
-      let items = this.get('content.items');
-
-      items.pushObject(Ember.Object.create({
-        isImage: true,
-        url: 'img/dumbbells.png'
+        index: items.get('length') + 1,
+        title: 'Cool Title',
+        description: 'Something something description',
+        imgUrl: 'img/dumbbells.png'
       }));
     },
     removeItem(item) {

@@ -31,7 +31,7 @@ define('amplify-web/tests/controllers/manage-app.jshint', ['exports'], function 
   QUnit.module('JSHint - controllers/manage-app.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/manage-app.js should pass jshint.\ncontrollers/manage-app.js: line 19, col 5, \'$\' is not defined.\n\n1 error');
+    assert.ok(false, 'controllers/manage-app.js should pass jshint.\ncontrollers/manage-app.js: line 81, col 7, Forgotten \'debugger\' statement?\ncontrollers/manage-app.js: line 83, col 7, Unreachable \'result\' after \'return\'.\ncontrollers/manage-app.js: line 97, col 9, Forgotten \'debugger\' statement?\ncontrollers/manage-app.js: line 96, col 28, \'result\' is defined but never used.\ncontrollers/manage-app.js: line 99, col 9, Forgotten \'debugger\' statement?\ncontrollers/manage-app.js: line 98, col 10, \'err\' is defined but never used.\ncontrollers/manage-app.js: line 60, col 11, \'actualResult\' is defined but never used.\ncontrollers/manage-app.js: line 24, col 5, \'$\' is not defined.\ncontrollers/manage-app.js: line 96, col 7, \'$\' is not defined.\n\n9 errors');
   });
 });
 define('amplify-web/tests/helpers/destroy-app', ['exports', 'ember'], function (exports, _ember) {

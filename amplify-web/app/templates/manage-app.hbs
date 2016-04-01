@@ -32,7 +32,7 @@
         <div class="form-group">
           <label for="appName" class='col-lg-2'>Application Name:</label>
           <div class='col-lg-10'>
-            <input type="text" class="form-control" id="appName" placeholder="My Cool App">
+            {{input type='text' class='form-control' id='appName' placeholder='MyCoolApp' value=applicationName}}
           </div>
         </div>
         <div class="form-group">
@@ -77,7 +77,7 @@ glyphicon-plus'></span>
         </div>
         <div class="form-group">
           <div class='col-lg-12 submit-btn-div'>
-            <button type="submit" class="submit-btn btn btn-danger">Create My App</button>
+            <button type="submit" class="submit-btn btn btn-danger" {{action 'submitChanges'}}>Create My App</button>
           </div>
         </div>
       </form>

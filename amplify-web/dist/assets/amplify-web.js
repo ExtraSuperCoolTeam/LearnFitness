@@ -89,20 +89,14 @@ define('amplify-web/components/week-content', ['exports', 'ember'], function (ex
   exports['default'] = _ember['default'].Component.extend({
 
     actions: {
-      addTextContent: function addTextContent() {
+      addStep: function addStep() {
         var items = this.get('content.items');
 
         items.pushObject(_ember['default'].Object.create({
-          isText: true,
-          text: 'asdf'
-        }));
-      },
-      addImageContent: function addImageContent() {
-        var items = this.get('content.items');
-
-        items.pushObject(_ember['default'].Object.create({
-          isImage: true,
-          url: 'img/dumbbells.png'
+          index: items.get('length') + 1,
+          title: 'Cool Title',
+          description: 'Something something description',
+          imgUrl: 'img/dumbbells.png'
         }));
       },
       removeItem: function removeItem(item) {
@@ -143,8 +137,12 @@ define('amplify-web/controllers/create-app', ['exports', 'ember', 'amplify-web/u
   });
 });
 define('amplify-web/controllers/manage-app', ['exports', 'ember', 'amplify-web/utils/week-content', 'amplify-web/controllers/create-app'], function (exports, _ember, _amplifyWebUtilsWeekContent, _amplifyWebControllersCreateApp) {
+
+  var CONTENTS_URL = 'https://learnxiny-mediastore.herokuapp.com/contents';
+
   exports['default'] = _amplifyWebControllersCreateApp['default'].extend({
 
+    applicationName: '',
     allWeeks: [],
 
     selectedColor: 'Blue',
@@ -156,15 +154,31 @@ define('amplify-web/controllers/manage-app', ['exports', 'ember', 'amplify-web/u
     fetchInitial: _ember['default'].on('init', function () {
       var self = this;
 
-      $.ajax('https://learnxiny-mediastore.herokuapp.com/contents').then(function (result) {
+      window.manageApp = this;
+
+      $.ajax(CONTENTS_URL).then(function (result) {
+
+        self.set('exactResult', result);
         var allWeeks = self.get('allWeeks');
 
+        self.setProperties({
+          applicationName: result.applicationName,
+          emailId: result.emailId
+        });
         result.weeks.forEach(function (week) {
           allWeeks.pushObject(_amplifyWebUtilsWeekContent['default'].create({
             weekTitle: week.weekTitle,
             videoId: week.videoId,
             shortDescription: week.shortDescription,
-            longDescription: week.longDescription
+            longDescription: week.longDescription,
+            steps: week.steps.map(function (step) {
+              return _ember['default'].Object.create({
+                index: parseInt(step.stepNumber),
+                imageUrl: step.stepImageUrl,
+                title: step.stepTitle,
+                description: step.stepDescription
+              });
+            })
           }));
         });
       });
@@ -174,6 +188,51 @@ define('amplify-web/controllers/manage-app', ['exports', 'ember', 'amplify-web/u
 
       selectColorTheme: function selectColorTheme(theme) {
         this.set('selectedColor', theme);
+      },
+      submitChanges: function submitChanges() {
+        var result = this.get('exactResult');
+
+        var actualResult = {
+          applicationName: this.get('applicationName'),
+          emailId: this.get('emailId'),
+          weeks: this.get('allWeeks').map(function (week) {
+            return {
+              weekTitle: week.get('weekTitle'),
+              videoId: week.get('videoId'),
+              shortDescription: week.get('shortDescription'),
+              longDescription: week.get('longDescription'),
+              steps: week.get('steps').map(function (step, index) {
+                return {
+                  stepNumber: (index + 1).toString(),
+                  stepImageUrl: step.get('imageUrl'),
+                  stepTitle: step.get('title'),
+                  stepDescription: step.get('description')
+                };
+              })
+            };
+          })
+        };
+
+        debugger;
+        return;
+        result.applicationName = 'ASDF';
+
+        var request = {
+          type: 'POST',
+          url: CONTENTS_URL,
+          data: JSON.stringify(result),
+          contentType: "application/json",
+          datatype: 'json',
+
+          // Allow cross domain request.
+          crossDomain: true
+        };
+
+        $.ajax(request).then(function (result) {
+          debugger;
+        }, function (err) {
+          debugger;
+        });
       }
     }
   });
@@ -902,231 +961,6 @@ define("amplify-web/templates/components/multi-select", ["exports"], function (e
 define("amplify-web/templates/components/week-content", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     var child0 = (function () {
-      var child0 = (function () {
-        return {
-          meta: {
-            "topLevel": null,
-            "revision": "Ember@2.1.0",
-            "loc": {
-              "source": null,
-              "start": {
-                "line": 57,
-                "column": 10
-              },
-              "end": {
-                "line": 74,
-                "column": 10
-              }
-            },
-            "moduleName": "amplify-web/templates/components/week-content.hbs"
-          },
-          isEmpty: false,
-          arity: 0,
-          cachedFragment: null,
-          hasRendered: false,
-          buildFragment: function buildFragment(dom) {
-            var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("            ");
-            dom.appendChild(el0, el1);
-            var el1 = dom.createElement("div");
-            dom.setAttribute(el1, "class", "panel panel-default");
-            var el2 = dom.createTextNode("\n              ");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createElement("div");
-            dom.setAttribute(el2, "class", "panel-heading");
-            var el3 = dom.createTextNode("\n                ");
-            dom.appendChild(el2, el3);
-            var el3 = dom.createElement("h3");
-            dom.setAttribute(el3, "class", "panel-title pull-left");
-            var el4 = dom.createTextNode("Text Content");
-            dom.appendChild(el3, el4);
-            dom.appendChild(el2, el3);
-            var el3 = dom.createTextNode("\n                ");
-            dom.appendChild(el2, el3);
-            var el3 = dom.createElement("button");
-            dom.setAttribute(el3, "type", "button");
-            dom.setAttribute(el3, "class", "btn btn-danger pull-right");
-            var el4 = dom.createTextNode("\n                  ");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createElement("span");
-            dom.setAttribute(el4, "class", "glyphicon glyphicon-remove");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createTextNode("\n                ");
-            dom.appendChild(el3, el4);
-            dom.appendChild(el2, el3);
-            var el3 = dom.createTextNode("\n                ");
-            dom.appendChild(el2, el3);
-            var el3 = dom.createElement("div");
-            dom.setAttribute(el3, "class", "clearfix");
-            dom.appendChild(el2, el3);
-            var el3 = dom.createTextNode("\n              ");
-            dom.appendChild(el2, el3);
-            dom.appendChild(el1, el2);
-            var el2 = dom.createTextNode("\n              ");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createElement("div");
-            dom.setAttribute(el2, "class", "panel-body");
-            var el3 = dom.createTextNode("\n                ");
-            dom.appendChild(el2, el3);
-            var el3 = dom.createElement("div");
-            dom.setAttribute(el3, "class", "row");
-            var el4 = dom.createTextNode("\n                  ");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createElement("div");
-            dom.setAttribute(el4, "class", "col-lg-12");
-            var el5 = dom.createTextNode("\n                    ");
-            dom.appendChild(el4, el5);
-            var el5 = dom.createComment("");
-            dom.appendChild(el4, el5);
-            var el5 = dom.createTextNode("\n                  ");
-            dom.appendChild(el4, el5);
-            dom.appendChild(el3, el4);
-            var el4 = dom.createTextNode("\n                ");
-            dom.appendChild(el3, el4);
-            dom.appendChild(el2, el3);
-            var el3 = dom.createTextNode("\n              ");
-            dom.appendChild(el2, el3);
-            dom.appendChild(el1, el2);
-            var el2 = dom.createTextNode("\n            ");
-            dom.appendChild(el1, el2);
-            dom.appendChild(el0, el1);
-            var el1 = dom.createTextNode("\n");
-            dom.appendChild(el0, el1);
-            return el0;
-          },
-          buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-            var element4 = dom.childAt(fragment, [1]);
-            var element5 = dom.childAt(element4, [1, 3]);
-            var morphs = new Array(2);
-            morphs[0] = dom.createElementMorph(element5);
-            morphs[1] = dom.createMorphAt(dom.childAt(element4, [3, 1, 1]), 1, 1);
-            return morphs;
-          },
-          statements: [["element", "action", ["removeItem", ["get", "item", ["loc", [null, [61, 94], [61, 98]]]]], [], ["loc", [null, [61, 72], [61, 100]]]], ["inline", "textarea", [], ["class", "text-content-area", "value", ["subexpr", "@mut", [["get", "item.text", ["loc", [null, [69, 63], [69, 72]]]]], [], []]], ["loc", [null, [69, 20], [69, 74]]]]],
-          locals: [],
-          templates: []
-        };
-      })();
-      var child1 = (function () {
-        return {
-          meta: {
-            "topLevel": null,
-            "revision": "Ember@2.1.0",
-            "loc": {
-              "source": null,
-              "start": {
-                "line": 76,
-                "column": 10
-              },
-              "end": {
-                "line": 97,
-                "column": 10
-              }
-            },
-            "moduleName": "amplify-web/templates/components/week-content.hbs"
-          },
-          isEmpty: false,
-          arity: 0,
-          cachedFragment: null,
-          hasRendered: false,
-          buildFragment: function buildFragment(dom) {
-            var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("            ");
-            dom.appendChild(el0, el1);
-            var el1 = dom.createElement("div");
-            dom.setAttribute(el1, "class", "panel panel-default");
-            var el2 = dom.createTextNode("\n              ");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createElement("div");
-            dom.setAttribute(el2, "class", "panel-heading");
-            var el3 = dom.createTextNode("\n                ");
-            dom.appendChild(el2, el3);
-            var el3 = dom.createElement("h3");
-            dom.setAttribute(el3, "class", "panel-title pull-left");
-            var el4 = dom.createTextNode("Image Content");
-            dom.appendChild(el3, el4);
-            dom.appendChild(el2, el3);
-            var el3 = dom.createTextNode("\n                ");
-            dom.appendChild(el2, el3);
-            var el3 = dom.createElement("button");
-            dom.setAttribute(el3, "type", "button");
-            dom.setAttribute(el3, "class", "btn btn-danger pull-right");
-            var el4 = dom.createTextNode("\n                  ");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createElement("span");
-            dom.setAttribute(el4, "class", "glyphicon glyphicon-remove");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createTextNode("\n                ");
-            dom.appendChild(el3, el4);
-            dom.appendChild(el2, el3);
-            var el3 = dom.createTextNode("\n                ");
-            dom.appendChild(el2, el3);
-            var el3 = dom.createElement("div");
-            dom.setAttribute(el3, "class", "clearfix");
-            dom.appendChild(el2, el3);
-            var el3 = dom.createTextNode("\n              ");
-            dom.appendChild(el2, el3);
-            dom.appendChild(el1, el2);
-            var el2 = dom.createTextNode("\n              ");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createElement("div");
-            dom.setAttribute(el2, "class", "panel-body");
-            var el3 = dom.createTextNode("\n                ");
-            dom.appendChild(el2, el3);
-            var el3 = dom.createElement("div");
-            dom.setAttribute(el3, "class", "row");
-            var el4 = dom.createTextNode("\n                  ");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createElement("div");
-            dom.setAttribute(el4, "class", "col-lg-4");
-            var el5 = dom.createTextNode("\n                    URL: ");
-            dom.appendChild(el4, el5);
-            var el5 = dom.createComment("");
-            dom.appendChild(el4, el5);
-            var el5 = dom.createTextNode("\n                  ");
-            dom.appendChild(el4, el5);
-            dom.appendChild(el3, el4);
-            var el4 = dom.createTextNode("\n\n                  ");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createElement("div");
-            dom.setAttribute(el4, "class", "col-lg-8 image-content-area");
-            var el5 = dom.createTextNode("\n                    ");
-            dom.appendChild(el4, el5);
-            var el5 = dom.createElement("img");
-            dom.setAttribute(el5, "class", "img-preview");
-            dom.appendChild(el4, el5);
-            var el5 = dom.createTextNode("\n                  ");
-            dom.appendChild(el4, el5);
-            dom.appendChild(el3, el4);
-            var el4 = dom.createTextNode("\n                ");
-            dom.appendChild(el3, el4);
-            dom.appendChild(el2, el3);
-            var el3 = dom.createTextNode("\n              ");
-            dom.appendChild(el2, el3);
-            dom.appendChild(el1, el2);
-            var el2 = dom.createTextNode("\n            ");
-            dom.appendChild(el1, el2);
-            dom.appendChild(el0, el1);
-            var el1 = dom.createTextNode("\n");
-            dom.appendChild(el0, el1);
-            return el0;
-          },
-          buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-            var element0 = dom.childAt(fragment, [1]);
-            var element1 = dom.childAt(element0, [1, 3]);
-            var element2 = dom.childAt(element0, [3, 1]);
-            var element3 = dom.childAt(element2, [3, 1]);
-            var morphs = new Array(3);
-            morphs[0] = dom.createElementMorph(element1);
-            morphs[1] = dom.createMorphAt(dom.childAt(element2, [1]), 1, 1);
-            morphs[2] = dom.createAttrMorph(element3, 'src');
-            return morphs;
-          },
-          statements: [["element", "action", ["removeItem", ["get", "item", ["loc", [null, [80, 94], [80, 98]]]]], [], ["loc", [null, [80, 72], [80, 100]]]], ["inline", "input", [], ["type", "text", "class", "img-url", "value", ["subexpr", "@mut", [["get", "item.url", ["loc", [null, [88, 67], [88, 75]]]]], [], []], "placeholder", "https://imgur.com/asdf"], ["loc", [null, [88, 25], [88, 114]]]], ["attribute", "src", ["get", "item.url", ["loc", [null, [92, 51], [92, 59]]]]]],
-          locals: [],
-          templates: []
-        };
-      })();
       return {
         meta: {
           "topLevel": null,
@@ -1138,7 +972,7 @@ define("amplify-web/templates/components/week-content", ["exports"], function (e
               "column": 8
             },
             "end": {
-              "line": 98,
+              "line": 85,
               "column": 8
             }
           },
@@ -1150,25 +984,128 @@ define("amplify-web/templates/components/week-content", ["exports"], function (e
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createComment("");
+          var el1 = dom.createTextNode("          ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("div");
+          dom.setAttribute(el1, "class", "panel panel-default");
+          var el2 = dom.createTextNode("\n            ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createElement("div");
+          dom.setAttribute(el2, "class", "panel-heading");
+          var el3 = dom.createTextNode("\n              ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("h3");
+          dom.setAttribute(el3, "class", "panel-title pull-left");
+          var el4 = dom.createTextNode("Step ");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createComment("");
+          dom.appendChild(el3, el4);
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n              ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("button");
+          dom.setAttribute(el3, "type", "button");
+          dom.setAttribute(el3, "class", "btn btn-danger pull-right");
+          var el4 = dom.createTextNode("\n                ");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createElement("span");
+          dom.setAttribute(el4, "class", "glyphicon glyphicon-remove");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createTextNode("\n              ");
+          dom.appendChild(el3, el4);
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n              ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("div");
+          dom.setAttribute(el3, "class", "clearfix");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n            ");
+          dom.appendChild(el2, el3);
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n            ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createElement("div");
+          dom.setAttribute(el2, "class", "panel-body");
+          var el3 = dom.createTextNode("\n              ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("div");
+          dom.setAttribute(el3, "class", "row");
+          var el4 = dom.createTextNode("\n                ");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createElement("div");
+          dom.setAttribute(el4, "class", "col-lg-12");
+          var el5 = dom.createTextNode("\n                  Title: ");
+          dom.appendChild(el4, el5);
+          var el5 = dom.createComment("");
+          dom.appendChild(el4, el5);
+          var el5 = dom.createTextNode("\n                ");
+          dom.appendChild(el4, el5);
+          dom.appendChild(el3, el4);
+          var el4 = dom.createTextNode("\n                ");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createElement("div");
+          dom.setAttribute(el4, "class", "col-lg-12");
+          var el5 = dom.createTextNode("\n                  Description:\n                    ");
+          dom.appendChild(el4, el5);
+          var el5 = dom.createComment("");
+          dom.appendChild(el4, el5);
+          var el5 = dom.createTextNode("\n                ");
+          dom.appendChild(el4, el5);
+          dom.appendChild(el3, el4);
+          var el4 = dom.createTextNode("\n\n                ");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createElement("div");
+          dom.setAttribute(el4, "class", "col-lg-12");
+          var el5 = dom.createTextNode("\n                  Title: ");
+          dom.appendChild(el4, el5);
+          var el5 = dom.createComment("");
+          dom.appendChild(el4, el5);
+          var el5 = dom.createTextNode("\n                ");
+          dom.appendChild(el4, el5);
+          dom.appendChild(el3, el4);
+          var el4 = dom.createTextNode("\n                ");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createElement("div");
+          dom.setAttribute(el4, "class", "col-lg-12 image-content-area");
+          var el5 = dom.createTextNode("\n                  ");
+          dom.appendChild(el4, el5);
+          var el5 = dom.createElement("img");
+          dom.setAttribute(el5, "class", "img-preview");
+          dom.appendChild(el4, el5);
+          var el5 = dom.createTextNode("\n                ");
+          dom.appendChild(el4, el5);
+          dom.appendChild(el3, el4);
+          var el4 = dom.createTextNode("\n              ");
+          dom.appendChild(el3, el4);
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n            ");
+          dom.appendChild(el2, el3);
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n          ");
+          dom.appendChild(el1, el2);
           dom.appendChild(el0, el1);
           var el1 = dom.createTextNode("\n");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createComment("");
           dom.appendChild(el0, el1);
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var morphs = new Array(2);
-          morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
-          morphs[1] = dom.createMorphAt(fragment, 2, 2, contextualElement);
-          dom.insertBoundary(fragment, 0);
-          dom.insertBoundary(fragment, null);
+          var element0 = dom.childAt(fragment, [1]);
+          var element1 = dom.childAt(element0, [1]);
+          var element2 = dom.childAt(element1, [3]);
+          var element3 = dom.childAt(element0, [3, 1]);
+          var element4 = dom.childAt(element3, [7, 1]);
+          var morphs = new Array(6);
+          morphs[0] = dom.createMorphAt(dom.childAt(element1, [1]), 1, 1);
+          morphs[1] = dom.createElementMorph(element2);
+          morphs[2] = dom.createMorphAt(dom.childAt(element3, [1]), 1, 1);
+          morphs[3] = dom.createMorphAt(dom.childAt(element3, [3]), 1, 1);
+          morphs[4] = dom.createMorphAt(dom.childAt(element3, [5]), 1, 1);
+          morphs[5] = dom.createAttrMorph(element4, 'src');
           return morphs;
         },
-        statements: [["block", "if", [["get", "item.isText", ["loc", [null, [57, 16], [57, 27]]]]], [], 0, null, ["loc", [null, [57, 10], [74, 17]]]], ["block", "if", [["get", "item.isImage", ["loc", [null, [76, 16], [76, 28]]]]], [], 1, null, ["loc", [null, [76, 10], [97, 17]]]]],
-        locals: ["item"],
-        templates: [child0, child1]
+        statements: [["content", "step.index", ["loc", [null, [59, 53], [59, 67]]]], ["element", "action", ["removeItem", ["get", "step", ["loc", [null, [60, 92], [60, 96]]]]], [], ["loc", [null, [60, 70], [60, 98]]]], ["inline", "input", [], ["type", "text", "class", "img-url", "value", ["subexpr", "@mut", [["get", "step.title", ["loc", [null, [68, 67], [68, 77]]]]], [], []], "placeholder", "Sample Title"], ["loc", [null, [68, 25], [68, 106]]]], ["inline", "textarea", [], ["class", "text-content-area", "value", ["subexpr", "@mut", [["get", "step.description", ["loc", [null, [73, 37], [73, 53]]]]], [], []]], ["loc", [null, [72, 20], [73, 55]]]], ["inline", "input", [], ["type", "text", "class", "img-url", "value", ["subexpr", "@mut", [["get", "step.imageUrl", ["loc", [null, [77, 67], [77, 80]]]]], [], []], "placeholder", "Sample Title"], ["loc", [null, [77, 25], [77, 109]]]], ["attribute", "src", ["get", "step.imageUrl", ["loc", [null, [80, 49], [80, 62]]]]]],
+        locals: ["step"],
+        templates: []
       };
     })();
     var child1 = (function () {
@@ -1179,11 +1116,11 @@ define("amplify-web/templates/components/week-content", ["exports"], function (e
           "loc": {
             "source": null,
             "start": {
-              "line": 98,
+              "line": 85,
               "column": 8
             },
             "end": {
-              "line": 100,
+              "line": 87,
               "column": 8
             }
           },
@@ -1195,7 +1132,7 @@ define("amplify-web/templates/components/week-content", ["exports"], function (e
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("          Add photos and text content to explain the video.\n");
+          var el1 = dom.createTextNode("          Add steps to explain the video.\n");
           dom.appendChild(el0, el1);
           return el0;
         },
@@ -1218,7 +1155,7 @@ define("amplify-web/templates/components/week-content", ["exports"], function (e
             "column": 0
           },
           "end": {
-            "line": 111,
+            "line": 97,
             "column": 0
           }
         },
@@ -1450,14 +1387,7 @@ define("amplify-web/templates/components/week-content", ["exports"], function (e
         dom.appendChild(el4, el5);
         var el5 = dom.createElement("button");
         dom.setAttribute(el5, "type", "button");
-        var el6 = dom.createTextNode("Add an Image");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("button");
-        dom.setAttribute(el5, "type", "button");
-        var el6 = dom.createTextNode("Add Text Content");
+        var el6 = dom.createTextNode("Add a Step");
         dom.appendChild(el5, el6);
         dom.appendChild(el4, el5);
         var el5 = dom.createTextNode("\n      ");
@@ -1477,28 +1407,25 @@ define("amplify-web/templates/components/week-content", ["exports"], function (e
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element6 = dom.childAt(fragment, [0]);
-        var element7 = dom.childAt(element6, [3]);
-        var element8 = dom.childAt(element7, [7, 3, 1]);
-        var element9 = dom.childAt(element8, [1, 1]);
-        var element10 = dom.childAt(element8, [3, 1]);
-        var element11 = dom.childAt(element7, [11, 1]);
-        var element12 = dom.childAt(element11, [1]);
-        var element13 = dom.childAt(element11, [3]);
-        var morphs = new Array(10);
-        morphs[0] = dom.createMorphAt(dom.childAt(element6, [1, 1]), 1, 1);
-        morphs[1] = dom.createMorphAt(dom.childAt(element7, [1, 3]), 1, 1);
-        morphs[2] = dom.createMorphAt(dom.childAt(element7, [3, 3]), 1, 1);
-        morphs[3] = dom.createMorphAt(dom.childAt(element7, [5, 3]), 1, 1);
-        morphs[4] = dom.createMorphAt(dom.childAt(element9, [1]), 1, 1);
-        morphs[5] = dom.createMorphAt(dom.childAt(element9, [3]), 1, 1);
-        morphs[6] = dom.createAttrMorph(element10, 'src');
-        morphs[7] = dom.createMorphAt(dom.childAt(element7, [9, 3]), 1, 1);
-        morphs[8] = dom.createElementMorph(element12);
-        morphs[9] = dom.createElementMorph(element13);
+        var element5 = dom.childAt(fragment, [0]);
+        var element6 = dom.childAt(element5, [3]);
+        var element7 = dom.childAt(element6, [7, 3, 1]);
+        var element8 = dom.childAt(element7, [1, 1]);
+        var element9 = dom.childAt(element7, [3, 1]);
+        var element10 = dom.childAt(element6, [11, 1, 1]);
+        var morphs = new Array(9);
+        morphs[0] = dom.createMorphAt(dom.childAt(element5, [1, 1]), 1, 1);
+        morphs[1] = dom.createMorphAt(dom.childAt(element6, [1, 3]), 1, 1);
+        morphs[2] = dom.createMorphAt(dom.childAt(element6, [3, 3]), 1, 1);
+        morphs[3] = dom.createMorphAt(dom.childAt(element6, [5, 3]), 1, 1);
+        morphs[4] = dom.createMorphAt(dom.childAt(element8, [1]), 1, 1);
+        morphs[5] = dom.createMorphAt(dom.childAt(element8, [3]), 1, 1);
+        morphs[6] = dom.createAttrMorph(element9, 'src');
+        morphs[7] = dom.createMorphAt(dom.childAt(element6, [9, 3]), 1, 1);
+        morphs[8] = dom.createElementMorph(element10);
         return morphs;
       },
-      statements: [["content", "content.index", ["loc", [null, [3, 33], [3, 50]]]], ["inline", "input", [], ["type", "text", "class", "form-control", "placeholder", "Abs and Core", "value", ["subexpr", "@mut", [["get", "content.weekTitle", ["loc", [null, [10, 21], [10, 38]]]]], [], []]], ["loc", [null, [9, 8], [10, 40]]]], ["inline", "input", [], ["type", "text", "class", "form-control", "placeholder", "Short description of the week", "value", ["subexpr", "@mut", [["get", "content.shortDescription", ["loc", [null, [17, 59], [17, 83]]]]], [], []]], ["loc", [null, [16, 8], [17, 85]]]], ["inline", "textarea", [], ["class", "form-control", "placeholder", "Longer description of the week", "value", ["subexpr", "@mut", [["get", "content.longDescription", ["loc", [null, [24, 60], [24, 83]]]]], [], []]], ["loc", [null, [23, 8], [24, 85]]]], ["inline", "input", [], ["class", "video-id", "type", "text", "placeholder", "Place your YouTube video id here", "value", ["subexpr", "@mut", [["get", "content.videoId", ["loc", [null, [36, 30], [36, 45]]]]], [], []]], ["loc", [null, [34, 16], [36, 47]]]], ["inline", "input", [], ["type", "text", "placeholder", "1:32", "value", ["subexpr", "@mut", [["get", "content.videoDuration", ["loc", [null, [41, 29], [41, 50]]]]], [], []]], ["loc", [null, [40, 16], [41, 52]]]], ["attribute", "src", ["get", "content.videoUrl", ["loc", [null, [47, 51], [47, 67]]]]], ["block", "each", [["get", "content.items", ["loc", [null, [56, 16], [56, 29]]]]], [], 0, 1, ["loc", [null, [56, 8], [100, 17]]]], ["element", "action", ["addImageContent"], [], ["loc", [null, [105, 30], [105, 58]]]], ["element", "action", ["addTextContent"], [], ["loc", [null, [106, 30], [106, 57]]]]],
+      statements: [["content", "content.index", ["loc", [null, [3, 33], [3, 50]]]], ["inline", "input", [], ["type", "text", "class", "form-control", "placeholder", "Abs and Core", "value", ["subexpr", "@mut", [["get", "content.weekTitle", ["loc", [null, [10, 21], [10, 38]]]]], [], []]], ["loc", [null, [9, 8], [10, 40]]]], ["inline", "input", [], ["type", "text", "class", "form-control", "placeholder", "Short description of the week", "value", ["subexpr", "@mut", [["get", "content.shortDescription", ["loc", [null, [17, 59], [17, 83]]]]], [], []]], ["loc", [null, [16, 8], [17, 85]]]], ["inline", "textarea", [], ["class", "form-control", "placeholder", "Longer description of the week", "value", ["subexpr", "@mut", [["get", "content.longDescription", ["loc", [null, [24, 60], [24, 83]]]]], [], []]], ["loc", [null, [23, 8], [24, 85]]]], ["inline", "input", [], ["class", "video-id", "type", "text", "placeholder", "Place your YouTube video id here", "value", ["subexpr", "@mut", [["get", "content.videoId", ["loc", [null, [36, 30], [36, 45]]]]], [], []]], ["loc", [null, [34, 16], [36, 47]]]], ["inline", "input", [], ["type", "text", "placeholder", "1:32", "value", ["subexpr", "@mut", [["get", "content.videoDuration", ["loc", [null, [41, 29], [41, 50]]]]], [], []]], ["loc", [null, [40, 16], [41, 52]]]], ["attribute", "src", ["get", "content.videoUrl", ["loc", [null, [47, 51], [47, 67]]]]], ["block", "each", [["get", "content.steps", ["loc", [null, [56, 16], [56, 29]]]]], [], 0, 1, ["loc", [null, [56, 8], [87, 17]]]], ["element", "action", ["addStep"], [], ["loc", [null, [92, 30], [92, 50]]]]],
       locals: [],
       templates: [child0, child1]
     };
@@ -2837,11 +2764,7 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
         dom.setAttribute(el6, "class", "col-lg-10");
         var el7 = dom.createTextNode("\n            ");
         dom.appendChild(el6, el7);
-        var el7 = dom.createElement("input");
-        dom.setAttribute(el7, "type", "text");
-        dom.setAttribute(el7, "class", "form-control");
-        dom.setAttribute(el7, "id", "appName");
-        dom.setAttribute(el7, "placeholder", "My Cool App");
+        var el7 = dom.createComment("");
         dom.appendChild(el6, el7);
         var el7 = dom.createTextNode("\n          ");
         dom.appendChild(el6, el7);
@@ -2965,18 +2888,21 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
         var element2 = dom.childAt(element0, [5, 1, 1]);
         var element3 = dom.childAt(element2, [5, 3]);
         var element4 = dom.childAt(element2, [13, 1, 1]);
-        var morphs = new Array(8);
+        var element5 = dom.childAt(element2, [15, 1, 1]);
+        var morphs = new Array(10);
         morphs[0] = dom.createMorphAt(dom.childAt(element1, [1]), 1, 1);
         morphs[1] = dom.createMorphAt(dom.childAt(element1, [3]), 1, 1);
-        morphs[2] = dom.createMorphAt(element3, 1, 1);
-        morphs[3] = dom.createMorphAt(element3, 3, 3);
-        morphs[4] = dom.createMorphAt(element3, 4, 4);
-        morphs[5] = dom.createMorphAt(element3, 5, 5);
-        morphs[6] = dom.createMorphAt(element2, 11, 11);
-        morphs[7] = dom.createElementMorph(element4);
+        morphs[2] = dom.createMorphAt(dom.childAt(element2, [3, 3]), 1, 1);
+        morphs[3] = dom.createMorphAt(element3, 1, 1);
+        morphs[4] = dom.createMorphAt(element3, 3, 3);
+        morphs[5] = dom.createMorphAt(element3, 4, 4);
+        morphs[6] = dom.createMorphAt(element3, 5, 5);
+        morphs[7] = dom.createMorphAt(element2, 11, 11);
+        morphs[8] = dom.createElementMorph(element4);
+        morphs[9] = dom.createElementMorph(element5);
         return morphs;
       },
-      statements: [["block", "link-to", ["create-app"], [], 0, null, ["loc", [null, [15, 12], [17, 24]]]], ["block", "link-to", ["manage-app"], [], 1, null, ["loc", [null, [20, 12], [22, 24]]]], ["block", "x-select", [], ["value", ["subexpr", "@mut", [["get", "selectedColor", ["loc", [null, [41, 30], [41, 43]]]]], [], []], "action", "selectColorTheme"], 2, null, ["loc", [null, [41, 12], [45, 25]]]], ["block", "if", [["get", "isBlueSelected", ["loc", [null, [47, 18], [47, 32]]]]], [], 3, null, ["loc", [null, [47, 12], [50, 19]]]], ["block", "if", [["get", "isNeutralSelected", ["loc", [null, [51, 18], [51, 35]]]]], [], 4, null, ["loc", [null, [51, 12], [55, 19]]]], ["block", "if", [["get", "isRedSelected", ["loc", [null, [56, 18], [56, 31]]]]], [], 5, null, ["loc", [null, [56, 12], [60, 19]]]], ["block", "each", [["get", "allWeeks", ["loc", [null, [65, 16], [65, 24]]]]], [], 6, 7, ["loc", [null, [65, 8], [69, 17]]]], ["element", "action", ["addWeek"], [], ["loc", [null, [72, 44], [72, 64]]]]],
+      statements: [["block", "link-to", ["create-app"], [], 0, null, ["loc", [null, [15, 12], [17, 24]]]], ["block", "link-to", ["manage-app"], [], 1, null, ["loc", [null, [20, 12], [22, 24]]]], ["inline", "input", [], ["type", "text", "class", "form-control", "id", "appName", "placeholder", "MyCoolApp", "value", ["subexpr", "@mut", [["get", "applicationName", ["loc", [null, [35, 96], [35, 111]]]]], [], []]], ["loc", [null, [35, 12], [35, 113]]]], ["block", "x-select", [], ["value", ["subexpr", "@mut", [["get", "selectedColor", ["loc", [null, [41, 30], [41, 43]]]]], [], []], "action", "selectColorTheme"], 2, null, ["loc", [null, [41, 12], [45, 25]]]], ["block", "if", [["get", "isBlueSelected", ["loc", [null, [47, 18], [47, 32]]]]], [], 3, null, ["loc", [null, [47, 12], [50, 19]]]], ["block", "if", [["get", "isNeutralSelected", ["loc", [null, [51, 18], [51, 35]]]]], [], 4, null, ["loc", [null, [51, 12], [55, 19]]]], ["block", "if", [["get", "isRedSelected", ["loc", [null, [56, 18], [56, 31]]]]], [], 5, null, ["loc", [null, [56, 12], [60, 19]]]], ["block", "each", [["get", "allWeeks", ["loc", [null, [65, 16], [65, 24]]]]], [], 6, 7, ["loc", [null, [65, 8], [69, 17]]]], ["element", "action", ["addWeek"], [], ["loc", [null, [72, 44], [72, 64]]]], ["element", "action", ["submitChanges"], [], ["loc", [null, [80, 68], [80, 94]]]]],
       locals: [],
       templates: [child0, child1, child2, child3, child4, child5, child6, child7]
     };
@@ -3020,7 +2946,7 @@ catch(err) {
 });
 
 if (!runningTests) {
-  require("amplify-web/app")["default"].create({"name":"amplify-web","version":"0.0.0+752b7e5c"});
+  require("amplify-web/app")["default"].create({"name":"amplify-web","version":"0.0.0+e3ad5cf2"});
 }
 
 /* jshint ignore:end */
