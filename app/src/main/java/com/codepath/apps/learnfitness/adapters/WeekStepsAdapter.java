@@ -1,8 +1,5 @@
 package com.codepath.apps.learnfitness.adapters;
 
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.models.Step;
-
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.models.Step;
 
 import java.util.List;
 

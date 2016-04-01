@@ -4,8 +4,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="peakInfoTextSize">16sp</dimen>
-    <dimen name="peakInfoMargin">10dp</dimen>
+    <dimen name="peakInfoTextSize">14sp</dimen>
+    <dimen name="peakInfoMargin">15dp</dimen>
     <integer name="google_play_services_version">8487000</integer>
 
 </resources>

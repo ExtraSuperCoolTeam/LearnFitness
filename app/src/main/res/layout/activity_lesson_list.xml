@@ -81,7 +81,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/rlBottomSheet"
         android:visibility="gone"
-        android:background="@color/primary_dark">
+        android:background="@color/testActionbar">
 
         <ImageView
             android:id="@+id/ivTrainerPhoto"
@@ -113,10 +113,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvTrainerName"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textSize="18sp"
                 android:textColor="#000"
                 android:text="Name"/>
 
@@ -130,8 +133,8 @@
                 android:text="@string/speciality"/>
 
             <ImageView
-                android:layout_width="85dp"
-                android:layout_height="85dp"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
                 android:id="@+id/ivSpecialtyIcon"
                 android:scaleType="fitXY"
                 android:layout_alignParentEnd="true"
@@ -157,7 +160,7 @@
             android:layout_marginBottom="25dp"
             android:layout_below="@id/llTrainerPeakInfo"
             android:id="@+id/rlTrainerDetails"
-            android:background="@color/primary_dark">
+            android:background="@color/testActionbar">
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -180,7 +183,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:textColor="@color/textWhite"
+                    android:textColor="@color/subTextWhite"
                     android:text="Address"
                     android:layout_below="@id/ivTrainerDirectionsIcon"/>
 
@@ -190,7 +193,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:textColor="@color/textWhite"
+                    android:textColor="@color/subTextWhite"
                     android:text="Address"
                     android:layout_below="@id/tvTrainerAddressLine1"/>
 
@@ -218,7 +221,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_marginTop="7dp"
-                    android:textColor="@color/textWhite"
+                    android:textColor="@color/subTextWhite"
                     android:gravity="center"
                     android:text="@string/call"
                     android:textStyle="bold"
