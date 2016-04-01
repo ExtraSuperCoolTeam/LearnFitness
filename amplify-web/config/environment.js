@@ -11,7 +11,7 @@ module.exports = function(environment) {
       'connect-src': "'self' learnxiny-mediastore.herokuapp.com",
       'style-src': "'self' 'unsafe-inline'",
       'default-src': "'self'",
-      'img-src': "'self' heapanalytics.com",
+      'img-src': "*",
       'frame-src': "*"
     },
     EmberENV: {

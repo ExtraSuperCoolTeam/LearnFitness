@@ -57,12 +57,42 @@ label {
   min-height: 100px;
   border: 1px solid #dddddd;
 }
-.panel-heading h3 {
+.step-header h3 {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: normal;
   width: 75%;
   padding-top: 8px;
+}
+.dark-blue {
+  color: white;
+  background-color: #303F9F;
+  opacity: 1 !important;
+}
+.light-blue {
+  color: white;
+  background-color: #C5CAE9;
+  opacity: 1 !important;
+}
+.dark-neutral {
+  color: white;
+  background-color: #616161;
+  opacity: 1 !important;
+}
+.light-neutral {
+  color: black;
+  background-color: #F5F5F5;
+  opacity: 1 !important;
+}
+.dark-red {
+  color: black;
+  background-color: #D32F2F;
+  opacity: 1 !important;
+}
+.light-red {
+  color: black;
+  background-color: #FFCDD2;
+  opacity: 1 !important;
 }
 /*# sourceMappingURL=/assets/amplify-web.css.map */
