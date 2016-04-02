@@ -1,67 +1,70 @@
-<div class="container">
-  <div class="page-header">
-    <h1>Amplify <small>Create Your Custom Android App</small></h1>
-  </div>
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <div class="collapse navbar-collapse">
-        <ul class="nav navbar-nav navbar-right">
-          <li>
-            {{#link-to 'create-app'}}
-              <span class='glyphicon glyphicon-plus'></span> Create a New App
-            {{/link-to}}
-          </li>
-          <li>
-            {{#link-to 'manage-app'}}
-              <span class='glyphicon glyphicon-pencil'></span> Manage Your App
-            {{/link-to}}
-          </li>
-        </ul>
+{{nav-bar top=0 showLogo=true}}
+<section id='create-app' class='bg-light-gray'>
+  <div class="container">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h2 class="section-heading">Create An Application</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h3 class="section-heading">Main Application Details</h3>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <form class='form-horizontal'>
+          <div class="form-group">
+            <label for="appName" class='col-lg-2'>Application Name</label>
+            <div class='col-lg-10'>
+              <input type="text" class="form-control" id="appName" placeholder="My Cool App">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email" class='col-lg-2'>Contact Email</label>
+            <div class='col-lg-10'>
+              <input type="email" class="form-control" id="email" placeholder="contact@email.com">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1" class='col-lg-2'>Password</label>
+            <div class='col-lg-10'>
+              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            </div>
+          </div>
+        </form>
       </div>
     </div>
-  </nav>
-  <div class="row">
-    <div class="col-lg-12">
-      <form class='form-horizontal'>
-        <div class="form-group">
-          <label for="appName" class='col-lg-2'>Application Name</label>
-          <div class='col-lg-10'>
-            <input type="text" class="form-control" id="appName" placeholder="My Cool App">
-          </div>
+    <hr />
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h3 class="section-heading">Lesson Content</h3>
         </div>
-        <div class="form-group">
-          <label for="email" class='col-lg-2'>Contact Email</label>
-          <div class='col-lg-10'>
-            <input type="email" class="form-control" id="email" placeholder="contact@email.com">
+    </div>
+    <div class='row'>
+      <div class='col-lg-12'>
+        <form class='form-horizontal'>
+          {{#each allWeeks as |week|}}
+            {{week-content content=week}}
+          {{else}}
+            <div class="alert alert-info">No content added yet.</div>
+          {{/each}}
+          <div class="form-group">
+            <div class='col-lg-12'>
+              <button class="btn btn-default" {{action 'addWeek'}}><span class='glyphicon
+  glyphicon-plus'></span>
+              Add a Week
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="form-group">
-          <label for="exampleInputPassword1" class='col-lg-2'>Password</label>
-          <div class='col-lg-10'>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+          <div class="form-group">
+            <div class='col-lg-12 submit-btn-div'>
+              <button type="submit" class="submit-btn btn btn-danger">Create My App</button>
+            </div>
           </div>
-        </div>
-        <hr />
-        <h3>Lesson Content</h3>
-        {{#each allWeeks as |week|}}
-          {{week-content content=week}}
-        {{else}}
-          <div class="alert alert-info">No content added yet.</div>
-        {{/each}}
-        <div class="form-group">
-          <div class='col-lg-12'>
-            <button class="btn btn-default" {{action 'addWeek'}}><span class='glyphicon
-glyphicon-plus'></span>
-            Add a Week
-            </button>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class='col-lg-12 submit-btn-div'>
-            <button type="submit" class="submit-btn btn btn-danger">Create My App</button>
-          </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
-</div>
+</section>
+{{app-footer}}

@@ -7,12 +7,13 @@ module.exports = function(environment) {
     baseURL: '/',
     locationType: 'auto',
     contentSecurityPolicy: {
-      'script-src': "'self' ",
+      'script-src': "*",
       'connect-src': "'self' learnxiny-mediastore.herokuapp.com",
-      'style-src': "'self' 'unsafe-inline'",
+      'style-src': "*",
       'default-src': "'self'",
       'img-src': "*",
-      'frame-src': "*"
+      'frame-src': "*",
+      'font-src': '*'
     },
     EmberENV: {
       FEATURES: {

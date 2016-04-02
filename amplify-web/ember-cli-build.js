@@ -1,8 +1,6 @@
 /*jshint node:true*/
 /* global require, module */
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
-var Funnel = require('broccoli-funnel');
-var mergeTrees = require('broccoli-merge-trees');
 
 module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
@@ -21,13 +19,12 @@ module.exports = function(defaults) {
   // modules that you would like to import into your application
   // please specify an object with the list of modules as keys
   // along with the exports of each module as its value.
-  app.import('bower_components/bootstrap/dist/js/bootstrap.js');
+  // app.import('bower_components/bootstrap/dist/js/bootstrap.js');
   // app.import('public/css/bootstrap.css');
 
-  var glyphicons = new Funnel('bower_components/bootstrap/fonts', {
-    destDir: '/fonts'
-  });
+  // var glyphicons = new Funnel('bower_components/bootstrap/fonts', {
+  //   destDir: '/fonts'
+  // });
 
-  var mainTree = app.toTree();
-  return mergeTrees([mainTree, glyphicons]);
+  return app.toTree();
 };

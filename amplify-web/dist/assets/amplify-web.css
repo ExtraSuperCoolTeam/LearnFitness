@@ -95,4 +95,13 @@ label {
   background-color: #FFCDD2;
   opacity: 1 !important;
 }
+.team-member img {
+  width: 200px;
+}
+.navbar-img {
+  padding: 0 !important;
+}
+.nav-logo {
+  width: 150px;
+}
 /*# sourceMappingURL=/assets/amplify-web.css.map */
