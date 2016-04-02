@@ -1,7 +1,6 @@
 package com.codepath.apps.learnfitness.activities;
 
 
-import com.codepath.apps.learnfitness.models.Lesson;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.ExponentialBackOff;
@@ -16,6 +15,7 @@ import com.codepath.apps.learnfitness.fragments.MyFormMessageListFragment;
 import com.codepath.apps.learnfitness.fragments.WeekFragment;
 import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
 import com.codepath.apps.learnfitness.gcm.RegistrationIntentService;
+import com.codepath.apps.learnfitness.models.Lesson;
 import com.codepath.apps.learnfitness.models.MyFormMessage;
 import com.codepath.apps.learnfitness.models.Trainer;
 import com.codepath.apps.learnfitness.models.Week;
@@ -72,10 +72,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -1061,5 +1061,14 @@ public class LessonListActivity extends AppCompatActivity
         if (numberProgressBar != null) {
             numberProgressBar.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.i(TAG, "Inside onNewIntent");
+        MyFormMessage myFormMessage = intent.getParcelableExtra("formMessage");
+        CheckMyFormFragment mCheckMyFormFragment = CheckMyFormFragment.newInstance(myFormMessage);
+        mFragmentManager.beginTransaction().add(R.id.flContent, mCheckMyFormFragment).addToBackStack("CheckMyFormFragment").commit();
     }
 }
