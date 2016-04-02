@@ -1,29 +1,7 @@
 package com.codepath.apps.learnfitness.fragments;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import com.codepath.apps.learnfitness.Manifest;
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.activities.LessonListActivity;
-import com.codepath.apps.learnfitness.models.Trainer;
-import com.codepath.apps.learnfitness.rest.MediaStoreService;
-
 import android.app.Dialog;
+import android.content.Context;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -40,6 +18,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
 import android.widget.Toast;
+
+import com.codepath.apps.learnfitness.Manifest;
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.activities.LessonListActivity;
+import com.codepath.apps.learnfitness.models.Trainer;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,43 +121,43 @@ public class FindTrainerFragment extends Fragment implements
         }
         Observable<List<Trainer>> call = MediaStoreService.trainersStore.fetchTrainers();
         subscription = call
-            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<List<Trainer>>() {
-                @Override
-                public void onCompleted() {
-                    Log.i("FindTrainerFragment", "Api call success");
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                    Log.i("FindTrainerFragment", e.toString());
-
-                    // cast to retrofit.HttpException to get the response code
-                    if (e instanceof HttpException) {
-                        HttpException response = (HttpException) e;
-                        int code = response.code();
-                        Log.i("FindTrainerFragment", "Http error code: " + code);
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Trainer>>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.i("FindTrainerFragment", "Api call success");
                     }
-                }
 
-                @Override
-                public void onNext(List<Trainer> trainers) {
-                    Log.i("FindTrainerFragment", "Found " + trainers.size() + " trainers");
-                    mTrainers = Trainer.mapTrainerIdToTrainer(trainers);
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.i("FindTrainerFragment", e.toString());
 
-                    if (mMap != null) {
-                        mMarkers.clear();
-                        for (String key : mTrainers.keySet()) {
-                            Trainer trainer = mTrainers.get(key);
-                            addMarkerforTrainer(trainer);
+                        // cast to retrofit.HttpException to get the response code
+                        if (e instanceof HttpException) {
+                            HttpException response = (HttpException) e;
+                            int code = response.code();
+                            Log.i("FindTrainerFragment", "Http error code: " + code);
                         }
-
-                        LatLng latLng = new LatLng(37.770927, -122.403665);
-                        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
-                        mMap.animateCamera(cameraUpdate);
                     }
-                }
-            });
+
+                    @Override
+                    public void onNext(List<Trainer> trainers) {
+                        Log.i("FindTrainerFragment", "Found " + trainers.size() + " trainers");
+                        mTrainers = Trainer.mapTrainerIdToTrainer(trainers);
+
+                        if (mMap != null) {
+                            mMarkers.clear();
+                            for (String key : mTrainers.keySet()) {
+                                Trainer trainer = mTrainers.get(key);
+                                addMarkerforTrainer(trainer);
+                            }
+
+                            LatLng latLng = new LatLng(37.770927, -122.403665);
+                            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+                            mMap.animateCamera(cameraUpdate);
+                        }
+                    }
+                });
     }
 
     public void addMarkerforTrainer(Trainer trainer) {
@@ -201,6 +201,7 @@ public class FindTrainerFragment extends Fragment implements
         }
 
         FindTrainerFragmentPermissionsDispatcher.getMyLocationWithCheck(this);
+
         mMap.setOnMarkerClickListener(this);
         populateMapWithSearchQuery("test");
     }
@@ -209,7 +210,7 @@ public class FindTrainerFragment extends Fragment implements
     void getMyLocation() {
         Log.d(TAG, "getMyLocation");
         // Now that map has loaded, let's get our location!
-        if (ActivityCompat.checkSelfPermission(getActivity(),
+        if (ActivityCompat.checkSelfPermission((Context) getActivity(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
