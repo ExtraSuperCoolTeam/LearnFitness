@@ -87,8 +87,8 @@
             android:id="@+id/ivTrainerPhoto"
             android:layout_centerHorizontal="true"
             android:layout_width="match_parent"
-            android:layout_height="280dp"
-            android:scaleType="centerCrop"/>
+            android:layout_height="250dp"
+            android:scaleType="fitXY"/>
 
         <ImageView
             android:layout_width="35dp"
@@ -133,13 +133,22 @@
                 android:text="@string/speciality"/>
 
             <ImageView
-                android:layout_width="75dp"
-                android:layout_height="75dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:id="@+id/ivSpecialtyIcon"
                 android:scaleType="fitXY"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_margin="@dimen/peakInfoMargin"/>
+
+            <ImageView
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:id="@+id/ivWhiteSpecialtyIcon"
+                android:scaleType="fitXY"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="15dp"/>
 
             <TextView
                 android:id="@+id/tvTrainerExperience"
@@ -156,7 +165,7 @@
         <android.support.percent.PercentRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="25dp"
             android:layout_below="@id/llTrainerPeakInfo"
             android:id="@+id/rlTrainerDetails"
@@ -170,9 +179,9 @@
                 android:layout_below="@+id/tvTrainerExperience">
                 <ImageView
                     android:id="@+id/ivTrainerDirectionsIcon"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="10dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_margin="15dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerInParent="true"
                     android:src="@drawable/direction_marker"/>
@@ -208,9 +217,9 @@
                 android:layout_toRightOf="@id/rlTrainerAddress">
                 <ImageView
                     android:id="@+id/ivTrainerCallIcon"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="10dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_margin="15dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerInParent="true"
                     android:src="@drawable/phone_icon"/>

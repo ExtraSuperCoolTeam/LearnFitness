@@ -1,33 +1,6 @@
 package com.codepath.apps.learnfitness.activities;
 
 
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.util.ExponentialBackOff;
-
-import com.bumptech.glide.Glide;
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.fragments.CheckMyFormFragment;
-import com.codepath.apps.learnfitness.fragments.ComposeFormMessageFragment;
-import com.codepath.apps.learnfitness.fragments.FABHideBehavior;
-import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
-import com.codepath.apps.learnfitness.fragments.MyFormMessageListFragment;
-import com.codepath.apps.learnfitness.fragments.WeekFragment;
-import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
-import com.codepath.apps.learnfitness.gcm.RegistrationIntentService;
-import com.codepath.apps.learnfitness.models.Lesson;
-import com.codepath.apps.learnfitness.models.MyFormMessage;
-import com.codepath.apps.learnfitness.models.Trainer;
-import com.codepath.apps.learnfitness.models.Week;
-import com.codepath.apps.learnfitness.rest.MediaStoreService;
-import com.codepath.apps.learnfitness.util.Utils;
-import com.codepath.apps.learnfitness.util.VideoUtility;
-import com.codepath.apps.learnfitness.youtubeupload.Auth;
-import com.daimajia.numberprogressbar.NumberProgressBar;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
-
 import android.Manifest;
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -70,6 +43,32 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.fragments.CheckMyFormFragment;
+import com.codepath.apps.learnfitness.fragments.ComposeFormMessageFragment;
+import com.codepath.apps.learnfitness.fragments.FABHideBehavior;
+import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
+import com.codepath.apps.learnfitness.fragments.MyFormMessageListFragment;
+import com.codepath.apps.learnfitness.fragments.WeekFragment;
+import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
+import com.codepath.apps.learnfitness.gcm.RegistrationIntentService;
+import com.codepath.apps.learnfitness.models.Lesson;
+import com.codepath.apps.learnfitness.models.MyFormMessage;
+import com.codepath.apps.learnfitness.models.Trainer;
+import com.codepath.apps.learnfitness.models.Week;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
+import com.codepath.apps.learnfitness.util.Utils;
+import com.codepath.apps.learnfitness.util.VideoUtility;
+import com.codepath.apps.learnfitness.youtubeupload.Auth;
+import com.daimajia.numberprogressbar.NumberProgressBar;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.util.ExponentialBackOff;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -137,6 +136,9 @@ public class LessonListActivity extends AppCompatActivity
 
     @Bind(R.id.ivSpecialtyIcon)
     ImageView mSpecialtyIcon;
+
+    @Bind(R.id.ivWhiteSpecialtyIcon)
+    ImageView mWhiteSpecialtyIcon;
 
     MenuItem miActionProgressItem;
     public static FragmentManager mFragmentManager;
@@ -368,6 +370,8 @@ public class LessonListActivity extends AppCompatActivity
                             .LayoutParams(mTrainerPeakInfo.getLayoutParams());
                     boxMargins.topMargin = (int) (BOTTOM_SHEET_IMAGE_MARGIN * slideOffset);
                     mTrainerPeakInfo.setLayoutParams(boxMargins);
+                    mWhiteSpecialtyIcon.setVisibility(View.VISIBLE);
+                    mSpecialtyIcon.setVisibility(View.GONE);
                 }
 
                 mTrainerPeakInfo.setBackgroundColor(ContextCompat.
@@ -396,6 +400,8 @@ public class LessonListActivity extends AppCompatActivity
                             getColor(LessonListActivity.this, textColor);
                     mTrainerName.setTextColor(parsedTextColor);
                     mTextViewTrainerSpeciality.setTextColor(parsedTextColor);
+                    mWhiteSpecialtyIcon.setVisibility(View.GONE);
+                    mSpecialtyIcon.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -437,22 +443,29 @@ public class LessonListActivity extends AppCompatActivity
 
         switch (trainer.getTrainerParams().getSpeciality()) {
             case "Cardio":
+                mWhiteSpecialtyIcon.setImageResource(R.drawable.cardio_white_icon);
                 mSpecialtyIcon.setImageResource(R.drawable.cardio_icon);
                 break;
             case "Cross Fit":
+                mWhiteSpecialtyIcon.setImageResource(R.drawable.yoga_white_icon);
                 mSpecialtyIcon.setImageResource(R.drawable.yoga_icon);
                 break;
             case "Lifting":
+                mWhiteSpecialtyIcon.setImageResource(R.drawable.lifting_white_icon);
                 mSpecialtyIcon.setImageResource(R.drawable.lifting_icon);
                 break;
             case "Yoga":
+                mWhiteSpecialtyIcon.setImageResource(R.drawable.yoga_white_icon);
                 mSpecialtyIcon.setImageResource(R.drawable.yoga_icon);
                 break;
             default:
+                mWhiteSpecialtyIcon.setImageResource(R.drawable.cardio_white_icon);
                 mSpecialtyIcon.setImageResource(R.drawable.cardio_icon);
                 break;
 
         }
+
+        mWhiteSpecialtyIcon.setVisibility(View.GONE);
 
         Glide.with(LessonListActivity.this)
                 .load(trainer.getProfileUrl())
