@@ -25,24 +25,28 @@
             <label for="appName" class='col-lg-offset-3 col-lg-2'>Color Theme:</label>
             <div class='col-lg-4'>
               {{#x-select value=selectedColor action="selectColorTheme"}}
-                {{#x-option value='Neutral'}}Neutral{{/x-option}}
                 {{#x-option value='Blue'}}Blue{{/x-option}}
+                {{#x-option value='Yellow'}}Yellow{{/x-option}}
                 {{#x-option value='Red'}}Red{{/x-option}}
+                {{#x-option value='Green'}}Green{{/x-option}}
               {{/x-select}}
 
               {{#if isBlueSelected}}
                 <button class='btn dark-blue' disabled>#303F9F</button>
                 <button class='btn light-blue' disabled>#C5CAE9</button>
               {{/if}}
-              {{#if isNeutralSelected}}
-                <button class='btn dark-neutral' disabled>#616161</button>
-                <button class='btn light-neutral' disabled>#F5F5F5</button>
+              {{#if isYellowSelected}}
+                <button class='btn dark-yellow' disabled>#D4C429</button>
+                <button class='btn light-yellow' disabled>#FDEC56</button>
 
               {{/if}}
               {{#if isRedSelected}}
                 <button class='btn dark-red' disabled>#D32F2F</button>
                 <button class='btn light-red' disabled>#FFCDD2</button>
-
+              {{/if}}
+              {{#if isGreenSelected}}
+                <button class='btn dark-green' disabled>#388E3C</button>
+                <button class='btn light-green' disabled>#C8E6C9</button>
               {{/if}}
             </div>
           </div>

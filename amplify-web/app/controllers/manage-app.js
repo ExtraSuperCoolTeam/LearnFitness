@@ -13,8 +13,9 @@ export default CreateAppController.extend({
   selectedColor: 'Blue',
 
   isBlueSelected: Ember.computed.equal('selectedColor', 'Blue'),
-  isNeutralSelected: Ember.computed.equal('selectedColor', 'Neutral'),
+  isYellowSelected: Ember.computed.equal('selectedColor', 'Yellow'),
   isRedSelected: Ember.computed.equal('selectedColor', 'Red'),
+  isGreenSelected: Ember.computed.equal('selectedColor', 'Green'),
 
   fetchInitial: Ember.on('init', function() {
     var self = this;

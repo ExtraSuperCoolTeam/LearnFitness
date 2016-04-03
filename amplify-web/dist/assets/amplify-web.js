@@ -262,8 +262,9 @@ define('amplify-web/controllers/manage-app', ['exports', 'ember', 'amplify-web/u
     selectedColor: 'Blue',
 
     isBlueSelected: _ember['default'].computed.equal('selectedColor', 'Blue'),
-    isNeutralSelected: _ember['default'].computed.equal('selectedColor', 'Neutral'),
+    isYellowSelected: _ember['default'].computed.equal('selectedColor', 'Yellow'),
     isRedSelected: _ember['default'].computed.equal('selectedColor', 'Red'),
+    isGreenSelected: _ember['default'].computed.equal('selectedColor', 'Green'),
 
     fetchInitial: _ember['default'].on('init', function () {
       var self = this;
@@ -3270,7 +3271,7 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
               },
               "end": {
                 "line": 28,
-                "column": 52
+                "column": 46
               }
             },
             "moduleName": "amplify-web/templates/manage-app.hbs"
@@ -3281,7 +3282,7 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           hasRendered: false,
           buildFragment: function buildFragment(dom) {
             var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("Neutral");
+            var el1 = dom.createTextNode("Blue");
             dom.appendChild(el0, el1);
             return el0;
           },
@@ -3306,7 +3307,7 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
               },
               "end": {
                 "line": 29,
-                "column": 46
+                "column": 50
               }
             },
             "moduleName": "amplify-web/templates/manage-app.hbs"
@@ -3317,7 +3318,7 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           hasRendered: false,
           buildFragment: function buildFragment(dom) {
             var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("Blue");
+            var el1 = dom.createTextNode("Yellow");
             dom.appendChild(el0, el1);
             return el0;
           },
@@ -3365,6 +3366,42 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           templates: []
         };
       })();
+      var child3 = (function () {
+        return {
+          meta: {
+            "topLevel": null,
+            "revision": "Ember@2.1.0",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 31,
+                "column": 16
+              },
+              "end": {
+                "line": 31,
+                "column": 48
+              }
+            },
+            "moduleName": "amplify-web/templates/manage-app.hbs"
+          },
+          isEmpty: false,
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode("Green");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes() {
+            return [];
+          },
+          statements: [],
+          locals: [],
+          templates: []
+        };
+      })();
       return {
         meta: {
           "topLevel": null,
@@ -3376,7 +3413,7 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
               "column": 14
             },
             "end": {
-              "line": 31,
+              "line": 32,
               "column": 14
             }
           },
@@ -3400,20 +3437,25 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           dom.appendChild(el0, el1);
           var el1 = dom.createComment("");
           dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n                ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
           var el1 = dom.createTextNode("\n");
           dom.appendChild(el0, el1);
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var morphs = new Array(3);
+          var morphs = new Array(4);
           morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
           morphs[1] = dom.createMorphAt(fragment, 3, 3, contextualElement);
           morphs[2] = dom.createMorphAt(fragment, 5, 5, contextualElement);
+          morphs[3] = dom.createMorphAt(fragment, 7, 7, contextualElement);
           return morphs;
         },
-        statements: [["block", "x-option", [], ["value", "Neutral"], 0, null, ["loc", [null, [28, 16], [28, 65]]]], ["block", "x-option", [], ["value", "Blue"], 1, null, ["loc", [null, [29, 16], [29, 59]]]], ["block", "x-option", [], ["value", "Red"], 2, null, ["loc", [null, [30, 16], [30, 57]]]]],
+        statements: [["block", "x-option", [], ["value", "Blue"], 0, null, ["loc", [null, [28, 16], [28, 59]]]], ["block", "x-option", [], ["value", "Yellow"], 1, null, ["loc", [null, [29, 16], [29, 63]]]], ["block", "x-option", [], ["value", "Red"], 2, null, ["loc", [null, [30, 16], [30, 57]]]], ["block", "x-option", [], ["value", "Green"], 3, null, ["loc", [null, [31, 16], [31, 61]]]]],
         locals: [],
-        templates: [child0, child1, child2]
+        templates: [child0, child1, child2, child3]
       };
     })();
     var child1 = (function () {
@@ -3424,11 +3466,11 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 33,
+              "line": 34,
               "column": 14
             },
             "end": {
-              "line": 36,
+              "line": 37,
               "column": 14
             }
           },
@@ -3476,11 +3518,11 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 37,
+              "line": 38,
               "column": 14
             },
             "end": {
-              "line": 41,
+              "line": 42,
               "column": 14
             }
           },
@@ -3495,17 +3537,17 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           var el1 = dom.createTextNode("                ");
           dom.appendChild(el0, el1);
           var el1 = dom.createElement("button");
-          dom.setAttribute(el1, "class", "btn dark-neutral");
+          dom.setAttribute(el1, "class", "btn dark-yellow");
           dom.setAttribute(el1, "disabled", "");
-          var el2 = dom.createTextNode("#616161");
+          var el2 = dom.createTextNode("#D4C429");
           dom.appendChild(el1, el2);
           dom.appendChild(el0, el1);
           var el1 = dom.createTextNode("\n                ");
           dom.appendChild(el0, el1);
           var el1 = dom.createElement("button");
-          dom.setAttribute(el1, "class", "btn light-neutral");
+          dom.setAttribute(el1, "class", "btn light-yellow");
           dom.setAttribute(el1, "disabled", "");
-          var el2 = dom.createTextNode("#F5F5F5");
+          var el2 = dom.createTextNode("#FDEC56");
           dom.appendChild(el1, el2);
           dom.appendChild(el0, el1);
           var el1 = dom.createTextNode("\n\n");
@@ -3528,7 +3570,7 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 42,
+              "line": 43,
               "column": 14
             },
             "end": {
@@ -3560,7 +3602,7 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           var el2 = dom.createTextNode("#FFCDD2");
           dom.appendChild(el1, el2);
           dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n\n");
+          var el1 = dom.createTextNode("\n");
           dom.appendChild(el0, el1);
           return el0;
         },
@@ -3580,11 +3622,63 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 61,
+              "line": 47,
+              "column": 14
+            },
+            "end": {
+              "line": 50,
+              "column": 14
+            }
+          },
+          "moduleName": "amplify-web/templates/manage-app.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("                ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("button");
+          dom.setAttribute(el1, "class", "btn dark-green");
+          dom.setAttribute(el1, "disabled", "");
+          var el2 = dom.createTextNode("#388E3C");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n                ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("button");
+          dom.setAttribute(el1, "class", "btn light-green");
+          dom.setAttribute(el1, "disabled", "");
+          var el2 = dom.createTextNode("#C8E6C9");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child5 = (function () {
+      return {
+        meta: {
+          "topLevel": null,
+          "revision": "Ember@2.1.0",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 65,
               "column": 10
             },
             "end": {
-              "line": 63,
+              "line": 67,
               "column": 10
             }
           },
@@ -3609,12 +3703,12 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
           return morphs;
         },
-        statements: [["inline", "week-content", [], ["content", ["subexpr", "@mut", [["get", "week", ["loc", [null, [62, 35], [62, 39]]]]], [], []]], ["loc", [null, [62, 12], [62, 41]]]]],
+        statements: [["inline", "week-content", [], ["content", ["subexpr", "@mut", [["get", "week", ["loc", [null, [66, 35], [66, 39]]]]], [], []]], ["loc", [null, [66, 12], [66, 41]]]]],
         locals: ["week"],
         templates: []
       };
     })();
-    var child5 = (function () {
+    var child6 = (function () {
       return {
         meta: {
           "topLevel": null,
@@ -3622,11 +3716,11 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 63,
+              "line": 67,
               "column": 10
             },
             "end": {
-              "line": 65,
+              "line": 69,
               "column": 10
             }
           },
@@ -3668,7 +3762,7 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 96,
+            "line": 100,
             "column": 0
           }
         },
@@ -3792,6 +3886,8 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
         var el8 = dom.createComment("");
         dom.appendChild(el7, el8);
         var el8 = dom.createTextNode("\n");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createComment("");
         dom.appendChild(el7, el8);
         var el8 = dom.createComment("");
         dom.appendChild(el7, el8);
@@ -3964,23 +4060,24 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
         var element4 = dom.childAt(element1, [11, 1, 1]);
         var element5 = dom.childAt(element4, [3, 1, 1]);
         var element6 = dom.childAt(element0, [5, 1, 1, 1, 1, 1, 1]);
-        var morphs = new Array(10);
+        var morphs = new Array(11);
         morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
         morphs[1] = dom.createMorphAt(dom.childAt(element2, [1, 3]), 1, 1);
         morphs[2] = dom.createMorphAt(element3, 1, 1);
         morphs[3] = dom.createMorphAt(element3, 3, 3);
         morphs[4] = dom.createMorphAt(element3, 4, 4);
         morphs[5] = dom.createMorphAt(element3, 5, 5);
-        morphs[6] = dom.createMorphAt(element4, 1, 1);
-        morphs[7] = dom.createElementMorph(element5);
-        morphs[8] = dom.createElementMorph(element6);
-        morphs[9] = dom.createMorphAt(fragment, 4, 4, contextualElement);
+        morphs[6] = dom.createMorphAt(element3, 6, 6);
+        morphs[7] = dom.createMorphAt(element4, 1, 1);
+        morphs[8] = dom.createElementMorph(element5);
+        morphs[9] = dom.createElementMorph(element6);
+        morphs[10] = dom.createMorphAt(fragment, 4, 4, contextualElement);
         dom.insertBoundary(fragment, 0);
         return morphs;
       },
-      statements: [["inline", "nav-bar", [], ["top", 0, "showLogo", true], ["loc", [null, [1, 0], [1, 31]]]], ["inline", "input", [], ["type", "text", "class", "form-control", "id", "appName", "placeholder", "MyCoolApp", "value", ["subexpr", "@mut", [["get", "applicationName", ["loc", [null, [21, 98], [21, 113]]]]], [], []]], ["loc", [null, [21, 14], [21, 115]]]], ["block", "x-select", [], ["value", ["subexpr", "@mut", [["get", "selectedColor", ["loc", [null, [27, 32], [27, 45]]]]], [], []], "action", "selectColorTheme"], 0, null, ["loc", [null, [27, 14], [31, 27]]]], ["block", "if", [["get", "isBlueSelected", ["loc", [null, [33, 20], [33, 34]]]]], [], 1, null, ["loc", [null, [33, 14], [36, 21]]]], ["block", "if", [["get", "isNeutralSelected", ["loc", [null, [37, 20], [37, 37]]]]], [], 2, null, ["loc", [null, [37, 14], [41, 21]]]], ["block", "if", [["get", "isRedSelected", ["loc", [null, [42, 20], [42, 33]]]]], [], 3, null, ["loc", [null, [42, 14], [46, 21]]]], ["block", "each", [["get", "allWeeks", ["loc", [null, [61, 18], [61, 26]]]]], [], 4, 5, ["loc", [null, [61, 10], [65, 19]]]], ["element", "action", ["addWeek"], [], ["loc", [null, [68, 46], [68, 66]]]], ["element", "action", ["submitChanges"], [], ["loc", [null, [87, 16], [87, 42]]]], ["content", "app-footer", ["loc", [null, [95, 0], [95, 14]]]]],
+      statements: [["inline", "nav-bar", [], ["top", 0, "showLogo", true], ["loc", [null, [1, 0], [1, 31]]]], ["inline", "input", [], ["type", "text", "class", "form-control", "id", "appName", "placeholder", "MyCoolApp", "value", ["subexpr", "@mut", [["get", "applicationName", ["loc", [null, [21, 98], [21, 113]]]]], [], []]], ["loc", [null, [21, 14], [21, 115]]]], ["block", "x-select", [], ["value", ["subexpr", "@mut", [["get", "selectedColor", ["loc", [null, [27, 32], [27, 45]]]]], [], []], "action", "selectColorTheme"], 0, null, ["loc", [null, [27, 14], [32, 27]]]], ["block", "if", [["get", "isBlueSelected", ["loc", [null, [34, 20], [34, 34]]]]], [], 1, null, ["loc", [null, [34, 14], [37, 21]]]], ["block", "if", [["get", "isYellowSelected", ["loc", [null, [38, 20], [38, 36]]]]], [], 2, null, ["loc", [null, [38, 14], [42, 21]]]], ["block", "if", [["get", "isRedSelected", ["loc", [null, [43, 20], [43, 33]]]]], [], 3, null, ["loc", [null, [43, 14], [46, 21]]]], ["block", "if", [["get", "isGreenSelected", ["loc", [null, [47, 20], [47, 35]]]]], [], 4, null, ["loc", [null, [47, 14], [50, 21]]]], ["block", "each", [["get", "allWeeks", ["loc", [null, [65, 18], [65, 26]]]]], [], 5, 6, ["loc", [null, [65, 10], [69, 19]]]], ["element", "action", ["addWeek"], [], ["loc", [null, [72, 46], [72, 66]]]], ["element", "action", ["submitChanges"], [], ["loc", [null, [91, 16], [91, 42]]]], ["content", "app-footer", ["loc", [null, [99, 0], [99, 14]]]]],
       locals: [],
-      templates: [child0, child1, child2, child3, child4, child5]
+      templates: [child0, child1, child2, child3, child4, child5, child6]
     };
   })());
 });
@@ -4022,7 +4119,7 @@ catch(err) {
 });
 
 if (!runningTests) {
-  require("amplify-web/app")["default"].create({"name":"amplify-web","version":"0.0.0+9360f889"});
+  require("amplify-web/app")["default"].create({"name":"amplify-web","version":"0.0.0+4d366b73"});
 }
 
 /* jshint ignore:end */
