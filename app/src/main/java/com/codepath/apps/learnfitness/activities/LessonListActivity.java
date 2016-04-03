@@ -304,8 +304,6 @@ public class LessonListActivity extends AppCompatActivity
                 public void onNext(Lesson lesson) {
                     Log.d(TAG, "adding all the weeks now");
                     mWeeks.addAll(lesson.getWeeks());
-                    Log.i(TAG, lesson.getTitle());
-
                     SharedPreferences sharedPreferences =
                             getSharedPreferences(LessonListActivity.MY_SHARED_PREFS,
                                     Context.MODE_PRIVATE);

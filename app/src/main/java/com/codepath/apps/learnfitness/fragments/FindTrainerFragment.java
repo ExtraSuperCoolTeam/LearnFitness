@@ -113,6 +113,7 @@ public class FindTrainerFragment extends Fragment implements
         super.onResume();
         Log.i(TAG, "In Resume");
         loadMap(mMap);
+        ((LessonListActivity)getActivity()).getSupportActionBar().setTitle("Trainers");
     }
 
     public void populateMapWithSearchQuery(String query) {
