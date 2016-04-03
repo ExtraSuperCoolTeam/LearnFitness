@@ -155,7 +155,9 @@ public class FindTrainerFragment extends Fragment implements
 
                             //LatLng latLng = new LatLng(37.770927, -122.403665);
                             //Facebook: 37.485366, -122.148321
-                            LatLng latLng = new LatLng(37.485366, -122.148321);
+                            //LatLng latLng = new LatLng(37.485366, -122.148321);
+
+                            LatLng latLng = new LatLng(37.790614, -122.391983);
                             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 13);
                             mMap.animateCamera(cameraUpdate);
 
@@ -205,7 +207,7 @@ public class FindTrainerFragment extends Fragment implements
         }
 
         FindTrainerFragmentPermissionsDispatcher.getMyLocationWithCheck(this);
-
+        mMap.setMyLocationEnabled(true);
         mMap.setOnMarkerClickListener(this);
         populateMapWithSearchQuery("test");
     }
