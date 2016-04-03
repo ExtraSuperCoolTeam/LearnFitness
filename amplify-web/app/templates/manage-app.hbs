@@ -61,10 +61,10 @@
           {{#each allWeeks as |week|}}
             {{week-content content=week}}
           {{else}}
-            <div class="alert alert-info">No content added yet.</div>
+            <div class="alert alert-info text-center">No content added yet.</div>
           {{/each}}
           <div class="form-group">
-            <div class='col-lg-12'>
+            <div class='col-lg-12 text-center'>
               <button class="btn btn-default" {{action 'addWeek'}}><span class='glyphicon
   glyphicon-plus'></span>
               Add a Week
@@ -82,8 +82,8 @@
       <div class="col-lg-12">
         <form class='form-horizontal'>
           <div class="form-group">
-            <div class='col-lg-12 submit-btn-div'>
-              <button type="submit" class="pull-right submit-btn btn btn-danger"
+            <div class='col-lg-12 submit-btn-div text-center'>
+              <button type="submit" class="submit-btn btn btn-danger"
                 {{action 'submitChanges'}}>Update My App</button>
             </div>
           </div>

@@ -104,4 +104,11 @@ label {
 .nav-logo {
   width: 150px;
 }
+.portfolio-link {
+  background-color: white;
+}
+.portfolio-link,
+.portfolio-caption {
+  max-width: 300px !important;
+}
 /*# sourceMappingURL=/assets/amplify-web.css.map */
