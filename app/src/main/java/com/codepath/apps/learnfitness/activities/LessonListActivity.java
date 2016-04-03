@@ -190,6 +190,7 @@ public class LessonListActivity extends AppCompatActivity
 
     AppBarLayout.LayoutParams mAppBarLayoutParams;
     FloatingActionButton mFab;
+    Week currentSelectedWeek;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -527,7 +528,7 @@ public class LessonListActivity extends AppCompatActivity
         checkForm.setIcon(R.drawable.lifting_icon);
         checkForm.setEnabled(false);
 
-        menu.add(CHECK_FORM_GROUP, FEEDBACK_ID, 1, "See Feedback");
+        menu.add(CHECK_FORM_GROUP, FEEDBACK_ID, 1, "Message Board");
         menu.add(CHECK_FORM_GROUP, REQUEST_FEEDBACK_ID, 2, "Request Feedback");
 
         navigationView.setNavigationItemSelectedListener(
@@ -653,6 +654,7 @@ public class LessonListActivity extends AppCompatActivity
 
     @Override
     public void onWeekSelected(View itemView, Week week) {
+        currentSelectedWeek = week;
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .add(R.id.flContent, WeekFragment.newInstance(week)).addToBackStack("week").commit();
@@ -673,7 +675,13 @@ public class LessonListActivity extends AppCompatActivity
 
     @Override
     public void onCheckMyFormDialog() {
-        mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance();
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.flContent);
+        if (f.getClass().toString().contains("WeekFragment")) {
+            mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance(currentSelectedWeek);
+        } else {
+            mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance(null);
+        }
+        //mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance(currentSelectedWeek);
         mFragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).addToBackStack("ComposeFormMessageFragment").commit();
     }
 
@@ -710,8 +718,10 @@ public class LessonListActivity extends AppCompatActivity
         }
 
         mFragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment)
-                .addToBackStack("MyFormMessageListFragment").commit();
+//        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment)
+//                .addToBackStack("MyFormMessageListFragment").commit();
+        mFragmentManager.popBackStack();
+        coordinatorReConfig();
     }
 
     @Override
@@ -748,15 +758,19 @@ public class LessonListActivity extends AppCompatActivity
                     });
 
         mFragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment)
-                .addToBackStack("MyFormMessageListFragment").commit();
+//        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment)
+//                .addToBackStack("MyFormMessageListFragment").commit();
+        mFragmentManager.popBackStack();
+        coordinatorReConfig();
     }
 
     @Override
     public void composeMessageCancel() {
         mFragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment)
-                .addToBackStack("MyFormMessageListFragment").commit();
+//        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment)
+//                .addToBackStack("MyFormMessageListFragment").commit();
+        mFragmentManager.popBackStack();
+        coordinatorReConfig();
     }
 
     @Override
@@ -978,44 +992,7 @@ public class LessonListActivity extends AppCompatActivity
         {
             public void onBackStackChanged()
             {
-                FragmentManager manager = getSupportFragmentManager();
-
-                if (manager != null)
-                {
-                    Fragment f = getSupportFragmentManager().findFragmentById(R.id.flContent);
-                    Log.i(TAG, "Current fragment is: " + f.getClass());
-
-                    if (f.getClass().toString().contains("WeeksListFragment") ||
-                            f.getClass().toString().contains("MyFormMessageListFragment")) {
-                        mAppBarLayoutParams.setScrollFlags(
-                                AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
-                                        AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL |
-                                        AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP);
-                        toolbar.setLayoutParams(mAppBarLayoutParams);
-                        Log.i(TAG, "Toolbar scrolling: " + f.getClass());
-
-                    } else if (f.getClass().toString().contains("CheckMyFormFragment") ||
-                                f.getClass().toString().contains("ComposeFormMessageFragment") ||
-                                f.getClass().toString().contains("WeekFragment") ||
-                            f.getClass().toString().contains("FindTrainerFragment")) {
-                        mAppBarLayoutParams.setScrollFlags(
-                                AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-                        toolbar.setLayoutParams(mAppBarLayoutParams);
-
-                        Log.i(TAG, "Toolbar stop scrolling: " + f.getClass());
-                    }
-
-                    if (f.getClass().toString().contains("MyFormMessageListFragment")) {
-                        mFab.setVisibility(View.VISIBLE);
-                    } else {
-                        mFab.setVisibility(View.GONE);
-                        CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) mFab.getLayoutParams();
-                        p.setBehavior(new FABHideBehavior(getApplicationContext(), null));
-                        mFab.setLayoutParams(p);
-                    }
-
-                    f.onResume();
-                }
+                coordinatorReConfig();
             }
         };
 
@@ -1025,13 +1002,31 @@ public class LessonListActivity extends AppCompatActivity
     public void updateVideoUploadProgress(int progressUnit) {
         if (numberProgressBar != null && progressUnit < 100) {
             Log.i(TAG, "Progress unit: " + progressUnit);
-            numberProgressBar.setProgress(progressUnit);
+
+//            for (int i = 0; i < progressUnit; i++) {
+//                numberProgressBar.incrementProgressBy(1);
+//            }
+
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (numberProgressBar.getProgress() >= numberProgressBar.getMax()) {
+                                numberProgressBar.setVisibility(View.GONE);
+                            }
+                            numberProgressBar.incrementProgressBy(1);
+                        }
+                    });
+                }
+            }, 1000, progressUnit);
         }
     }
 
     public void doneUploadProgress() {
         if (numberProgressBar != null) {
-            //numberProgressBar.setProgress(100);
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
@@ -1052,7 +1047,10 @@ public class LessonListActivity extends AppCompatActivity
 
     public void showUploadProgressBar() {
         if (numberProgressBar != null) {
-            numberProgressBar.setProgress(3);
+
+            for (int i = 0; i < 5; i++) {
+                numberProgressBar.incrementProgressBy(1);
+            }
             numberProgressBar.setVisibility(View.VISIBLE);
         }
     }
@@ -1070,5 +1068,46 @@ public class LessonListActivity extends AppCompatActivity
         MyFormMessage myFormMessage = intent.getParcelableExtra("formMessage");
         CheckMyFormFragment mCheckMyFormFragment = CheckMyFormFragment.newInstance(myFormMessage);
         mFragmentManager.beginTransaction().add(R.id.flContent, mCheckMyFormFragment).addToBackStack("CheckMyFormFragment").commit();
+    }
+
+    private void coordinatorReConfig() {
+        FragmentManager manager = getSupportFragmentManager();
+
+        if (manager != null) {
+            Fragment f = getSupportFragmentManager().findFragmentById(R.id.flContent);
+            Log.i(TAG, "Current fragment is: " + f.getClass());
+
+            if (f.getClass().toString().contains("WeeksListFragment") ||
+                    f.getClass().toString().contains("MyFormMessageListFragment")) {
+                mAppBarLayoutParams.setScrollFlags(
+                        AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
+                                AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL |
+                                AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP);
+                toolbar.setLayoutParams(mAppBarLayoutParams);
+                Log.i(TAG, "Toolbar scrolling: " + f.getClass());
+
+            } else if (f.getClass().toString().contains("CheckMyFormFragment") ||
+                    f.getClass().toString().contains("ComposeFormMessageFragment") ||
+                    f.getClass().toString().contains("WeekFragment") ||
+                    f.getClass().toString().contains("FindTrainerFragment")) {
+                mAppBarLayoutParams.setScrollFlags(
+                        AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                toolbar.setLayoutParams(mAppBarLayoutParams);
+
+                Log.i(TAG, "Toolbar stop scrolling: " + f.getClass());
+            }
+
+            if (f.getClass().toString().contains("MyFormMessageListFragment") ||
+                    f.getClass().toString().contains("WeekFragment")) {
+                mFab.setVisibility(View.VISIBLE);
+            } else {
+                mFab.setVisibility(View.GONE);
+                CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) mFab.getLayoutParams();
+                p.setBehavior(new FABHideBehavior(getApplicationContext(), null));
+                mFab.setLayoutParams(p);
+            }
+
+            f.onResume();
+        }
     }
 }

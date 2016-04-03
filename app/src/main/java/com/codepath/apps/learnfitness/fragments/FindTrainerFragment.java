@@ -152,9 +152,12 @@ public class FindTrainerFragment extends Fragment implements
                                 addMarkerforTrainer(trainer);
                             }
 
-                            LatLng latLng = new LatLng(37.770927, -122.403665);
-                            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+                            //LatLng latLng = new LatLng(37.770927, -122.403665);
+                            //Facebook: 37.485366, -122.148321
+                            LatLng latLng = new LatLng(37.485366, -122.148321);
+                            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 13);
                             mMap.animateCamera(cameraUpdate);
+
                         }
                     }
                 });

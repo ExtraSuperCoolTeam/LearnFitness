@@ -1,6 +1,7 @@
 package com.codepath.apps.learnfitness.fragments;
 
 import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.activities.LessonListActivity;
 import com.codepath.apps.learnfitness.models.Lesson;
 import com.codepath.apps.learnfitness.models.MyFormMessage;
 import com.codepath.apps.learnfitness.models.Week;
@@ -71,10 +72,13 @@ public class ComposeFormMessageFragment extends Fragment {
     EditText mEditTextMessageText;
     FloatingActionButton mFab;
 
-    public static ComposeFormMessageFragment newInstance() {
+    public static ComposeFormMessageFragment newInstance(Week week) {
         ComposeFormMessageFragment composeFormMessageFragment = new ComposeFormMessageFragment();
-
         Bundle args = new Bundle();
+        if (week != null) {
+            args.putParcelable("currentWeek", week);
+        }
+        composeFormMessageFragment.setArguments(args);
         return composeFormMessageFragment;
     }
 
@@ -133,6 +137,8 @@ public class ComposeFormMessageFragment extends Fragment {
 
                     //TODO mSpinnerWeeksTitleList set the default from preferences
                     mSpinnerWeeksTitleList.setAdapter(mWeekArrayAdapter);
+
+                    setSelection();
 
                 }
             });
@@ -259,6 +265,8 @@ public class ComposeFormMessageFragment extends Fragment {
         FloatingActionButton mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         mFab.setVisibility(View.GONE);
         //showFab(false);
+        setSelection();
+        ((LessonListActivity)getActivity()).getSupportActionBar().setTitle("Request Feedback");
     }
 
     public void showFab(Boolean show) {
@@ -270,5 +278,27 @@ public class ComposeFormMessageFragment extends Fragment {
                 mFab.setVisibility(View.GONE);
             }
         }
+    }
+
+    private void setSelection() {
+        if (getArguments().containsKey("currentWeek")
+                && getArguments().getParcelable("currentWeek") != null) {
+            Week w = getArguments().getParcelable("currentWeek");
+            Log.i(TAG, "In set selection: " + w.getWeekTitle());
+            int position = mWeeks.indexOf(w);
+            Log.i(TAG, "Selected week index: " + position);
+            if (position != -1)
+                mSpinnerWeeksTitleList.setSelection(position);
+        }
+//        //mWeekArrayAdapter.getPosition(week)
+//        String compareValue = "some value";
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter
+//                .createFromResource(this, R.array.select_state, android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        mSpinnerWeeksTitleList.setAdapter(adapter);
+//        if (!compareValue.equals(null)) {
+//            int spinnerPosition = adapter.getPosition(compareValue);
+//            mSpinnerWeeksTitleList.setSelection(spinnerPosition);
+//        }
     }
 }
