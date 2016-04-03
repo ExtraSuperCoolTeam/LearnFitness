@@ -11,6 +11,7 @@ import com.codepath.apps.learnfitness.models.Week;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -104,8 +105,19 @@ public class WeekFragment extends Fragment implements YouTubePlayer.OnInitialize
     @Override
     public void onResume() {
         super.onResume();
-        FloatingActionButton mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        mFab.setVisibility(View.GONE);
+//        FloatingActionButton mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+//        mFab.setVisibility(View.GONE);
+        FabSetup();
         Log.i(TAG, "In Resume");
+    }
+
+    void FabSetup() {
+        FloatingActionButton mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        mFab.setVisibility(View.VISIBLE);
+
+
+        CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) mFab.getLayoutParams();
+        p.setBehavior(new FABScrollBehavior(getContext(), null));
+        mFab.setLayoutParams(p);
     }
 }

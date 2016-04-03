@@ -190,6 +190,7 @@ public class LessonListActivity extends AppCompatActivity
 
     AppBarLayout.LayoutParams mAppBarLayoutParams;
     FloatingActionButton mFab;
+    Week currentSelectedWeek;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -653,6 +654,7 @@ public class LessonListActivity extends AppCompatActivity
 
     @Override
     public void onWeekSelected(View itemView, Week week) {
+        currentSelectedWeek = week;
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .add(R.id.flContent, WeekFragment.newInstance(week)).addToBackStack("week").commit();
@@ -673,7 +675,13 @@ public class LessonListActivity extends AppCompatActivity
 
     @Override
     public void onCheckMyFormDialog() {
-        mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance();
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.flContent);
+        if (f.getClass().toString().contains("WeekFragment")) {
+            mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance(currentSelectedWeek);
+        } else {
+            mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance(null);
+        }
+        //mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance(currentSelectedWeek);
         mFragmentManager.beginTransaction().add(R.id.flContent, mComposeFormMessageFragment).addToBackStack("ComposeFormMessageFragment").commit();
     }
 
@@ -710,8 +718,10 @@ public class LessonListActivity extends AppCompatActivity
         }
 
         mFragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment)
-                .addToBackStack("MyFormMessageListFragment").commit();
+//        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment)
+//                .addToBackStack("MyFormMessageListFragment").commit();
+        mFragmentManager.popBackStack();
+        coordinatorReConfig();
     }
 
     @Override
@@ -748,15 +758,19 @@ public class LessonListActivity extends AppCompatActivity
                     });
 
         mFragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment)
-                .addToBackStack("MyFormMessageListFragment").commit();
+//        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment)
+//                .addToBackStack("MyFormMessageListFragment").commit();
+        mFragmentManager.popBackStack();
+        coordinatorReConfig();
     }
 
     @Override
     public void composeMessageCancel() {
         mFragmentManager.beginTransaction().remove(mComposeFormMessageFragment).commit();
-        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment)
-                .addToBackStack("MyFormMessageListFragment").commit();
+//        mFragmentManager.beginTransaction().replace(R.id.flContent, mMyFormMessageListFragment)
+//                .addToBackStack("MyFormMessageListFragment").commit();
+        mFragmentManager.popBackStack();
+        coordinatorReConfig();
     }
 
     @Override
@@ -978,44 +992,7 @@ public class LessonListActivity extends AppCompatActivity
         {
             public void onBackStackChanged()
             {
-                FragmentManager manager = getSupportFragmentManager();
-
-                if (manager != null)
-                {
-                    Fragment f = getSupportFragmentManager().findFragmentById(R.id.flContent);
-                    Log.i(TAG, "Current fragment is: " + f.getClass());
-
-                    if (f.getClass().toString().contains("WeeksListFragment") ||
-                            f.getClass().toString().contains("MyFormMessageListFragment")) {
-                        mAppBarLayoutParams.setScrollFlags(
-                                AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
-                                        AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL |
-                                        AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP);
-                        toolbar.setLayoutParams(mAppBarLayoutParams);
-                        Log.i(TAG, "Toolbar scrolling: " + f.getClass());
-
-                    } else if (f.getClass().toString().contains("CheckMyFormFragment") ||
-                                f.getClass().toString().contains("ComposeFormMessageFragment") ||
-                                f.getClass().toString().contains("WeekFragment") ||
-                            f.getClass().toString().contains("FindTrainerFragment")) {
-                        mAppBarLayoutParams.setScrollFlags(
-                                AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-                        toolbar.setLayoutParams(mAppBarLayoutParams);
-
-                        Log.i(TAG, "Toolbar stop scrolling: " + f.getClass());
-                    }
-
-                    if (f.getClass().toString().contains("MyFormMessageListFragment")) {
-                        mFab.setVisibility(View.VISIBLE);
-                    } else {
-                        mFab.setVisibility(View.GONE);
-                        CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) mFab.getLayoutParams();
-                        p.setBehavior(new FABHideBehavior(getApplicationContext(), null));
-                        mFab.setLayoutParams(p);
-                    }
-
-                    f.onResume();
-                }
+                coordinatorReConfig();
             }
         };
 
@@ -1070,5 +1047,46 @@ public class LessonListActivity extends AppCompatActivity
         MyFormMessage myFormMessage = intent.getParcelableExtra("formMessage");
         CheckMyFormFragment mCheckMyFormFragment = CheckMyFormFragment.newInstance(myFormMessage);
         mFragmentManager.beginTransaction().add(R.id.flContent, mCheckMyFormFragment).addToBackStack("CheckMyFormFragment").commit();
+    }
+
+    private void coordinatorReConfig() {
+        FragmentManager manager = getSupportFragmentManager();
+
+        if (manager != null) {
+            Fragment f = getSupportFragmentManager().findFragmentById(R.id.flContent);
+            Log.i(TAG, "Current fragment is: " + f.getClass());
+
+            if (f.getClass().toString().contains("WeeksListFragment") ||
+                    f.getClass().toString().contains("MyFormMessageListFragment")) {
+                mAppBarLayoutParams.setScrollFlags(
+                        AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
+                                AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL |
+                                AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP);
+                toolbar.setLayoutParams(mAppBarLayoutParams);
+                Log.i(TAG, "Toolbar scrolling: " + f.getClass());
+
+            } else if (f.getClass().toString().contains("CheckMyFormFragment") ||
+                    f.getClass().toString().contains("ComposeFormMessageFragment") ||
+                    f.getClass().toString().contains("WeekFragment") ||
+                    f.getClass().toString().contains("FindTrainerFragment")) {
+                mAppBarLayoutParams.setScrollFlags(
+                        AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                toolbar.setLayoutParams(mAppBarLayoutParams);
+
+                Log.i(TAG, "Toolbar stop scrolling: " + f.getClass());
+            }
+
+            if (f.getClass().toString().contains("MyFormMessageListFragment") ||
+                    f.getClass().toString().contains("WeekFragment")) {
+                mFab.setVisibility(View.VISIBLE);
+            } else {
+                mFab.setVisibility(View.GONE);
+                CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) mFab.getLayoutParams();
+                p.setBehavior(new FABHideBehavior(getApplicationContext(), null));
+                mFab.setLayoutParams(p);
+            }
+
+            f.onResume();
+        }
     }
 }

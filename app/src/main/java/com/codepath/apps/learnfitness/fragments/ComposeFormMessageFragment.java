@@ -71,10 +71,13 @@ public class ComposeFormMessageFragment extends Fragment {
     EditText mEditTextMessageText;
     FloatingActionButton mFab;
 
-    public static ComposeFormMessageFragment newInstance() {
+    public static ComposeFormMessageFragment newInstance(Week week) {
         ComposeFormMessageFragment composeFormMessageFragment = new ComposeFormMessageFragment();
-
         Bundle args = new Bundle();
+        if (week != null) {
+            args.putParcelable("currentWeek", week);
+        }
+        composeFormMessageFragment.setArguments(args);
         return composeFormMessageFragment;
     }
 
@@ -270,5 +273,23 @@ public class ComposeFormMessageFragment extends Fragment {
                 mFab.setVisibility(View.GONE);
             }
         }
+    }
+
+    private void setSelection() {
+        if (getArguments().containsKey("currentWeek")
+                && getArguments().getParcelable("currentWeek") != null) {
+            int position = mWeekArrayAdapter.getPosition((Week)getArguments().getParcelable("currentWeek"));
+            mSpinnerWeeksTitleList.setSelection(position);
+        }
+//        //mWeekArrayAdapter.getPosition(week)
+//        String compareValue = "some value";
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter
+//                .createFromResource(this, R.array.select_state, android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        mSpinnerWeeksTitleList.setAdapter(adapter);
+//        if (!compareValue.equals(null)) {
+//            int spinnerPosition = adapter.getPosition(compareValue);
+//            mSpinnerWeeksTitleList.setSelection(spinnerPosition);
+//        }
     }
 }
