@@ -535,11 +535,10 @@ public class LessonListActivity extends AppCompatActivity
         trainerItem.setIcon(R.drawable.trainer_icon);
 
         // Add the check my form links.
-        MenuItem checkForm = menu.add(CHECK_FORM_GROUP, CHECK_MY_FORM_ID, 0, "Check My Form");
+        MenuItem checkForm = menu.add(CHECK_FORM_GROUP, FEEDBACK_ID, 0, "Check My Form");
         checkForm.setIcon(R.drawable.lifting_icon);
-        checkForm.setEnabled(false);
 
-        menu.add(CHECK_FORM_GROUP, FEEDBACK_ID, 1, "Message Board");
+//        menu.add(CHECK_FORM_GROUP, FEEDBACK_ID, 1, "Message Board");
         menu.add(CHECK_FORM_GROUP, REQUEST_FEEDBACK_ID, 2, "Request Feedback");
 
         navigationView.setNavigationItemSelectedListener(
