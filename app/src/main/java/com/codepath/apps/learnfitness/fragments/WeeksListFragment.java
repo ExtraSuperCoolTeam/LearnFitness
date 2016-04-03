@@ -1,5 +1,10 @@
 package com.codepath.apps.learnfitness.fragments;
 
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.activities.LessonListActivity;
+import com.codepath.apps.learnfitness.adapters.LessonsAdapter;
+import com.codepath.apps.learnfitness.models.Week;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,11 +18,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.activities.LessonListActivity;
-import com.codepath.apps.learnfitness.adapters.LessonsAdapter;
-import com.codepath.apps.learnfitness.models.Week;
 
 import java.util.List;
 
@@ -151,5 +151,6 @@ public class WeeksListFragment extends Fragment {
         FloatingActionButton mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         mFab.setVisibility(View.GONE);
         Log.i(TAG, "In Resume");
+        ((LessonListActivity)getActivity()).getSupportActionBar().setTitle(R.string.title_activity_lesson_list);
     }
 }

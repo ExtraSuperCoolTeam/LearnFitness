@@ -6,6 +6,7 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.activities.LessonListActivity;
 import com.codepath.apps.learnfitness.adapters.CheckMyFormAdapter;
 import com.codepath.apps.learnfitness.models.MyFormMessage;
 import com.codepath.apps.learnfitness.models.TrainerReply;
@@ -207,5 +208,7 @@ public class CheckMyFormFragment extends Fragment
         FloatingActionButton mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         mFab.setVisibility(View.GONE);
         Log.i(TAG, "In Resume");
+
+        ((LessonListActivity)getActivity()).getSupportActionBar().setTitle("See Feedback");
     }
 }

@@ -250,4 +250,17 @@ public class Week implements Parcelable {
     public String toString() {
         return "Week: " + weekTitle;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this.weekTitle.equals(((Week) obj).weekTitle)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.parseInt(this.getWeekNumber()) * (this.weekTitle.hashCode());
+    }
 }

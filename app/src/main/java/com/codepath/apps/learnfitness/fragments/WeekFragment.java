@@ -5,6 +5,7 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.activities.LessonListActivity;
 import com.codepath.apps.learnfitness.adapters.WeekStepsAdapter;
 import com.codepath.apps.learnfitness.models.Step;
 import com.codepath.apps.learnfitness.models.Week;
@@ -109,6 +110,7 @@ public class WeekFragment extends Fragment implements YouTubePlayer.OnInitialize
 //        mFab.setVisibility(View.GONE);
         FabSetup();
         Log.i(TAG, "In Resume");
+        ((LessonListActivity)getActivity()).getSupportActionBar().setTitle(R.string.title_activity_lesson_list);
     }
 
     void FabSetup() {

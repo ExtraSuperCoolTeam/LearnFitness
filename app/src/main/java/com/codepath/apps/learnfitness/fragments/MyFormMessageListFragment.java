@@ -300,6 +300,7 @@ public class MyFormMessageListFragment extends Fragment {
         //showFab(true);
         FabSetup();
         enterReveal();
+        ((LessonListActivity)getActivity()).getSupportActionBar().setTitle("Message Board");
     }
 
     @Override

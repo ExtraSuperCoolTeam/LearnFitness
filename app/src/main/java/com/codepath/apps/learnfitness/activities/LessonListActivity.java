@@ -528,7 +528,7 @@ public class LessonListActivity extends AppCompatActivity
         checkForm.setIcon(R.drawable.lifting_icon);
         checkForm.setEnabled(false);
 
-        menu.add(CHECK_FORM_GROUP, FEEDBACK_ID, 1, "See Feedback");
+        menu.add(CHECK_FORM_GROUP, FEEDBACK_ID, 1, "Message Board");
         menu.add(CHECK_FORM_GROUP, REQUEST_FEEDBACK_ID, 2, "Request Feedback");
 
         navigationView.setNavigationItemSelectedListener(
@@ -1002,13 +1002,31 @@ public class LessonListActivity extends AppCompatActivity
     public void updateVideoUploadProgress(int progressUnit) {
         if (numberProgressBar != null && progressUnit < 100) {
             Log.i(TAG, "Progress unit: " + progressUnit);
-            numberProgressBar.setProgress(progressUnit);
+
+//            for (int i = 0; i < progressUnit; i++) {
+//                numberProgressBar.incrementProgressBy(1);
+//            }
+
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (numberProgressBar.getProgress() >= numberProgressBar.getMax()) {
+                                numberProgressBar.setVisibility(View.GONE);
+                            }
+                            numberProgressBar.incrementProgressBy(1);
+                        }
+                    });
+                }
+            }, 1000, progressUnit);
         }
     }
 
     public void doneUploadProgress() {
         if (numberProgressBar != null) {
-            //numberProgressBar.setProgress(100);
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
@@ -1029,7 +1047,10 @@ public class LessonListActivity extends AppCompatActivity
 
     public void showUploadProgressBar() {
         if (numberProgressBar != null) {
-            numberProgressBar.setProgress(3);
+
+            for (int i = 0; i < 5; i++) {
+                numberProgressBar.incrementProgressBy(1);
+            }
             numberProgressBar.setVisibility(View.VISIBLE);
         }
     }
