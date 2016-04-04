@@ -113,11 +113,18 @@ public class FindTrainerFragment extends Fragment implements
         super.onResume();
         Log.i(TAG, "In Resume");
         loadMap(mMap);
-        ((LessonListActivity)getActivity()).getSupportActionBar().setTitle("Trainers");
+        ((LessonListActivity) getActivity()).getSupportActionBar().setTitle("Trainers");
     }
 
     public void populateMapWithSearchQuery(String query) {
         if (query.trim().isEmpty()) {
+            return;
+        }
+
+        if (!query.equals("splunk")) {
+            LatLng latLng = new LatLng(37.485366, -122.148321);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 13);
+            mMap.animateCamera(cameraUpdate);
             return;
         }
         Observable<List<Trainer>> call = MediaStoreService.trainersStore.fetchTrainers();
@@ -207,9 +214,19 @@ public class FindTrainerFragment extends Fragment implements
         }
 
         FindTrainerFragmentPermissionsDispatcher.getMyLocationWithCheck(this);
+        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         mMap.setMyLocationEnabled(true);
         mMap.setOnMarkerClickListener(this);
-        populateMapWithSearchQuery("test");
+        populateMapWithSearchQuery("splunk");
     }
 
     @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
@@ -258,6 +275,16 @@ public class FindTrainerFragment extends Fragment implements
         // TODO: move to current location.
         Log.d(TAG, "onConnected");
 
+        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (location != null) {
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
