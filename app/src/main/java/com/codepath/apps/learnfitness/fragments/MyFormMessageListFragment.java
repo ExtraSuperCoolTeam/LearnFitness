@@ -50,7 +50,7 @@ public class MyFormMessageListFragment extends Fragment {
     RecyclerView mRecyclerViewMessages;
 
 //    @Bind(R.id.fab)
-    FloatingActionButton mFab;
+    //FloatingActionButton mFab;
 
     LinearLayoutManager layoutManager;
 
