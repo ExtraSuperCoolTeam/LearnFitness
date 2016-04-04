@@ -65,6 +65,14 @@ label {
   width: 75%;
   padding-top: 8px;
 }
+.week-header h3 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: normal;
+  width: 75%;
+  padding-top: 8px;
+}
 .dark-blue {
   color: white;
   background-color: #303F9F;
@@ -120,5 +128,13 @@ label {
 .portfolio-link,
 .portfolio-caption {
   max-width: 300px !important;
+}
+.relative-row {
+  position: relative;
+}
+.submit-btn-left {
+  position: absolute;
+  top: 20px;
+  right: 0;
 }
 /*# sourceMappingURL=/assets/amplify-web.css.map */
