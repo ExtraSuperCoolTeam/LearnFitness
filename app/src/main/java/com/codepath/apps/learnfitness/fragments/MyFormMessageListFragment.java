@@ -162,6 +162,7 @@ public class MyFormMessageListFragment extends Fragment {
 
                     @Override
                     public void onNext(List<MyFormMessage> messages) {
+                        mMyFormMessages.clear();
                         mMyFormMessages.addAll(messages);
                         Log.i(TAG, Integer.toString(mMyFormMessages.size()));
                         mAdapter.notifyDataSetChanged();

@@ -157,32 +157,6 @@ public class CheckMyFormFragment extends Fragment
             });
     }
 
-    // Define the listener of the interface type
-    // listener will the activity instance containing fragment
-//    private OnCheckMyFormListener mOnCheckMyFormListener;
-//
-//    // Define the events that the fragment will use to communicate
-//    public interface OnCheckMyFormListener {
-//        // This can be any number of events to be sent to the activity
-//        void onCheckMyFormDialog();
-//    }
-
-    // Store the listener (activity) that will have events fired once the fragment is attached
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnCheckMyFormListener) {
-//            mOnCheckMyFormListener = (OnCheckMyFormListener) context;
-//        } else {
-//            throw new ClassCastException(context.toString()
-//                    + " must implement CheckMyFormFragment.OnCheckMyFormListener");
-//        }
-//    }
-//
-//    public void showCreationDialog() {
-//        mOnCheckMyFormListener.onCheckMyFormDialog();
-//    }
-
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider,
                                         YouTubePlayer youTubePlayer,

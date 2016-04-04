@@ -49,8 +49,6 @@ public class WeeksListFragment extends Fragment {
         rvLessons.setLayoutManager(layoutManager);
 
         mAdapter.notifyDataSetChanged();
-
-
         return rvLessons;
     }
 
