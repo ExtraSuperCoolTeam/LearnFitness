@@ -11,11 +11,16 @@ export default Ember.Controller.extend({
       let newWeek = WeekContent.create({
         index: allWeeks.get('length') + 1,
         title: "",
-        videoId: "0IYlUbxwzOQ",
+        videoId: "",
         items: []
       });
 
       allWeeks.pushObject(newWeek);
+    },
+    removeWeek(week) {
+      let allWeeks = this.get('allWeeks');
+
+      allWeeks.removeObject(week);
     }
   }
 

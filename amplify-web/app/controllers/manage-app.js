@@ -62,8 +62,10 @@ export default CreateAppController.extend({
       let actualResult = {
         applicationName: this.get('applicationName'),
         emailId: this.get('emailId'),
-        weeks: this.get('allWeeks').map(week => {
+        numberOfWeeks: this.get('allWeeks.length').toString(),
+        weeks: this.get('allWeeks').map((week, weekIndex) => {
           return {
+            weekNumber: weekIndex + 1,
             weekTitle: week.get('weekTitle'),
             videoId: week.get('videoId'),
             shortDescription: week.get('shortDescription'),

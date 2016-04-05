@@ -167,6 +167,9 @@ define('amplify-web/components/week-content', ['exports', 'ember'], function (ex
           imgUrl: 'img/dumbbells.png'
         }));
       },
+      removeWeek: function removeWeek() {
+        this.get('removeWeek')(this.get('content'));
+      },
       removeItem: function removeItem(item) {
         var items = this.get('content.items');
         items.removeObject(item);
@@ -205,11 +208,16 @@ define('amplify-web/controllers/create-app', ['exports', 'ember', 'amplify-web/u
         var newWeek = _amplifyWebUtilsWeekContent['default'].create({
           index: allWeeks.get('length') + 1,
           title: "",
-          videoId: "0IYlUbxwzOQ",
+          videoId: "",
           items: []
         });
 
         allWeeks.pushObject(newWeek);
+      },
+      removeWeek: function removeWeek(week) {
+        var allWeeks = this.get('allWeeks');
+
+        allWeeks.removeObject(week);
       }
     }
 
@@ -311,8 +319,10 @@ define('amplify-web/controllers/manage-app', ['exports', 'ember', 'amplify-web/u
         var actualResult = {
           applicationName: this.get('applicationName'),
           emailId: this.get('emailId'),
-          weeks: this.get('allWeeks').map(function (week) {
+          numberOfWeeks: this.get('allWeeks.length').toString(),
+          weeks: this.get('allWeeks').map(function (week, weekIndex) {
             return {
+              weekNumber: weekIndex + 1,
               weekTitle: week.get('weekTitle'),
               videoId: week.get('videoId'),
               shortDescription: week.get('shortDescription'),
@@ -1730,11 +1740,11 @@ define("amplify-web/templates/components/week-content", ["exports"], function (e
           "loc": {
             "source": null,
             "start": {
-              "line": 56,
+              "line": 60,
               "column": 8
             },
             "end": {
-              "line": 85,
+              "line": 89,
               "column": 8
             }
           },
@@ -1865,7 +1875,7 @@ define("amplify-web/templates/components/week-content", ["exports"], function (e
           morphs[5] = dom.createAttrMorph(element4, 'src');
           return morphs;
         },
-        statements: [["content", "step.index", ["loc", [null, [59, 53], [59, 67]]]], ["element", "action", ["removeItem", ["get", "step", ["loc", [null, [60, 92], [60, 96]]]]], [], ["loc", [null, [60, 70], [60, 98]]]], ["inline", "input", [], ["type", "text", "class", "img-url", "value", ["subexpr", "@mut", [["get", "step.title", ["loc", [null, [68, 67], [68, 77]]]]], [], []], "placeholder", "Sample Title"], ["loc", [null, [68, 25], [68, 106]]]], ["inline", "textarea", [], ["class", "text-content-area", "value", ["subexpr", "@mut", [["get", "step.description", ["loc", [null, [73, 37], [73, 53]]]]], [], []]], ["loc", [null, [72, 20], [73, 55]]]], ["inline", "input", [], ["type", "text", "class", "img-url", "value", ["subexpr", "@mut", [["get", "step.imageUrl", ["loc", [null, [77, 67], [77, 80]]]]], [], []], "placeholder", "Sample Title"], ["loc", [null, [77, 25], [77, 109]]]], ["attribute", "src", ["get", "step.imageUrl", ["loc", [null, [80, 49], [80, 62]]]]]],
+        statements: [["content", "step.index", ["loc", [null, [63, 53], [63, 67]]]], ["element", "action", ["removeItem", ["get", "step", ["loc", [null, [64, 92], [64, 96]]]]], [], ["loc", [null, [64, 70], [64, 98]]]], ["inline", "input", [], ["type", "text", "class", "img-url", "value", ["subexpr", "@mut", [["get", "step.title", ["loc", [null, [72, 67], [72, 77]]]]], [], []], "placeholder", "Sample Title"], ["loc", [null, [72, 25], [72, 106]]]], ["inline", "textarea", [], ["class", "text-content-area", "value", ["subexpr", "@mut", [["get", "step.description", ["loc", [null, [77, 37], [77, 53]]]]], [], []]], ["loc", [null, [76, 20], [77, 55]]]], ["inline", "input", [], ["type", "text", "class", "img-url", "value", ["subexpr", "@mut", [["get", "step.imageUrl", ["loc", [null, [81, 67], [81, 80]]]]], [], []], "placeholder", "Sample Title"], ["loc", [null, [81, 25], [81, 109]]]], ["attribute", "src", ["get", "step.imageUrl", ["loc", [null, [84, 49], [84, 62]]]]]],
         locals: ["step"],
         templates: []
       };
@@ -1878,11 +1888,11 @@ define("amplify-web/templates/components/week-content", ["exports"], function (e
           "loc": {
             "source": null,
             "start": {
-              "line": 85,
+              "line": 89,
               "column": 8
             },
             "end": {
-              "line": 87,
+              "line": 91,
               "column": 8
             }
           },
@@ -1917,7 +1927,7 @@ define("amplify-web/templates/components/week-content", ["exports"], function (e
             "column": 0
           },
           "end": {
-            "line": 97,
+            "line": 101,
             "column": 0
           }
         },
@@ -1934,15 +1944,33 @@ define("amplify-web/templates/components/week-content", ["exports"], function (e
         var el2 = dom.createTextNode("\n  ");
         dom.appendChild(el1, el2);
         var el2 = dom.createElement("div");
-        dom.setAttribute(el2, "class", "panel-heading");
+        dom.setAttribute(el2, "class", "panel-heading week-header");
         var el3 = dom.createTextNode("\n    ");
         dom.appendChild(el2, el3);
         var el3 = dom.createElement("h3");
-        dom.setAttribute(el3, "class", "panel-title");
+        dom.setAttribute(el3, "class", "panel-title pull-left");
         var el4 = dom.createTextNode("Week ");
         dom.appendChild(el3, el4);
         var el4 = dom.createComment("");
         dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("button");
+        dom.setAttribute(el3, "type", "button");
+        dom.setAttribute(el3, "class", "btn btn-danger pull-right");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("span");
+        dom.setAttribute(el4, "class", "glyphicon glyphicon-remove");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3, "class", "clearfix");
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n  ");
         dom.appendChild(el2, el3);
@@ -2170,24 +2198,27 @@ define("amplify-web/templates/components/week-content", ["exports"], function (e
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
         var element5 = dom.childAt(fragment, [0]);
-        var element6 = dom.childAt(element5, [3]);
-        var element7 = dom.childAt(element6, [7, 3, 1]);
-        var element8 = dom.childAt(element7, [1, 1]);
-        var element9 = dom.childAt(element7, [3, 1]);
-        var element10 = dom.childAt(element6, [11, 1, 1]);
-        var morphs = new Array(9);
-        morphs[0] = dom.createMorphAt(dom.childAt(element5, [1, 1]), 1, 1);
-        morphs[1] = dom.createMorphAt(dom.childAt(element6, [1, 3]), 1, 1);
-        morphs[2] = dom.createMorphAt(dom.childAt(element6, [3, 3]), 1, 1);
-        morphs[3] = dom.createMorphAt(dom.childAt(element6, [5, 3]), 1, 1);
-        morphs[4] = dom.createMorphAt(dom.childAt(element8, [1]), 1, 1);
-        morphs[5] = dom.createMorphAt(dom.childAt(element8, [3]), 1, 1);
-        morphs[6] = dom.createAttrMorph(element9, 'src');
-        morphs[7] = dom.createMorphAt(dom.childAt(element6, [9, 3]), 1, 1);
-        morphs[8] = dom.createElementMorph(element10);
+        var element6 = dom.childAt(element5, [1]);
+        var element7 = dom.childAt(element6, [3]);
+        var element8 = dom.childAt(element5, [3]);
+        var element9 = dom.childAt(element8, [7, 3, 1]);
+        var element10 = dom.childAt(element9, [1, 1]);
+        var element11 = dom.childAt(element9, [3, 1]);
+        var element12 = dom.childAt(element8, [11, 1, 1]);
+        var morphs = new Array(10);
+        morphs[0] = dom.createMorphAt(dom.childAt(element6, [1]), 1, 1);
+        morphs[1] = dom.createElementMorph(element7);
+        morphs[2] = dom.createMorphAt(dom.childAt(element8, [1, 3]), 1, 1);
+        morphs[3] = dom.createMorphAt(dom.childAt(element8, [3, 3]), 1, 1);
+        morphs[4] = dom.createMorphAt(dom.childAt(element8, [5, 3]), 1, 1);
+        morphs[5] = dom.createMorphAt(dom.childAt(element10, [1]), 1, 1);
+        morphs[6] = dom.createMorphAt(dom.childAt(element10, [3]), 1, 1);
+        morphs[7] = dom.createAttrMorph(element11, 'src');
+        morphs[8] = dom.createMorphAt(dom.childAt(element8, [9, 3]), 1, 1);
+        morphs[9] = dom.createElementMorph(element12);
         return morphs;
       },
-      statements: [["content", "content.index", ["loc", [null, [3, 33], [3, 50]]]], ["inline", "input", [], ["type", "text", "class", "form-control", "placeholder", "Abs and Core", "value", ["subexpr", "@mut", [["get", "content.weekTitle", ["loc", [null, [10, 21], [10, 38]]]]], [], []]], ["loc", [null, [9, 8], [10, 40]]]], ["inline", "input", [], ["type", "text", "class", "form-control", "placeholder", "Short description of the week", "value", ["subexpr", "@mut", [["get", "content.shortDescription", ["loc", [null, [17, 59], [17, 83]]]]], [], []]], ["loc", [null, [16, 8], [17, 85]]]], ["inline", "textarea", [], ["class", "form-control", "placeholder", "Longer description of the week", "value", ["subexpr", "@mut", [["get", "content.longDescription", ["loc", [null, [24, 60], [24, 83]]]]], [], []]], ["loc", [null, [23, 8], [24, 85]]]], ["inline", "input", [], ["class", "video-id", "type", "text", "placeholder", "Place your YouTube video id here", "value", ["subexpr", "@mut", [["get", "content.videoId", ["loc", [null, [36, 30], [36, 45]]]]], [], []]], ["loc", [null, [34, 16], [36, 47]]]], ["inline", "input", [], ["type", "text", "placeholder", "1:32", "value", ["subexpr", "@mut", [["get", "content.videoDuration", ["loc", [null, [41, 29], [41, 50]]]]], [], []]], ["loc", [null, [40, 16], [41, 52]]]], ["attribute", "src", ["get", "content.videoUrl", ["loc", [null, [47, 51], [47, 67]]]]], ["block", "each", [["get", "content.steps", ["loc", [null, [56, 16], [56, 29]]]]], [], 0, 1, ["loc", [null, [56, 8], [87, 17]]]], ["element", "action", ["addStep"], [], ["loc", [null, [92, 30], [92, 50]]]]],
+      statements: [["content", "content.index", ["loc", [null, [3, 43], [3, 60]]]], ["element", "action", ["removeWeek"], [], ["loc", [null, [4, 60], [4, 83]]]], ["inline", "input", [], ["type", "text", "class", "form-control", "placeholder", "Abs and Core", "value", ["subexpr", "@mut", [["get", "content.weekTitle", ["loc", [null, [14, 21], [14, 38]]]]], [], []]], ["loc", [null, [13, 8], [14, 40]]]], ["inline", "input", [], ["type", "text", "class", "form-control", "placeholder", "Short description of the week", "value", ["subexpr", "@mut", [["get", "content.shortDescription", ["loc", [null, [21, 59], [21, 83]]]]], [], []]], ["loc", [null, [20, 8], [21, 85]]]], ["inline", "textarea", [], ["class", "form-control", "placeholder", "Longer description of the week", "value", ["subexpr", "@mut", [["get", "content.longDescription", ["loc", [null, [28, 60], [28, 83]]]]], [], []]], ["loc", [null, [27, 8], [28, 85]]]], ["inline", "input", [], ["class", "video-id", "type", "text", "placeholder", "Place your YouTube video id here", "value", ["subexpr", "@mut", [["get", "content.videoId", ["loc", [null, [40, 30], [40, 45]]]]], [], []]], ["loc", [null, [38, 16], [40, 47]]]], ["inline", "input", [], ["type", "text", "placeholder", "1:32", "value", ["subexpr", "@mut", [["get", "content.videoDuration", ["loc", [null, [45, 29], [45, 50]]]]], [], []]], ["loc", [null, [44, 16], [45, 52]]]], ["attribute", "src", ["get", "content.videoUrl", ["loc", [null, [51, 51], [51, 67]]]]], ["block", "each", [["get", "content.steps", ["loc", [null, [60, 16], [60, 29]]]]], [], 0, 1, ["loc", [null, [60, 8], [91, 17]]]], ["element", "action", ["addStep"], [], ["loc", [null, [96, 30], [96, 50]]]]],
       locals: [],
       templates: [child0, child1]
     };
@@ -3266,11 +3297,11 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
             "loc": {
               "source": null,
               "start": {
-                "line": 28,
+                "line": 31,
                 "column": 16
               },
               "end": {
-                "line": 28,
+                "line": 31,
                 "column": 46
               }
             },
@@ -3302,11 +3333,11 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
             "loc": {
               "source": null,
               "start": {
-                "line": 29,
+                "line": 32,
                 "column": 16
               },
               "end": {
-                "line": 29,
+                "line": 32,
                 "column": 50
               }
             },
@@ -3338,11 +3369,11 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
             "loc": {
               "source": null,
               "start": {
-                "line": 30,
+                "line": 33,
                 "column": 16
               },
               "end": {
-                "line": 30,
+                "line": 33,
                 "column": 44
               }
             },
@@ -3374,11 +3405,11 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
             "loc": {
               "source": null,
               "start": {
-                "line": 31,
+                "line": 34,
                 "column": 16
               },
               "end": {
-                "line": 31,
+                "line": 34,
                 "column": 48
               }
             },
@@ -3409,11 +3440,11 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 27,
+              "line": 30,
               "column": 14
             },
             "end": {
-              "line": 32,
+              "line": 35,
               "column": 14
             }
           },
@@ -3453,7 +3484,7 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           morphs[3] = dom.createMorphAt(fragment, 7, 7, contextualElement);
           return morphs;
         },
-        statements: [["block", "x-option", [], ["value", "Blue"], 0, null, ["loc", [null, [28, 16], [28, 59]]]], ["block", "x-option", [], ["value", "Yellow"], 1, null, ["loc", [null, [29, 16], [29, 63]]]], ["block", "x-option", [], ["value", "Red"], 2, null, ["loc", [null, [30, 16], [30, 57]]]], ["block", "x-option", [], ["value", "Green"], 3, null, ["loc", [null, [31, 16], [31, 61]]]]],
+        statements: [["block", "x-option", [], ["value", "Blue"], 0, null, ["loc", [null, [31, 16], [31, 59]]]], ["block", "x-option", [], ["value", "Yellow"], 1, null, ["loc", [null, [32, 16], [32, 63]]]], ["block", "x-option", [], ["value", "Red"], 2, null, ["loc", [null, [33, 16], [33, 57]]]], ["block", "x-option", [], ["value", "Green"], 3, null, ["loc", [null, [34, 16], [34, 61]]]]],
         locals: [],
         templates: [child0, child1, child2, child3]
       };
@@ -3466,11 +3497,11 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 34,
+              "line": 37,
               "column": 14
             },
             "end": {
-              "line": 37,
+              "line": 40,
               "column": 14
             }
           },
@@ -3518,11 +3549,11 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 38,
+              "line": 41,
               "column": 14
             },
             "end": {
-              "line": 42,
+              "line": 45,
               "column": 14
             }
           },
@@ -3570,11 +3601,11 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 43,
+              "line": 46,
               "column": 14
             },
             "end": {
-              "line": 46,
+              "line": 49,
               "column": 14
             }
           },
@@ -3622,11 +3653,11 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 47,
+              "line": 50,
               "column": 14
             },
             "end": {
-              "line": 50,
+              "line": 53,
               "column": 14
             }
           },
@@ -3674,11 +3705,11 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 65,
+              "line": 68,
               "column": 10
             },
             "end": {
-              "line": 67,
+              "line": 70,
               "column": 10
             }
           },
@@ -3703,7 +3734,7 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
           return morphs;
         },
-        statements: [["inline", "week-content", [], ["content", ["subexpr", "@mut", [["get", "week", ["loc", [null, [66, 35], [66, 39]]]]], [], []]], ["loc", [null, [66, 12], [66, 41]]]]],
+        statements: [["inline", "week-content", [], ["content", ["subexpr", "@mut", [["get", "week", ["loc", [null, [69, 35], [69, 39]]]]], [], []], "removeWeek", ["subexpr", "action", ["removeWeek"], [], ["loc", [null, [69, 51], [69, 72]]]]], ["loc", [null, [69, 12], [69, 74]]]]],
         locals: ["week"],
         templates: []
       };
@@ -3716,11 +3747,11 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 67,
+              "line": 70,
               "column": 10
             },
             "end": {
-              "line": 69,
+              "line": 72,
               "column": 10
             }
           },
@@ -3762,7 +3793,7 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 100,
+            "line": 103,
             "column": 0
           }
         },
@@ -3809,7 +3840,7 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
         var el3 = dom.createTextNode("\n    ");
         dom.appendChild(el2, el3);
         var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "row");
+        dom.setAttribute(el3, "class", "row relative-row");
         var el4 = dom.createTextNode("\n      ");
         dom.appendChild(el3, el4);
         var el4 = dom.createElement("div");
@@ -3824,10 +3855,18 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
         var el5 = dom.createTextNode("\n      ");
         dom.appendChild(el4, el5);
         dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("button");
+        dom.setAttribute(el4, "type", "submit");
+        dom.setAttribute(el4, "class", "submit-btn-left btn btn-danger");
+        var el5 = dom.createTextNode("Update My App");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
         var el4 = dom.createTextNode("\n    ");
         dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n    ");
+        var el3 = dom.createTextNode("\n\n    ");
         dom.appendChild(el2, el3);
         var el3 = dom.createElement("div");
         dom.setAttribute(el3, "class", "row");
@@ -4055,27 +4094,29 @@ define("amplify-web/templates/manage-app", ["exports"], function (exports) {
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
         var element0 = dom.childAt(fragment, [2]);
         var element1 = dom.childAt(element0, [1]);
-        var element2 = dom.childAt(element1, [5, 1, 1]);
-        var element3 = dom.childAt(element2, [3, 3]);
-        var element4 = dom.childAt(element1, [11, 1, 1]);
-        var element5 = dom.childAt(element4, [3, 1, 1]);
-        var element6 = dom.childAt(element0, [5, 1, 1, 1, 1, 1, 1]);
-        var morphs = new Array(11);
+        var element2 = dom.childAt(element1, [3, 3]);
+        var element3 = dom.childAt(element1, [5, 1, 1]);
+        var element4 = dom.childAt(element3, [3, 3]);
+        var element5 = dom.childAt(element1, [11, 1, 1]);
+        var element6 = dom.childAt(element5, [3, 1, 1]);
+        var element7 = dom.childAt(element0, [5, 1, 1, 1, 1, 1, 1]);
+        var morphs = new Array(12);
         morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
-        morphs[1] = dom.createMorphAt(dom.childAt(element2, [1, 3]), 1, 1);
-        morphs[2] = dom.createMorphAt(element3, 1, 1);
-        morphs[3] = dom.createMorphAt(element3, 3, 3);
-        morphs[4] = dom.createMorphAt(element3, 4, 4);
-        morphs[5] = dom.createMorphAt(element3, 5, 5);
-        morphs[6] = dom.createMorphAt(element3, 6, 6);
-        morphs[7] = dom.createMorphAt(element4, 1, 1);
-        morphs[8] = dom.createElementMorph(element5);
+        morphs[1] = dom.createElementMorph(element2);
+        morphs[2] = dom.createMorphAt(dom.childAt(element3, [1, 3]), 1, 1);
+        morphs[3] = dom.createMorphAt(element4, 1, 1);
+        morphs[4] = dom.createMorphAt(element4, 3, 3);
+        morphs[5] = dom.createMorphAt(element4, 4, 4);
+        morphs[6] = dom.createMorphAt(element4, 5, 5);
+        morphs[7] = dom.createMorphAt(element4, 6, 6);
+        morphs[8] = dom.createMorphAt(element5, 1, 1);
         morphs[9] = dom.createElementMorph(element6);
-        morphs[10] = dom.createMorphAt(fragment, 4, 4, contextualElement);
+        morphs[10] = dom.createElementMorph(element7);
+        morphs[11] = dom.createMorphAt(fragment, 4, 4, contextualElement);
         dom.insertBoundary(fragment, 0);
         return morphs;
       },
-      statements: [["inline", "nav-bar", [], ["top", 0, "showLogo", true], ["loc", [null, [1, 0], [1, 31]]]], ["inline", "input", [], ["type", "text", "class", "form-control", "id", "appName", "placeholder", "MyCoolApp", "value", ["subexpr", "@mut", [["get", "applicationName", ["loc", [null, [21, 98], [21, 113]]]]], [], []]], ["loc", [null, [21, 14], [21, 115]]]], ["block", "x-select", [], ["value", ["subexpr", "@mut", [["get", "selectedColor", ["loc", [null, [27, 32], [27, 45]]]]], [], []], "action", "selectColorTheme"], 0, null, ["loc", [null, [27, 14], [32, 27]]]], ["block", "if", [["get", "isBlueSelected", ["loc", [null, [34, 20], [34, 34]]]]], [], 1, null, ["loc", [null, [34, 14], [37, 21]]]], ["block", "if", [["get", "isYellowSelected", ["loc", [null, [38, 20], [38, 36]]]]], [], 2, null, ["loc", [null, [38, 14], [42, 21]]]], ["block", "if", [["get", "isRedSelected", ["loc", [null, [43, 20], [43, 33]]]]], [], 3, null, ["loc", [null, [43, 14], [46, 21]]]], ["block", "if", [["get", "isGreenSelected", ["loc", [null, [47, 20], [47, 35]]]]], [], 4, null, ["loc", [null, [47, 14], [50, 21]]]], ["block", "each", [["get", "allWeeks", ["loc", [null, [65, 18], [65, 26]]]]], [], 5, 6, ["loc", [null, [65, 10], [69, 19]]]], ["element", "action", ["addWeek"], [], ["loc", [null, [72, 46], [72, 66]]]], ["element", "action", ["submitChanges"], [], ["loc", [null, [91, 16], [91, 42]]]], ["content", "app-footer", ["loc", [null, [99, 0], [99, 14]]]]],
+      statements: [["inline", "nav-bar", [], ["top", 0, "showLogo", true], ["loc", [null, [1, 0], [1, 31]]]], ["element", "action", ["submitChanges"], [], ["loc", [null, [15, 8], [15, 34]]]], ["inline", "input", [], ["type", "text", "class", "form-control", "id", "appName", "placeholder", "MyCoolApp", "value", ["subexpr", "@mut", [["get", "applicationName", ["loc", [null, [24, 98], [24, 113]]]]], [], []]], ["loc", [null, [24, 14], [24, 115]]]], ["block", "x-select", [], ["value", ["subexpr", "@mut", [["get", "selectedColor", ["loc", [null, [30, 32], [30, 45]]]]], [], []], "action", "selectColorTheme"], 0, null, ["loc", [null, [30, 14], [35, 27]]]], ["block", "if", [["get", "isBlueSelected", ["loc", [null, [37, 20], [37, 34]]]]], [], 1, null, ["loc", [null, [37, 14], [40, 21]]]], ["block", "if", [["get", "isYellowSelected", ["loc", [null, [41, 20], [41, 36]]]]], [], 2, null, ["loc", [null, [41, 14], [45, 21]]]], ["block", "if", [["get", "isRedSelected", ["loc", [null, [46, 20], [46, 33]]]]], [], 3, null, ["loc", [null, [46, 14], [49, 21]]]], ["block", "if", [["get", "isGreenSelected", ["loc", [null, [50, 20], [50, 35]]]]], [], 4, null, ["loc", [null, [50, 14], [53, 21]]]], ["block", "each", [["get", "allWeeks", ["loc", [null, [68, 18], [68, 26]]]]], [], 5, 6, ["loc", [null, [68, 10], [72, 19]]]], ["element", "action", ["addWeek"], [], ["loc", [null, [75, 46], [75, 66]]]], ["element", "action", ["submitChanges"], [], ["loc", [null, [94, 16], [94, 42]]]], ["content", "app-footer", ["loc", [null, [102, 0], [102, 14]]]]],
       locals: [],
       templates: [child0, child1, child2, child3, child4, child5, child6]
     };
@@ -4119,7 +4160,7 @@ catch(err) {
 });
 
 if (!runningTests) {
-  require("amplify-web/app")["default"].create({"name":"amplify-web","version":"0.0.0+4d366b73"});
+  require("amplify-web/app")["default"].create({"name":"amplify-web","version":"0.0.0+88a8adb3"});
 }
 
 /* jshint ignore:end */

@@ -13,6 +13,9 @@ export default Ember.Component.extend({
         imgUrl: 'img/dumbbells.png'
       }));
     },
+    removeWeek() {
+      this.get('removeWeek')(this.get('content'));
+    },
     removeItem(item) {
       let items = this.get('content.items');
       items.removeObject(item);

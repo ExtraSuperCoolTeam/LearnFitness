@@ -1,6 +1,10 @@
 <div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">Week {{content.index}}</h3>
+  <div class="panel-heading week-header">
+    <h3 class="panel-title pull-left">Week {{content.index}}</h3>
+    <button type="button" class='btn btn-danger pull-right' {{action 'removeWeek'}}>
+      <span class="glyphicon glyphicon-remove"></span>
+    </button>
+    <div class="clearfix"></div>
   </div>
   <div class="panel-body">
     <div class='form-group'>
