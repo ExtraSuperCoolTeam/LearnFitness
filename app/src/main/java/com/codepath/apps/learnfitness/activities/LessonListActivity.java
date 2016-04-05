@@ -1,6 +1,33 @@
 package com.codepath.apps.learnfitness.activities;
 
 
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.util.ExponentialBackOff;
+
+import com.bumptech.glide.Glide;
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.fragments.CheckMyFormFragment;
+import com.codepath.apps.learnfitness.fragments.ComposeFormMessageFragment;
+import com.codepath.apps.learnfitness.fragments.FABHideBehavior;
+import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
+import com.codepath.apps.learnfitness.fragments.MyFormMessageListFragment;
+import com.codepath.apps.learnfitness.fragments.WeekFragment;
+import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
+import com.codepath.apps.learnfitness.gcm.RegistrationIntentService;
+import com.codepath.apps.learnfitness.models.Lesson;
+import com.codepath.apps.learnfitness.models.MyFormMessage;
+import com.codepath.apps.learnfitness.models.Trainer;
+import com.codepath.apps.learnfitness.models.Week;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
+import com.codepath.apps.learnfitness.util.Utils;
+import com.codepath.apps.learnfitness.util.VideoUtility;
+import com.codepath.apps.learnfitness.youtubeupload.Auth;
+import com.daimajia.numberprogressbar.NumberProgressBar;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
+
 import android.Manifest;
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -43,32 +70,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.fragments.CheckMyFormFragment;
-import com.codepath.apps.learnfitness.fragments.ComposeFormMessageFragment;
-import com.codepath.apps.learnfitness.fragments.FABHideBehavior;
-import com.codepath.apps.learnfitness.fragments.FindTrainerFragment;
-import com.codepath.apps.learnfitness.fragments.MyFormMessageListFragment;
-import com.codepath.apps.learnfitness.fragments.WeekFragment;
-import com.codepath.apps.learnfitness.fragments.WeeksListFragment;
-import com.codepath.apps.learnfitness.gcm.RegistrationIntentService;
-import com.codepath.apps.learnfitness.models.Lesson;
-import com.codepath.apps.learnfitness.models.MyFormMessage;
-import com.codepath.apps.learnfitness.models.Trainer;
-import com.codepath.apps.learnfitness.models.Week;
-import com.codepath.apps.learnfitness.rest.MediaStoreService;
-import com.codepath.apps.learnfitness.util.Utils;
-import com.codepath.apps.learnfitness.util.VideoUtility;
-import com.codepath.apps.learnfitness.youtubeupload.Auth;
-import com.daimajia.numberprogressbar.NumberProgressBar;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.util.ExponentialBackOff;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -166,6 +167,7 @@ public class LessonListActivity extends AppCompatActivity
     private static final int REQUEST_GOOGLE_PLAY_SERVICES = 0;
     private static final int REQUEST_GMS_ERROR_DIALOG = 1;
     private static final int REQUEST_ACCOUNT_PICKER = 2;
+    private static final int REQUEST_ACCOUNT_PICKER_FROM_WEEK_DETAILS = 22;
     private static final int REQUEST_AUTHORIZATION = 3;
     private static final int RESULT_VIDEO_CAP = 5;
     private static final int REQUEST_TAKE_GALLERY_VIDEO = 7;
@@ -193,6 +195,7 @@ public class LessonListActivity extends AppCompatActivity
     AppBarLayout.LayoutParams mAppBarLayoutParams;
     FloatingActionButton mFab;
     Week currentSelectedWeek;
+    boolean chooseAccountFromMessageBoard = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -831,14 +834,23 @@ public class LessonListActivity extends AppCompatActivity
             case REQUEST_ACCOUNT_PICKER:
                 if (resultCode == Activity.RESULT_OK && data != null
                         && data.getExtras() != null) {
-                    String accountName = data.getExtras().getString(
-                            AccountManager.KEY_ACCOUNT_NAME);
-                    if (accountName != null) {
-                        mChosenAccountName = accountName;
-                        credential.setSelectedAccountName(accountName);
-                        saveAccount();
-                    }
+//                    String accountName = data.getExtras().getString(
+//                            AccountManager.KEY_ACCOUNT_NAME);
+//                    if (accountName != null) {
+//                        mChosenAccountName = accountName;
+//                        credential.setSelectedAccountName(accountName);
+//                        saveAccount();
+//                    }
+                    saveAccount(resultCode, data);
                     mMyFormMessageListFragment.showData();
+                }
+                break;
+
+            case REQUEST_ACCOUNT_PICKER_FROM_WEEK_DETAILS:
+                if (resultCode == Activity.RESULT_OK && data != null
+                        && data.getExtras() != null) {
+                    saveAccount(resultCode, data);
+                    //mMyFormMessageListFragment.showData();
                 }
                 break;
 
@@ -857,6 +869,24 @@ public class LessonListActivity extends AppCompatActivity
                 }
                 break;
             }
+    }
+    /**
+     * Store the account name that was chosen as a login.
+     */
+    private void saveAccount(int resultCode, Intent data){
+
+        if (resultCode == Activity.RESULT_OK && data != null
+                && data.getExtras() != null) {
+            String accountName = data.getExtras().getString(
+                    AccountManager.KEY_ACCOUNT_NAME);
+            if (accountName != null) {
+                mChosenAccountName = accountName;
+                credential.setSelectedAccountName(accountName);
+            }
+            SharedPreferences sp = PreferenceManager
+                    .getDefaultSharedPreferences(this);
+            sp.edit().putString(ACCOUNT_KEY, mChosenAccountName).commit();
+        }
     }
 
     private void loadAccount() {
@@ -878,14 +908,21 @@ public class LessonListActivity extends AppCompatActivity
         }
     }
 
+    public void checkLoginWeekDetails() {
+        if (mChosenAccountName == null) {
+            startActivityForResult(credential.newChooseAccountIntent(),
+                    REQUEST_ACCOUNT_PICKER_FROM_WEEK_DETAILS);
+        }
+    }
+
     /**
      * Store the account name that was chosen as a login.
      */
-    private void saveAccount() {
-        SharedPreferences sp = PreferenceManager
-                .getDefaultSharedPreferences(this);
-        sp.edit().putString(ACCOUNT_KEY, mChosenAccountName).commit();
-    }
+//    private void saveAccount() {
+//        SharedPreferences sp = PreferenceManager
+//                .getDefaultSharedPreferences(this);
+//        sp.edit().putString(ACCOUNT_KEY, mChosenAccountName).commit();
+//    }
 
     /**
      * Launch the google account picker.
@@ -1012,10 +1049,6 @@ public class LessonListActivity extends AppCompatActivity
     public void updateVideoUploadProgress(int progressUnit) {
         if (numberProgressBar != null && progressUnit < 100) {
             Log.i(TAG, "Progress unit: " + progressUnit);
-
-//            for (int i = 0; i < progressUnit; i++) {
-//                numberProgressBar.incrementProgressBy(1);
-//            }
 
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
