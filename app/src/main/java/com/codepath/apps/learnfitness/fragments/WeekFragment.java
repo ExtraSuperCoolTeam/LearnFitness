@@ -60,7 +60,7 @@ public class WeekFragment extends Fragment implements YouTubePlayer.OnInitialize
         View v = inflater.inflate(R.layout.fragment_week, container, false);
         ButterKnife.bind(this, v);
 
-       // ((LessonListActivity)getActivity()).checkLogin();
+       ((LessonListActivity)getActivity()).checkLoginWeekDetails();
 
         mWeek = getArguments().getParcelable("weekInfo");
         mSteps = new ArrayList<>();
@@ -110,6 +110,7 @@ public class WeekFragment extends Fragment implements YouTubePlayer.OnInitialize
         super.onResume();
 //        FloatingActionButton mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
 //        mFab.setVisibility(View.GONE);
+        ((LessonListActivity)getActivity()).checkLoginWeekDetails();
         FabSetup();
         Log.i(TAG, "In Resume");
         ((LessonListActivity)getActivity()).getSupportActionBar().setTitle(R.string.title_activity_lesson_list);

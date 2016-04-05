@@ -49,9 +49,6 @@ public class MyFormMessageListFragment extends Fragment {
     @Bind(R.id.rvMessages)
     RecyclerView mRecyclerViewMessages;
 
-//    @Bind(R.id.fab)
-    //FloatingActionButton mFab;
-
     LinearLayoutManager layoutManager;
 
     public static MyFormMessageListFragment newInstance() {
@@ -61,8 +58,6 @@ public class MyFormMessageListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        ((LessonListActivity)getActivity()).checkLogin();
 
         mMyFormMessages = new ArrayList<>();
         mAdapter = new MyFormMessagesAdapter(mMyFormMessages);
@@ -205,14 +200,6 @@ public class MyFormMessageListFragment extends Fragment {
         //showFab(false);
         mOnMyFormMessagesListener.onCheckMyFormDialog();
     }
-
-//    public void showFab(Boolean show) {
-//        if (show) {
-//            mFab.setVisibility(View.VISIBLE);
-//        } else {
-//            mFab.setVisibility(View.GONE);
-//        }
-//    }
 
     void enterReveal() {
         // previously invisible view
