@@ -32,7 +32,8 @@ import butterknife.ButterKnife;
 
 //import com.codepath.apps.learnfitness.DeveloperKey;
 
-public class WeekFragment extends Fragment implements YouTubePlayer.OnInitializedListener {
+public class WeekFragment extends Fragment implements YouTubePlayer.OnInitializedListener,
+        YouTubePlayer.PlaybackEventListener {
     private static final String TAG = "WeekFragment";
 
     @Bind(R.id.rvWeekStepsList)
@@ -42,6 +43,7 @@ public class WeekFragment extends Fragment implements YouTubePlayer.OnInitialize
     private WeekStepsAdapter mAdapterWeekSteps;
     private List<Step> mSteps;
     LinearLayoutManager layoutManager;
+    YouTubePlayer mYouTubePlayer;
 
     private static final int RECOVERY_DIALOG_REQUEST = 1;
 
@@ -60,7 +62,7 @@ public class WeekFragment extends Fragment implements YouTubePlayer.OnInitialize
         View v = inflater.inflate(R.layout.fragment_week, container, false);
         ButterKnife.bind(this, v);
 
-       ((LessonListActivity)getActivity()).checkLoginWeekDetails();
+      // ((LessonListActivity)getActivity()).checkLoginWeekDetails();
 
         mWeek = getArguments().getParcelable("weekInfo");
         mSteps = new ArrayList<>();
@@ -90,6 +92,7 @@ public class WeekFragment extends Fragment implements YouTubePlayer.OnInitialize
                                         YouTubePlayer youTubePlayer,
                                         boolean wasRestored) {
         if (!wasRestored) {
+            mYouTubePlayer = youTubePlayer;
             youTubePlayer.cueVideo(mWeek.getVideoId());
         }
     }
@@ -110,7 +113,7 @@ public class WeekFragment extends Fragment implements YouTubePlayer.OnInitialize
         super.onResume();
 //        FloatingActionButton mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
 //        mFab.setVisibility(View.GONE);
-        ((LessonListActivity)getActivity()).checkLoginWeekDetails();
+        //((LessonListActivity)getActivity()).checkLoginWeekDetails();
         FabSetup();
         Log.i(TAG, "In Resume");
         ((LessonListActivity)getActivity()).getSupportActionBar().setTitle(R.string.title_activity_lesson_list);
@@ -124,5 +127,33 @@ public class WeekFragment extends Fragment implements YouTubePlayer.OnInitialize
         CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) mFab.getLayoutParams();
         p.setBehavior(new FABScrollBehavior(getContext(), null));
         mFab.setLayoutParams(p);
+    }
+
+    @Override
+    public void onPlaying() {
+
+    }
+
+    @Override
+    public void onPaused() {
+        if (mYouTubePlayer != null) {
+            mYouTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL);
+        }
+
+    }
+
+    @Override
+    public void onStopped() {
+
+    }
+
+    @Override
+    public void onBuffering(boolean b) {
+
+    }
+
+    @Override
+    public void onSeekTo(int i) {
+
     }
 }

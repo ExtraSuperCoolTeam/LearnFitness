@@ -1,5 +1,28 @@
 package com.codepath.apps.learnfitness.fragments;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import com.codepath.apps.learnfitness.Manifest;
+import com.codepath.apps.learnfitness.R;
+import com.codepath.apps.learnfitness.activities.LessonListActivity;
+import com.codepath.apps.learnfitness.models.Trainer;
+import com.codepath.apps.learnfitness.rest.MediaStoreService;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.IntentSender;
@@ -18,28 +41,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
 import android.widget.Toast;
-
-import com.codepath.apps.learnfitness.Manifest;
-import com.codepath.apps.learnfitness.R;
-import com.codepath.apps.learnfitness.activities.LessonListActivity;
-import com.codepath.apps.learnfitness.models.Trainer;
-import com.codepath.apps.learnfitness.rest.MediaStoreService;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -125,6 +126,14 @@ public class FindTrainerFragment extends Fragment implements
             LatLng latLng = new LatLng(37.485366, -122.148321);
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 13);
             mMap.animateCamera(cameraUpdate);
+
+            mMarkers.clear();
+            mMap.clear();
+
+            for (String key : mTrainers.keySet()) {
+                Trainer trainer = mTrainers.get(key);
+                addMarkerforTrainer(trainer);
+            }
             return;
         }
         Observable<List<Trainer>> call = MediaStoreService.trainersStore.fetchTrainers();
@@ -155,10 +164,7 @@ public class FindTrainerFragment extends Fragment implements
 
                         if (mMap != null) {
                             mMarkers.clear();
-                            for (String key : mTrainers.keySet()) {
-                                Trainer trainer = mTrainers.get(key);
-                                addMarkerforTrainer(trainer);
-                            }
+                            mMap.clear();
 
                             //LatLng latLng = new LatLng(37.770927, -122.403665);
                             //Facebook: 37.485366, -122.148321
@@ -168,6 +174,10 @@ public class FindTrainerFragment extends Fragment implements
                             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 13);
                             mMap.animateCamera(cameraUpdate);
 
+                            for (String key : mTrainers.keySet()) {
+                                Trainer trainer = mTrainers.get(key);
+                                addMarkerforTrainer(trainer);
+                            }
                         }
                     }
                 });
@@ -187,6 +197,7 @@ public class FindTrainerFragment extends Fragment implements
                 .icon(BitmapDescriptorFactory
                         .fromResource(R.drawable.untapped_marker)));
 
+        dropPinEffect(marker);
         mMarkers.add(marker);
 
     }
@@ -387,7 +398,7 @@ public class FindTrainerFragment extends Fragment implements
                     // Post this event again 15ms from now.
                     handler.postDelayed(this, 15);
                 } else { // done elapsing, show window
-                    marker.showInfoWindow();
+                    //marker.showInfoWindow();
                 }
             }
         });
@@ -458,4 +469,6 @@ public class FindTrainerFragment extends Fragment implements
             return mDialog;
         }
     }
+
+
 }

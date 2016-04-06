@@ -424,6 +424,7 @@ public class LessonListActivity extends AppCompatActivity
                         return;
                     }
                     startActivity(i);
+
                 }
             }
         });
@@ -690,6 +691,7 @@ public class LessonListActivity extends AppCompatActivity
     public void onCheckMyFormDialog() {
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.flContent);
         if (f.getClass().toString().contains("WeekFragment")) {
+            checkLoginWeekDetails();
             mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance(currentSelectedWeek);
         } else {
             mComposeFormMessageFragment = ComposeFormMessageFragment.newInstance(null);
