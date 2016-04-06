@@ -89,4 +89,7 @@ dependencies {
 
     //progressbar
     compile 'com.daimajia.numberprogressbar:library:1.2@aar'
+
+    //FAB transition
+    //compile 'com.github.coyarzun89:fabtransitionactivity:0.2.0'
 }
