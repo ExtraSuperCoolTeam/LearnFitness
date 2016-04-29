@@ -14,11 +14,11 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
-    <string name="facebook_app_id">1115574068475551</string>
+    <string name="facebook_app_id"></string>
 
     <string name="get_directions">Get Directions</string>
     <string name="call">415-404-3039sssss</string>
-    <string name="google_developer_key">AIzaSyD7Ylp3sfQXPH0GmDaVcnQ1DPgdCRHBigY</string>
+    <string name="google_developer_key"></string>
     <string name="speciality">Specialty : Test Specialty</string>
     <string name="experience">Years of Experience : 5years</string>
     <string name="weight">Weight : 110 lbs</string>
@@ -77,9 +77,9 @@
     <string name="message_record_cancel">Cancel</string>
     <string name="message_hint">How can we help you?</string>
 
-    <string name="clientId">9999</string>
+    <string name="clientId"></string>
 
-    <string name="gcm_defaultSenderId" translatable="false">823310351743</string>
+    <string name="gcm_defaultSenderId" translatable="false"></string>
     <string name="empty_check_my_form_response">No Responses Yet</string>
 
 </resources>
